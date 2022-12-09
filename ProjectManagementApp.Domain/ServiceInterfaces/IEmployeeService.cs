@@ -12,6 +12,9 @@ namespace ProjectManagementApp.Domain.ServiceInterfaces
         void Create(Employee newEmployee);
 
         Task Edit(Employee updatedEmployee);
+
+        Employee? Get(string email);
+
         void Delete(int id);
     }
 }

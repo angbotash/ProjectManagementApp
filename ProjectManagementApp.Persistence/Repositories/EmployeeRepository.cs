@@ -45,6 +45,13 @@ namespace ProjectManagementApp.Persistence.Repositories
             return employee;
         }
 
+        public Employee? GetByEmail(string email)
+        {
+            var employee = this._dbContext.Employees.Find(email);
+
+            return employee;
+        }
+
         public void Delete(int id)
         {
             var employee = _dbContext.Employees.Find(id);

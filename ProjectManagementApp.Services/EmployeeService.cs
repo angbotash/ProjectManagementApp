@@ -42,6 +42,13 @@ namespace ProjectManagementApp.Services
             }
         }
 
+        public Employee? Get(string email)
+        {
+            var employee = this._employeeRepository.GetByEmail(email);
+
+            return employee;
+        }
+
         public void Delete(int id)
         {
             var employee = this._employeeRepository.GetById(id);
