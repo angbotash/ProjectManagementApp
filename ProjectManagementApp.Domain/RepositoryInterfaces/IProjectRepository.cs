@@ -9,12 +9,12 @@ namespace ProjectManagementApp.Domain.RepositoryInterfaces
 {
     public interface IProjectRepository
     {
-        public void Create(Project newProject);
+        void Create(Project newProject);
 
-        public void Update(Project updatedProject);
+        Task Update(int id, string name, string clientCompanyName, string executorCompanyName, DateTime startDate, DateTime endDate, int priority);
 
-        public Project GetById(int id);
+        Project? GetById(int id);
 
-        public void Delete(int id);
+        void Delete(int id);
     }
 }
