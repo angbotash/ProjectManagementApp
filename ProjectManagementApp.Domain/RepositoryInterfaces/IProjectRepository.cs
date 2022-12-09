@@ -7,13 +7,13 @@ using ProjectManagementApp.Domain.Entities;
 
 namespace ProjectManagementApp.Domain.RepositoryInterfaces
 {
-    public interface IEmployeeRepository
+    public interface IProjectRepository
     {
-        public void Create(Employee newEmployee);
+        public void Create(Project newProject);
 
-        public void Update(Employee updatedEmployee);
+        public void Update(Project updatedProject);
 
-        public Employee GetById(int id);
+        public Project GetById(int id);
 
         public void Delete(int id);
     }
