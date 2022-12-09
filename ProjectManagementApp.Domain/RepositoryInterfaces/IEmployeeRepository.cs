@@ -9,12 +9,12 @@ namespace ProjectManagementApp.Domain.RepositoryInterfaces
 {
     public interface IEmployeeRepository
     {
-        public void Create(Employee newEmployee);
+        void Create(Employee newEmployee);
 
-        public void Update(Employee updatedEmployee);
+        Task Update(int id, string firstName, string lastName, string patronymics, string email);
 
-        public Employee GetById(int id);
+        Employee? GetById(int id);
 
-        public void Delete(int id);
+        void Delete(int id);
     }
 }
