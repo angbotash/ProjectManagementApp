@@ -14,6 +14,7 @@ namespace ProjectManagementApp.Domain.Entities
         public string ExecutorCompanyName { get; set; }
         public ICollection<Employee> Employees { get; set; }
         public Employee TeamLeader { get; set; }
+        public int TeamLeaderId { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public int Priority { get; set; }

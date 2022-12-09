@@ -10,4 +10,17 @@
     <Folder Include="ViewModels\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ProjectManagementApp.Domain\ProjectManagementApp.Domain.csproj" />
+    <ProjectReference Include="..\ProjectManagementApp.Persistence\ProjectManagementApp.Persistence.csproj" />
+    <ProjectReference Include="..\ProjectManagementApp.Services\ProjectManagementApp.Services.csproj" />
+  </ItemGroup>
+
 </Project>
