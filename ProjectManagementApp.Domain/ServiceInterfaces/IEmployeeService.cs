@@ -5,16 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using ProjectManagementApp.Domain.Entities;
 
-namespace ProjectManagementApp.Domain.RepositoryInterfaces
+namespace ProjectManagementApp.Domain.ServiceInterfaces
 {
-    public interface IEmployeeRepository
+    public interface IEmployeeService
     {
         void Create(Employee newEmployee);
 
-        Task Update(int id, string firstName, string lastName, string patronymic, string email);
-
-        Employee? GetById(int id);
-
+        Task Edit(Employee updatedEmployee);
         void Delete(int id);
     }
 }
