@@ -28,8 +28,8 @@ namespace ProjectManagementApp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var employee = _mapper.Map<CreateEmployeeViewModel, Employee>(model);
-                _employeeService.Create(employee);
+                var employee = this._mapper.Map<CreateEmployeeViewModel, Employee>(model);
+                this._employeeService.Create(employee);
             }
 
             return View(model);

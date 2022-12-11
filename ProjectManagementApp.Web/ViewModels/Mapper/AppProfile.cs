@@ -8,6 +8,7 @@ namespace ProjectManagementApp.Web.ViewModels.Mapper
         public AppProfile()
         {
             CreateMap<CreateEmployeeViewModel, Employee>();
+            CreateMap<CreateProjectViewModel, Project>();
         }
     }
 }

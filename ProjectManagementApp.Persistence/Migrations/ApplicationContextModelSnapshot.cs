@@ -43,7 +43,6 @@ namespace ProjectManagementApp.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Patronymic")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -95,7 +94,7 @@ namespace ProjectManagementApp.Persistence.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("TeamLeaderId")
+                    b.Property<int?>("TeamLeaderId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -128,9 +127,7 @@ namespace ProjectManagementApp.Persistence.Migrations
                 {
                     b.HasOne("ProjectManagementApp.Domain.Entities.Employee", "TeamLeader")
                         .WithMany()
-                        .HasForeignKey("TeamLeaderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TeamLeaderId");
 
                     b.Navigation("TeamLeader");
                 });

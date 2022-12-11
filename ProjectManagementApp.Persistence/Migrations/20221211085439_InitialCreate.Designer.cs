@@ -12,7 +12,7 @@ using ProjectManagementApp.Persistence;
 namespace ProjectManagementApp.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20221211080655_InitialCreate")]
+    [Migration("20221211085439_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -46,7 +46,6 @@ namespace ProjectManagementApp.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Patronymic")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -98,7 +97,7 @@ namespace ProjectManagementApp.Persistence.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("TeamLeaderId")
+                    b.Property<int?>("TeamLeaderId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -131,9 +130,7 @@ namespace ProjectManagementApp.Persistence.Migrations
                 {
                     b.HasOne("ProjectManagementApp.Domain.Entities.Employee", "TeamLeader")
                         .WithMany()
-                        .HasForeignKey("TeamLeaderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TeamLeaderId");
 
                     b.Navigation("TeamLeader");
                 });
