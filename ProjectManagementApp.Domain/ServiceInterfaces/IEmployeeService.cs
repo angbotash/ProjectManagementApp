@@ -13,7 +13,11 @@ namespace ProjectManagementApp.Domain.ServiceInterfaces
 
         Task Edit(Employee updatedEmployee);
 
+        Employee? Get(int id);
+
         Employee? Get(string email);
+
+        IEnumerable<Employee> GetAll();
 
         void Delete(int id);
     }

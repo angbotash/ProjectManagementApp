@@ -1,0 +1,19 @@
+﻿@model ProjectManagementApp.Web.ViewModels.ProjectViewModel
+
+<h4>Project</h4>
+<div>
+    <p><b>Name: </b> @Model.Name</p>
+    <p><b>Customer: </b> @Model.ClientCompanyName</p>
+    <p><b>Executor: </b> @Model.ExecutorCompanyName</p>
+    <p><b>Team leader: </b> </p>
+    <p><b>Start date: </b> @Model.StartDate.ToString("dd/MM/yyyy")</p>
+    <p><b>End date: </b> @Model.EndDate.ToString("dd/MM/yyyy")</p>
+    <p><b>Priority: </b> @Model.Priority</p>
+
+    <a asp-controller="Project" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-dark">Edit</a>
+    <br />
+    @using (Html.BeginForm("Delete", "Project", new { id = Model.Id }, FormMethod.Post))
+    {
+        <input type="submit" value="Delete" />
+    }
+</div>

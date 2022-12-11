@@ -1,0 +1,61 @@
+﻿@model List<ProjectManagementApp.Web.ViewModels.ProjectViewModel>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>
+                Project name
+            </th>
+            <th>
+                Customer
+            </th>
+            <th>
+                Executor
+            </th>
+            <th>
+                Team leader
+            </th>
+            <th>
+                Start date
+            </th>
+            <th>
+                End date
+            </th>
+            <th>
+                Priority
+            </th>
+        </tr>
+        </thead>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a asp-controller="Project" asp-action="ViewProject" asp-route-Id="@item.Id">@item.Name</a>
+                </td>
+                <td>
+                    @item.ClientCompanyName
+                </td>
+                <td>
+                    @item.ExecutorCompanyName
+                </td>
+                <td>
+                </td>
+                <td>
+                    @item.StartDate.ToString("dd/MM/yyyy")
+                </td>
+                <td>
+                    @item.EndDate.ToString("dd/MM/yyyy")
+                </td>
+                <td>
+                    @item.Priority
+                </td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <h6>There is no projects.</h6>
+}

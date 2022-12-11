@@ -1,9 +1,9 @@
-﻿@model ProjectManagementApp.Web.ViewModels.CreateProjectViewModel
+﻿@model ProjectManagementApp.Web.ViewModels.EditProjectViewModel
 
-<form asp-action="CreateProject" asp-controller="Project" enctype="multipart/form-data">
+<form asp-action="Edit" asp-controller="Project" asp-route-id="@Model.Id" enctype="multipart/form-data">
     <div asp-validation-summary="ModelOnly"></div>
     <div class="container">
-        <h1>Create a new project</h1>
+        <h1>Edit project "@Model.Name"</h1>
         <hr>
         <div>
             <label asp-for="Name"><b>Project name</b></label>
@@ -31,14 +31,14 @@
             <input type="date" asp-for="StartDate" placeholder="Enter start date" required>
             <span asp-validation-for="StartDate"></span>
         </div>
-        
+
         <div>
             <label asp-for="EndDate"><b>End date</b></label>
             <br />
             <input type="date" asp-for="EndDate" placeholder="Enter end date" required>
             <span asp-validation-for="EndDate"></span>
         </div>
-        
+
         <div>
             <label asp-for="Priority"><b>Priority</b></label>
             <br />
@@ -47,6 +47,6 @@
         </div>
         <hr>
 
-        <button type="submit">Create</button>
+        <button type="submit">Save</button>
     </div>
 </form>

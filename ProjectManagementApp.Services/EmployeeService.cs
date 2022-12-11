@@ -42,11 +42,25 @@ namespace ProjectManagementApp.Services
             }
         }
 
+        public Employee? Get(int id)
+        {
+            var employee = this._employeeRepository.GetById(id);
+
+            return employee;
+        }
+
         public Employee? Get(string email)
         {
             var employee = this._employeeRepository.GetByEmail(email);
 
             return employee;
+        }
+
+        public IEnumerable<Employee> GetAll()
+        {
+            var employees = this._employeeRepository.GetAll();
+
+            return employees;
         }
 
         public void Delete(int id)

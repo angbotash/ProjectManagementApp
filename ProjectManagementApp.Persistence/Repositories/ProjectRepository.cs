@@ -54,6 +54,13 @@ namespace ProjectManagementApp.Persistence.Repositories
             return project;
         }
 
+        public IEnumerable<Project> GetAll()
+        {
+            var projects = this._dbContext.Projects;
+
+            return projects;
+        }
+
         public void Delete(int id)
         {
             var project = this._dbContext.Projects.Find(id);

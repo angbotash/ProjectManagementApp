@@ -1,0 +1,38 @@
+﻿@model ProjectManagementApp.Web.ViewModels.EditEmployeeViewModel
+
+<form asp-action="Edit" asp-controller="Employee" asp-route-id="@Model.Id" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly"></div>
+    <div class="container">
+        <h1>Edit employee @Model.Email</h1>
+        <hr>
+        <div>
+            <label asp-for="FirstName"><b>First name</b></label>
+            <br/>
+            <input type="text" asp-for="FirstName" placeholder="Enter first name" required>
+            <span asp-validation-for="FirstName"></span>
+        </div>
+        
+        <div>
+            <label asp-for="LastName"><b>Last name</b></label>
+            <br />
+            <input type="text" asp-for="LastName" placeholder="Enter last name" required>
+            <span asp-validation-for="LastName"></span>
+        </div>
+        
+        <div>
+            <label asp-for="Patronymic"><b>Patronymic</b></label>
+            <br />
+            <input type="text" asp-for="Patronymic" placeholder="Enter patronymic">
+        </div>
+        
+        <div>
+            <label asp-for="Email"><b>Email</b></label>
+            <br />
+            <input type="email" asp-for="Email" placeholder="Enter email" required>
+            <span asp-validation-for="Email"></span>
+        </div>
+        <hr>
+
+        <button type="submit">Save</button>
+    </div>
+</form>

@@ -1,0 +1,19 @@
+﻿@model ProjectManagementApp.Web.ViewModels.EmployeeViewModel
+
+<h4>Employee</h4>
+<div>
+    <p><b>First name: </b> @Model.FirstName</p>
+    <p><b>Last name: </b> @Model.LastName</p>
+    @if (Model.Patronymic != null)
+    {
+        <p><b>Patronymic: </b> @Model.Patronymic</p>
+    }
+    <p><b>Email: </b> @Model.Email</p>
+
+    <a asp-controller="Employee" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-dark">Edit</a>
+    <br/>
+    @using (Html.BeginForm("Delete", "Employee", new { id = Model.Id }, FormMethod.Post))
+    {
+        <input type="submit" value="Delete" />
+    }
+</div>

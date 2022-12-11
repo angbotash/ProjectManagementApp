@@ -44,6 +44,20 @@ namespace ProjectManagementApp.Services
             }
         }
 
+        public Project? Get(int id)
+        {
+            var project = this._projectRepository.GetById(id);
+
+            return project;
+        }
+
+        public IEnumerable<Project> GetAll()
+        {
+            var projects = this._projectRepository.GetAll();
+
+            return projects;
+        }
+
         public void Delete(int id)
         {
             var project = this._projectRepository.GetById(id);

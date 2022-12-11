@@ -13,6 +13,10 @@ namespace ProjectManagementApp.Domain.ServiceInterfaces
 
         Task Edit(Project updatedProject);
 
+        Project? Get(int id);
+
+        IEnumerable<Project> GetAll();
+
         void Delete(int id);
     }
 }

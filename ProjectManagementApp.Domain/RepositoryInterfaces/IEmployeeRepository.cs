@@ -17,6 +17,8 @@ namespace ProjectManagementApp.Domain.RepositoryInterfaces
 
         Employee? GetByEmail(string email);
 
+        IEnumerable<Employee> GetAll();
+
         void Delete(int id);
     }
 }

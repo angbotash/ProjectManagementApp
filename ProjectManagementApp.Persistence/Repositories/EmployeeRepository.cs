@@ -52,6 +52,13 @@ namespace ProjectManagementApp.Persistence.Repositories
             return employee;
         }
 
+        public IEnumerable<Employee> GetAll()
+        {
+            var employees = this._dbContext.Employees;
+
+            return employees;
+        }
+
         public void Delete(int id)
         {
             var employee = _dbContext.Employees.Find(id);
