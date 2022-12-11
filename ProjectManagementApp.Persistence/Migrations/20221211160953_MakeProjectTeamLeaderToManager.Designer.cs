@@ -12,8 +12,8 @@ using ProjectManagementApp.Persistence;
 namespace ProjectManagementApp.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20221211085439_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20221211160953_MakeProjectTeamLeaderToManager")]
+    partial class MakeProjectTeamLeaderToManager
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -87,6 +87,9 @@ namespace ProjectManagementApp.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ManagerId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -97,12 +100,9 @@ namespace ProjectManagementApp.Persistence.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("TeamLeaderId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("TeamLeaderId");
+                    b.HasIndex("ManagerId");
 
                     b.ToTable("Projects");
                 });
@@ -128,11 +128,11 @@ namespace ProjectManagementApp.Persistence.Migrations
 
             modelBuilder.Entity("ProjectManagementApp.Domain.Entities.Project", b =>
                 {
-                    b.HasOne("ProjectManagementApp.Domain.Entities.Employee", "TeamLeader")
+                    b.HasOne("ProjectManagementApp.Domain.Entities.Employee", "Manager")
                         .WithMany()
-                        .HasForeignKey("TeamLeaderId");
+                        .HasForeignKey("ManagerId");
 
-                    b.Navigation("TeamLeader");
+                    b.Navigation("Manager");
                 });
 
             modelBuilder.Entity("ProjectManagementApp.Domain.Entities.Employee", b =>

@@ -13,6 +13,6 @@ namespace ProjectManagementApp.Domain.Entities
         public string LastName { get; set; }
         public string? Patronymic { get; set; }
         public string Email { get; set; }
-        public ICollection<EmployeeProject> EmployeeProject { get; set; }
+        public IList<EmployeeProject> EmployeeProject { get; set; } = null!;
     }
 }

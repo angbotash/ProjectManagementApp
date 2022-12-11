@@ -57,8 +57,20 @@ namespace ProjectManagementApp.Persistence.Repositories
         public IEnumerable<Project> GetAll()
         {
             var projects = this._dbContext.Projects;
+            var result = new List<Project>();
 
-            return projects;
+            foreach (var project in projects)
+            {
+                //if (project.ManagerId != null)
+                //{
+                //    var manager = this._dbContext.Employees.Find(project.ManagerId);
+                //    project.Manager = manager;
+                //}
+
+                result.Add(project);
+            }
+
+            return result;
         }
 
         public void Delete(int id)

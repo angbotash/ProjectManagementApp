@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectManagementApp.Persistence;
 
@@ -11,9 +12,11 @@ using ProjectManagementApp.Persistence;
 namespace ProjectManagementApp.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20221211153600_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -84,9 +87,6 @@ namespace ProjectManagementApp.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ManagerId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -97,9 +97,13 @@ namespace ProjectManagementApp.Persistence.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("TeamLeaderId")
+                        .IsRequired()
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ManagerId");
+                    b.HasIndex("TeamLeaderId");
 
                     b.ToTable("Projects");
                 });
@@ -125,11 +129,13 @@ namespace ProjectManagementApp.Persistence.Migrations
 
             modelBuilder.Entity("ProjectManagementApp.Domain.Entities.Project", b =>
                 {
-                    b.HasOne("ProjectManagementApp.Domain.Entities.Employee", "Manager")
+                    b.HasOne("ProjectManagementApp.Domain.Entities.Employee", "TeamLeader")
                         .WithMany()
-                        .HasForeignKey("ManagerId");
+                        .HasForeignKey("TeamLeaderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Manager");
+                    b.Navigation("TeamLeader");
                 });
 
             modelBuilder.Entity("ProjectManagementApp.Domain.Entities.Employee", b =>

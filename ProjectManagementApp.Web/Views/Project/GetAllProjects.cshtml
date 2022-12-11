@@ -6,7 +6,7 @@
         <thead>
         <tr>
             <th>
-                Project name
+                <a asp-action="GetAllProjects" asp-route-sortOrder="@ViewData["NameSortParam"]">Project name</a>
             </th>
             <th>
                 Customer
@@ -15,16 +15,16 @@
                 Executor
             </th>
             <th>
-                Team leader
+                Manager
             </th>
             <th>
-                Start date
+                <a asp-action="GetAllProjects" asp-route-sortOrder="@ViewData["StartDateSortParam"]">Start date</a>
             </th>
             <th>
-                End date
+                <a asp-action="GetAllProjects" asp-route-sortOrder="@ViewData["EndDateSortParam"]">End date</a>
             </th>
             <th>
-                Priority
+                <a asp-action="GetAllProjects" asp-route-sortOrder="@ViewData["PrioritySortParam"]">Priority</a>
             </th>
         </tr>
         </thead>
@@ -41,6 +41,10 @@
                     @item.ExecutorCompanyName
                 </td>
                 <td>
+                    @if (item.Manager != null)
+                    {
+                        @item.Manager.Email
+                    }
                 </td>
                 <td>
                     @item.StartDate.ToString("dd/MM/yyyy")

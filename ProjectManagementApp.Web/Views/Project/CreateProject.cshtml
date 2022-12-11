@@ -1,52 +1,55 @@
 ﻿@model ProjectManagementApp.Web.ViewModels.CreateProjectViewModel
 
-<form asp-action="CreateProject" asp-controller="Project" enctype="multipart/form-data">
+
+@using (Html.BeginForm("CreateProject", "Project", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
     <div asp-validation-summary="ModelOnly"></div>
     <div class="container">
         <h1>Create a new project</h1>
         <hr>
         <div>
-            <label asp-for="Name"><b>Project name</b></label>
+            <b>@Html.LabelFor(m => m.Name)</b>
             <br />
-            <input type="text" asp-for="Name" placeholder="Enter project name" required>
-            <span asp-validation-for="Name"></span>
+            @Html.TextBoxFor(m => m.Name, new { placeholder = "Enter project name" })
         </div>
 
         <div>
-            <label asp-for="ClientCompanyName"><b>Client company</b></label>
+            <b>@Html.LabelFor(m => m.ClientCompanyName)</b>
             <br />
-            <input type="text" asp-for="ClientCompanyName" placeholder="Enter client company name" required>
-            <span asp-validation-for="ClientCompanyName"></span>
+            @Html.TextBoxFor(m => m.ClientCompanyName,new { placeholder = "Enter client company name" })
         </div>
 
         <div>
-            <label asp-for="ExecutorCompanyName"><b>Executor company</b></label>
+            <b>@Html.LabelFor(m => m.ExecutorCompanyName)</b>
             <br />
-            <input type="text" asp-for="ExecutorCompanyName" placeholder="Enter executor company name">
+            @Html.TextBoxFor(m => m.ExecutorCompanyName, new { placeholder = "Enter executor company name" })
         </div>
 
         <div>
-            <label asp-for="StartDate"><b>Start date</b></label>
+            <b>@Html.LabelFor(m => m.ManagerId)</b>
             <br />
-            <input type="date" asp-for="StartDate" placeholder="Enter start date" required>
-            <span asp-validation-for="StartDate"></span>
+            @Html.DropDownListFor(m => m.ManagerId, @Model.Employees, "Select Manager")
+            @Html.HiddenFor(m => m.Employees)
         </div>
-        
+
         <div>
-            <label asp-for="EndDate"><b>End date</b></label>
+            <b>@Html.LabelFor(m => m.StartDate)</b>
             <br />
-            <input type="date" asp-for="EndDate" placeholder="Enter end date" required>
-            <span asp-validation-for="EndDate"></span>
+            @Html.TextBoxFor(m => m.StartDate, new { @type="date", @Value = Model.StartDate.ToString("dd/MM/yyyy"), placeholder = "Enter start date" })
         </div>
-        
+
         <div>
-            <label asp-for="Priority"><b>Priority</b></label>
+            <b>@Html.LabelFor(m => m.EndDate)</b>
             <br />
-            <input type="number" asp-for="Priority" placeholder="Enter priority 1-10" min="1" max="10" required>
-            <span asp-validation-for="Priority"></span>
+            @Html.TextBoxFor(m => m.EndDate, new { @type="date", @Value = Model.EndDate.ToString("dd/MM/yyyy"), placeholder = "Enter end date" })
+        </div>
+
+        <div>
+            <b>@Html.LabelFor(m => m.Priority)</b>
+            <br />
+            @Html.TextBoxFor(m => m.Priority, new { @type="number", min="1", max="10", placeholder = "Enter executor company name" })
         </div>
         <hr>
-
-        <button type="submit">Create</button>
+        <input id="Submit" type="submit" value="Submit" />
     </div>
-</form>
+}
