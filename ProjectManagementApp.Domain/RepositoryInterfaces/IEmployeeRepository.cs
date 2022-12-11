@@ -11,9 +11,11 @@ namespace ProjectManagementApp.Domain.RepositoryInterfaces
     {
         void Create(Employee newEmployee);
 
-        Task Update(int id, string firstName, string lastName, string patronymics, string email);
+        Task Update(int id, string firstName, string lastName, string patronymic, string email);
 
         Employee? GetById(int id);
+
+        Employee? GetByEmail(string email);
 
         void Delete(int id);
     }

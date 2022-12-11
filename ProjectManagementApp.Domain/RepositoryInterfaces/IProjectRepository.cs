@@ -15,6 +15,8 @@ namespace ProjectManagementApp.Domain.RepositoryInterfaces
 
         Project? GetById(int id);
 
+        Project? GetByName(string name);
+
         void Delete(int id);
     }
 }
