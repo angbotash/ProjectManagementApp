@@ -12,7 +12,7 @@ namespace ProjectManagementApp.Domain.Entities
         public string Name { get; set; }
         public string ClientCompanyName { get; set; }
         public string ExecutorCompanyName { get; set; }
-        public ICollection<Employee> Employees { get; set; }
+        public ICollection<EmployeeProject> EmployeeProject { get; set; }
         public Employee TeamLeader { get; set; }
         public int TeamLeaderId { get; set; }
         public DateTime StartDate { get; set; }

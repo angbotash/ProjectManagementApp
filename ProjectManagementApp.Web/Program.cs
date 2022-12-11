@@ -1,12 +1,23 @@
 using Microsoft.EntityFrameworkCore;
 using ProjectManagementApp.Domain.Entities;
+using ProjectManagementApp.Domain.RepositoryInterfaces;
+using ProjectManagementApp.Domain.ServiceInterfaces;
 using ProjectManagementApp.Persistence;
+using ProjectManagementApp.Persistence.Repositories;
+using ProjectManagementApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var connection = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection));
+
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IProjectService, ProjectService>();
+
+builder.Services.AddAutoMapper(typeof(Program));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

@@ -8,6 +8,7 @@ namespace ProjectManagementApp.Persistence
     {
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Project> Projects { get; set; }
+        public DbSet<EmployeeProject> EmployeeProject { get; set; }
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
@@ -20,6 +21,7 @@ namespace ProjectManagementApp.Persistence
 
             modelBuilder.ApplyConfiguration(new EmployeeMappingConfiguration());
             modelBuilder.ApplyConfiguration(new ProjectMappingConfiguration());
+            modelBuilder.ApplyConfiguration(new EmployeeProjectMappingConfiguration());
         }
     }
 }
