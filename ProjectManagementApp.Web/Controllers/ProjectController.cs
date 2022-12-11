@@ -35,7 +35,6 @@ namespace ProjectManagementApp.Web.Controllers
             }
 
             var selectList = employees.Select(x => new SelectListItem(x.Email, x.Id.ToString())).ToList();
-
             var model = new CreateProjectViewModel() { Employees = selectList };
 
             return View(model);
@@ -48,6 +47,8 @@ namespace ProjectManagementApp.Web.Controllers
             {
                 var project = this._mapper.Map<CreateProjectViewModel, Project>(model);
                 this._projectService.Create(project);
+
+                return RedirectToAction("GetAllProjects");
             }
 
             return View(model);
@@ -63,11 +64,12 @@ namespace ProjectManagementApp.Web.Controllers
             {
                 var tempProject = this._mapper.Map<Project, ProjectViewModel>(proj);
 
-                //if (proj.Manager != null)
-                //{
-                //    var tempManager = this._mapper.Map<Employee, EmployeeViewModel>(proj.Manager);
-                //    tempProject.Manager = tempManager;
-                //}
+                if (proj.Manager != null)
+                {
+                    var tempManager = this._mapper.Map<Employee, EmployeeViewModel>(proj.Manager);
+
+                    tempProject.Manager = tempManager;
+                }
 
                 result.Add(tempProject);
             }
@@ -122,6 +124,14 @@ namespace ProjectManagementApp.Web.Controllers
             }
 
             var result = this._mapper.Map<Project, ProjectViewModel>(project);
+            var employees = this._projectService.GetEmployees((int)id);
+
+            foreach (var empl in employees)
+            {
+                var tempEmployee = this._mapper.Map<Employee, EmployeeViewModel>(empl);
+
+                result.Employees.Add(tempEmployee);
+            }
 
             return View(result);
         }

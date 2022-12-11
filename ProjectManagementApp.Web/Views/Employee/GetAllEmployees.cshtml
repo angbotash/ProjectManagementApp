@@ -1,5 +1,7 @@
 ﻿@model List<ProjectManagementApp.Web.ViewModels.EmployeeViewModel>
 
+<h2>Employees<a class="btn btn-outline-dark" asp-controller="Employee" asp-action="CreateEmployee" style="float: right">Create a new employee</a></h2>
+
 @if (Model.Any())
 {
     <table class="table">

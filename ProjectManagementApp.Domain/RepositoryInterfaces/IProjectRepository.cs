@@ -19,6 +19,8 @@ namespace ProjectManagementApp.Domain.RepositoryInterfaces
 
         IEnumerable<Project> GetAll();
 
+        IEnumerable<Employee> GetEmployees(int id);
+
         void Delete(int id);
     }
 }

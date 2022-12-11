@@ -2,13 +2,18 @@
 
 <h4>Employee</h4>
 <div>
-    <p><b>First name: </b> @Model.FirstName</p>
-    <p><b>Last name: </b> @Model.LastName</p>
+    <p><b>First name: </b>@Model.FirstName</p>
+    <p><b>Last name: </b>@Model.LastName</p>
     @if (Model.Patronymic != null)
     {
-        <p><b>Patronymic: </b> @Model.Patronymic</p>
+        <p><b>Patronymic: </b>@Model.Patronymic</p>
     }
-    <p><b>Email: </b> @Model.Email</p>
+    <p><b>Email: </b>@Model.Email</p>
+    <p><b>Email: </b></p>
+    @foreach(var projects in Model.Projects)
+    {
+        <p>@projects.Name</p>
+    }
 
     <a asp-controller="Employee" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-dark">Edit</a>
     <br/>

@@ -17,6 +17,8 @@ namespace ProjectManagementApp.Domain.ServiceInterfaces
 
         IEnumerable<Project> GetAll();
 
+        IEnumerable<Employee> GetEmployees(int id);
+
         void Delete(int id);
     }
 }

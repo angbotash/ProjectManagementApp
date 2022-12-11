@@ -1,38 +1,36 @@
 ﻿@model ProjectManagementApp.Web.ViewModels.CreateEmployeeViewModel
 
-<form asp-action="CreateEmployee" asp-controller="Employee" enctype="multipart/form-data">
+@using (Html.BeginForm("CreateEmployee", "Employee", FormMethod.Post, new {enctype = "multipart/form-data"}))
+{
     <div asp-validation-summary="ModelOnly"></div>
     <div class="container">
         <h1>Create a new employee</h1>
         <hr>
         <div>
-            <label asp-for="FirstName"><b>First name</b></label>
-            <br/>
-            <input type="text" asp-for="FirstName" placeholder="Enter first name" required>
-            <span asp-validation-for="FirstName"></span>
-        </div>
-        
-        <div>
-            <label asp-for="LastName"><b>Last name</b></label>
+            <b>@Html.LabelFor(m => m.FirstName)</b>
             <br />
-            <input type="text" asp-for="LastName" placeholder="Enter last name" required>
-            <span asp-validation-for="LastName"></span>
+            @Html.TextBoxFor(m => m.FirstName, new { placeholder = "Enter first name" })
         </div>
-        
+
         <div>
-            <label asp-for="Patronymic"><b>Patronymic</b></label>
+            <b>@Html.LabelFor(m => m.LastName)</b>
             <br />
-            <input type="text" asp-for="Patronymic" placeholder="Enter patronymic">
+            @Html.TextBoxFor(m => m.LastName, new { placeholder = "Enter last name" })
         </div>
-        
+
         <div>
-            <label asp-for="Email"><b>Email</b></label>
+            <b>@Html.LabelFor(m => m.Patronymic)</b>
             <br />
-            <input type="email" asp-for="Email" placeholder="Enter email" required>
-            <span asp-validation-for="Email"></span>
+            @Html.TextBoxFor(m => m.Patronymic, new { placeholder = "Enter patronymic" })
+        </div>
+
+        <div>
+            <b>@Html.LabelFor(m => m.Email)</b>
+            <br />
+            @Html.TextBoxFor(m => m.Email, new { placeholder = "Enter email" })
         </div>
         <hr>
 
         <button type="submit">Create</button>
     </div>
-</form>
+}

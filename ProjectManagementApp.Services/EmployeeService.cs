@@ -63,6 +63,13 @@ namespace ProjectManagementApp.Services
             return employees;
         }
 
+        public IEnumerable<Project> GetProjects(int id)
+        {
+            var projects = this._employeeRepository.GetProjects(id);
+
+            return projects;
+        }
+
         public void Delete(int id)
         {
             var employee = this._employeeRepository.GetById(id);

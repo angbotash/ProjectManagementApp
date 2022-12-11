@@ -31,6 +31,8 @@ namespace ProjectManagementApp.Web.Controllers
             {
                 var employee = this._mapper.Map<CreateEmployeeViewModel, Employee>(model);
                 this._employeeService.Create(employee);
+
+                return RedirectToAction("GetAllEmployees");
             }
 
             return View(model);
@@ -68,6 +70,14 @@ namespace ProjectManagementApp.Web.Controllers
             }
 
             var result = this._mapper.Map<Employee, EmployeeViewModel>(employee);
+            var projects = this._employeeService.GetProjects((int)id);
+
+            foreach (var proj in projects)
+            {
+                var tempProject = this._mapper.Map<Project, ProjectViewModel>(proj);
+
+                result.Projects.Add(tempProject);
+            }
 
             return View(result);
         }

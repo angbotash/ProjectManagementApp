@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using ProjectManagementApp.Domain.Entities;
 using ProjectManagementApp.Domain.RepositoryInterfaces;
 
@@ -42,32 +43,38 @@ namespace ProjectManagementApp.Persistence.Repositories
 
         public Project? GetById(int id)
         {
-            var project = this._dbContext.Projects.Find(id);
+            var project = this._dbContext.Projects.Include(x => x.Manager).FirstOrDefault(p => p.Id == id);
 
             return project;
         }
 
         public Project? GetByName(string name)
         {
-            var project = this._dbContext.Projects.Find(name);
+            var project = this._dbContext.Projects.Include(x => x.Manager).FirstOrDefault(p => p.Name == name);
 
             return project;
         }
 
         public IEnumerable<Project> GetAll()
         {
-            var projects = this._dbContext.Projects;
-            var result = new List<Project>();
+            var projects = this._dbContext.Projects.Include(x => x.Manager);
 
-            foreach (var project in projects)
+            return projects;
+        }
+
+        public IEnumerable<Employee> GetEmployees(int id)
+        {
+            var employees = this._dbContext.EmployeeProject.Where(e => e.ProjectId == id);
+            var result = new List<Employee>();
+
+            foreach (var employee in employees)
             {
-                //if (project.ManagerId != null)
-                //{
-                //    var manager = this._dbContext.Employees.Find(project.ManagerId);
-                //    project.Manager = manager;
-                //}
+                var tempEmployee = this._dbContext.Employees.FirstOrDefault(e => e.Id == employee.EmployeeId);
 
-                result.Add(project);
+                if (tempEmployee != null)
+                {
+                    result.Add(tempEmployee);
+                }
             }
 
             return result;

@@ -12,5 +12,6 @@ namespace ProjectManagementApp.Web.ViewModels
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public int Priority { get; set; }
+        public IList<EmployeeViewModel> Employees { get; set; }
     }
 }

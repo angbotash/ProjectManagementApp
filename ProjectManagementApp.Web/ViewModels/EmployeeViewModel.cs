@@ -7,5 +7,6 @@
         public string LastName { get; set; }
         public string? Patronymic { get; set; }
         public string Email { get; set; }
+        public IList<ProjectViewModel> Projects { get; set; }
     }
 }

@@ -59,6 +59,24 @@ namespace ProjectManagementApp.Persistence.Repositories
             return employees;
         }
 
+        public IEnumerable<Project> GetProjects(int id)
+        {
+            var projects = this._dbContext.EmployeeProject.Where(p => p.EmployeeId == id);
+            var result = new List<Project>();
+
+            foreach (var project in projects)
+            {
+                var tempProject = this._dbContext.Projects.FirstOrDefault(p => p.Id == project.ProjectId);
+
+                if (tempProject != null)
+                {
+                    result.Add(tempProject);
+                }
+            }
+
+            return result;
+        }
+
         public void Delete(int id)
         {
             var employee = _dbContext.Employees.Find(id);
