@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ProjectManagementApp.Domain.Entities;
+﻿using ProjectManagementApp.Domain.Entities;
 using ProjectManagementApp.Domain.RepositoryInterfaces;
 using ProjectManagementApp.Domain.ServiceInterfaces;
 
@@ -20,7 +15,7 @@ namespace ProjectManagementApp.Services
 
         public async Task Create(Employee newEmployee)
         {
-            var employee = await this._employeeRepository.Get(newEmployee.Id);
+            var employee = this._employeeRepository.Get(newEmployee.Id);
 
             if (employee == null)
             {
@@ -30,28 +25,24 @@ namespace ProjectManagementApp.Services
 
         public async Task Edit(Employee updatedEmployee)
         {
-            var employee = await this._employeeRepository.Get(updatedEmployee.Id);
+            var employee = this._employeeRepository.Get(updatedEmployee.Id);
 
             if (employee != null)
             {
-                await this._employeeRepository.Update(updatedEmployee.Id,
-                                                      updatedEmployee.FirstName,
-                                                      updatedEmployee.LastName, 
-                                                      updatedEmployee.Patronymic,
-                                                      updatedEmployee.Email);
+                await this._employeeRepository.Update(updatedEmployee);
             }
         }
 
-        public async Task<Employee?> Get(int id)
+        public Employee? Get(int id)
         {
-            var employee = await this._employeeRepository.Get(id);
+            var employee = this._employeeRepository.Get(id);
 
             return employee;
         }
 
-        public async Task<Employee?> Get(string email)
+        public Employee? Get(string email)
         {
-            var employee = await this._employeeRepository.Get(email);
+            var employee = this._employeeRepository.Get(email);
 
             return employee;
         }
@@ -63,16 +54,16 @@ namespace ProjectManagementApp.Services
             return employees;
         }
 
-        public async Task<IEnumerable<Project>> GetProjects(int id)
+        public IEnumerable<Project> GetProjects(int id)
         {
-            var projects = await this._employeeRepository.GetProjects(id);
+            var projects = this._employeeRepository.GetProjects(id);
 
             return projects;
         }
 
         public async Task Delete(int id)
         {
-            var employee = await this._employeeRepository.Get(id);
+            var employee = this._employeeRepository.Get(id);
 
             if (employee != null)
             {

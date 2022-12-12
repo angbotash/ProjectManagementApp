@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ProjectManagementApp.Domain.Entities;
+﻿using ProjectManagementApp.Domain.Entities;
 
 namespace ProjectManagementApp.Domain.ServiceInterfaces
 {
@@ -13,13 +8,13 @@ namespace ProjectManagementApp.Domain.ServiceInterfaces
 
         Task Edit(Employee updatedEmployee);
 
-        Task<Employee?> Get(int id);
+        Employee? Get(int id);
 
-        Task<Employee?> Get(string email);
+        Employee? Get(string email);
 
         IEnumerable<Employee> GetAll();
 
-        Task<IEnumerable<Project>> GetProjects(int id);
+        IEnumerable<Project> GetProjects(int id);
 
         Task Delete(int id);
     }

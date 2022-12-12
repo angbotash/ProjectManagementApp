@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ProjectManagementApp.Domain.Entities;
+﻿using ProjectManagementApp.Domain.Entities;
 
 namespace ProjectManagementApp.Domain.RepositoryInterfaces
 {
@@ -11,15 +6,15 @@ namespace ProjectManagementApp.Domain.RepositoryInterfaces
     {
         Task Create(Project newProject);
 
-        Task Update(int id, string name, string clientCompanyName, string executorCompanyName, int? managerId, DateTime startDate, DateTime endDate, int priority);
+        Task Update(Project updatedProject);
 
-        Task<Project?> Get(int id);
+        Project? Get(int id);
 
-        Task<Project?> Get(string name);
+        Project? Get(string name);
 
         IEnumerable<Project> GetAll();
 
-        Task<IEnumerable<Employee>> GetEmployees(int id);
+        IEnumerable<Employee> GetEmployees(int id);
 
         Task Delete(int id);
 
@@ -31,6 +26,6 @@ namespace ProjectManagementApp.Domain.RepositoryInterfaces
 
         Task RemoveFromProject(int projectId, int employeeId);
 
-        Task<bool> IsEmployeeOnProject(int employeeId, int projectId);
+        bool IsEmployeeOnProject(int employeeId, int projectId);
     }
 }

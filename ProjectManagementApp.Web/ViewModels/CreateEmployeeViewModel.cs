@@ -7,13 +7,13 @@ namespace ProjectManagementApp.Web.ViewModels
         [Required(ErrorMessage = "First name is required.")]
         [DataType(DataType.Text)]
         [Display(Name = "First name")]
-        public string FirstName { get; set; }
+        public string FirstName { get; set; } = null!;
 
         [Required(ErrorMessage = "Last name is required.")]
         [DataType(DataType.Text)]
         [Display(Name = "Last name")]
-        public string LastName { get; set; }
-        
+        public string LastName { get; set; } = null!;
+
         [DataType(DataType.Text)]
         [Display(Name = "Patronymic")]
         public string? Patronymic { get; set; }
@@ -21,6 +21,6 @@ namespace ProjectManagementApp.Web.ViewModels
         [Required(ErrorMessage = "Invalid email.")]
         [DataType((DataType.EmailAddress))]
         [Display(Name = "Email")]
-        public string Email { get; set; }
+        public string Email { get; set; } = null!;
     }
 }
