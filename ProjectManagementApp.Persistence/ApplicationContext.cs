@@ -9,6 +9,7 @@ namespace ProjectManagementApp.Persistence
         public DbSet<Employee> Employees { get; set; } = null!;
         public DbSet<Project> Projects { get; set; } = null!;
         public DbSet<EmployeeProject> EmployeeProject { get; set; } = null!;
+        public DbSet<ProjectTask> ProjectTasks { get; set; } = null!;
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {

@@ -13,5 +13,7 @@
         public string Email { get; set; } = null!;
 
         public IList<EmployeeProject> EmployeeProject { get; set; } = null!;
+
+        public IList<ProjectTask> Tasks { get; set; } = null!;
     }
 }

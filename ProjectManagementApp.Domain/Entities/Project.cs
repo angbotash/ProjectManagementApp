@@ -21,5 +21,7 @@
         public DateTime EndDate { get; set; }
 
         public int Priority { get; set; }
+
+        public IList<ProjectTask> Tasks { get; set; } = null!;
     }
 }

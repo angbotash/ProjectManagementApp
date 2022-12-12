@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using ProjectManagementApp.Domain.Entities;
 using ProjectManagementApp.Domain.RepositoryInterfaces;
 using ProjectManagementApp.Domain.ServiceInterfaces;
 using ProjectManagementApp.Persistence;
