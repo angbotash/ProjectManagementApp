@@ -6,7 +6,7 @@ namespace ProjectManagementApp.Domain.RepositoryInterfaces
     {
         Task Create(Project newProject);
 
-        Task Update(int id, string name, string clientCompanyName, string executorCompanyName, int? managerId, DateTime startDate, DateTime endDate, int priority);
+        Task Update(Project updatedProject);
 
         Project? Get(int id);
 

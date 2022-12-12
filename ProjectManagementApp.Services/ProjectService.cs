@@ -31,14 +31,7 @@ namespace ProjectManagementApp.Services
 
             if (project != null)
             {
-                await this._projectRepository.Update(updatedProject.Id,
-                                                     updatedProject.Name,
-                                                     updatedProject.ClientCompanyName,
-                                                     updatedProject.ExecutorCompanyName,
-                                                     updatedProject.ManagerId ,
-                                                     updatedProject.StartDate,
-                                                     updatedProject.EndDate,
-                                                     updatedProject.Priority);
+                await this._projectRepository.Update(updatedProject);
             }
         }
 

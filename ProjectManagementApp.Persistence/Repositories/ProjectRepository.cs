@@ -35,26 +35,26 @@ namespace ProjectManagementApp.Persistence.Repositories
             }
         }
 
-        public async Task Update(int id, string name, string clientCompanyName, string executorCompanyName, int? managerId, DateTime startDate, DateTime endDate, int priority)
+        public async Task Update(Project updatedProject)
         {
-            var project = this._dbContext.Projects.FirstOrDefault(p => p.Id == id);
+            var project = this._dbContext.Projects.FirstOrDefault(p => p.Id == updatedProject.Id);
 
             if (project != null)
             {
-                project.Name = name;
-                project.ClientCompanyName = clientCompanyName;
-                project.ExecutorCompanyName = executorCompanyName;
-                project.StartDate = startDate;
-                project.EndDate = endDate;
-                project.Priority = priority;
+                project.Name = updatedProject.Name;
+                project.ClientCompanyName = updatedProject.ClientCompanyName;
+                project.ExecutorCompanyName = updatedProject.ExecutorCompanyName;
+                project.StartDate = updatedProject.StartDate;
+                project.EndDate = updatedProject.EndDate;
+                project.Priority = updatedProject.Priority;
 
-                if (project.ManagerId != null && project.ManagerId != managerId && managerId != null)
+                if (project.ManagerId != null && project.ManagerId != updatedProject.ManagerId && updatedProject.ManagerId != null)
                 {
                     await this.RemoveFromProject(project.Id, (int)project.ManagerId);
-                    await this.AddToProject(project.Id, (int)managerId);
+                    await this.AddToProject(project.Id, (int)updatedProject.ManagerId);
 
                 }
-                project.ManagerId = managerId;
+                project.ManagerId = updatedProject.ManagerId;
 
                 await this._dbContext.SaveChangesAsync();
             }
