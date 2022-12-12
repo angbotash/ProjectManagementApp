@@ -12,25 +12,27 @@ namespace ProjectManagementApp.Services
     public class ProjectService : IProjectService
     {
         private readonly IProjectRepository _projectRepository;
+        private readonly IEmployeeRepository _employeeRepository;
 
-        public ProjectService(IProjectRepository projectRepository)
+        public ProjectService(IProjectRepository projectRepository, IEmployeeRepository employeeRepository)
         {
             this._projectRepository = projectRepository;
+            this._employeeRepository = employeeRepository;
         }
 
-        public void Create(Project newProject)
+        public async Task Create(Project newProject)
         {
-            var project = this._projectRepository.GetById(newProject.Id);
+            var project = await this._projectRepository.Get(newProject.Id);
 
             if (project == null)
             {
-                this._projectRepository.Create(newProject);
+                await this._projectRepository.Create(newProject);
             }
         }
 
         public async Task Edit(Project updatedProject)
         {
-            var project = this._projectRepository.GetById(updatedProject.Id);
+            var project = await this._projectRepository.Get(updatedProject.Id);
 
             if (project != null)
             {
@@ -38,15 +40,16 @@ namespace ProjectManagementApp.Services
                                                      updatedProject.Name,
                                                      updatedProject.ClientCompanyName,
                                                      updatedProject.ExecutorCompanyName,
+                                                     updatedProject.ManagerId ,
                                                      updatedProject.StartDate,
                                                      updatedProject.EndDate,
                                                      updatedProject.Priority);
             }
         }
 
-        public Project? Get(int id)
+        public async Task<Project?> Get(int id)
         {
-            var project = this._projectRepository.GetById(id);
+            var project = await this._projectRepository.Get(id);
 
             return project;
         }
@@ -58,20 +61,57 @@ namespace ProjectManagementApp.Services
             return projects;
         }
 
-        public IEnumerable<Employee> GetEmployees(int id)
+        public async Task<IEnumerable<Employee>> GetEmployees(int id)
         {
-            var employees = this._projectRepository.GetEmployees(id);
+            var employees = await this._projectRepository.GetEmployees(id);
 
             return employees;
         }
 
-        public void Delete(int id)
+        public async Task AddToProject(int projectId, int employeeId)
         {
-            var project = this._projectRepository.GetById(id);
+            if (await this._projectRepository.Get(projectId) == null)
+            {
+                return;
+            }
+
+            if (await this._employeeRepository.Get(employeeId) == null)
+            {
+                return;
+            }
+
+            await this._projectRepository.AddToProject(projectId, employeeId);
+        }
+
+        public async Task RemoveFromProject(int projectId, int employeeId)
+        {
+            if (await this._projectRepository.Get(projectId) == null)
+            {
+                return;
+            }
+
+            if (await this._employeeRepository.Get(employeeId) == null)
+            {
+                return;
+            }
+
+            await this._projectRepository.RemoveFromProject(projectId, employeeId);
+        }
+
+        public async Task<bool> IsOnProject(int projectId, int employeeId)
+        {
+            var result = await this._projectRepository.IsEmployeeOnProject(projectId, employeeId);
+
+            return result;
+        }
+
+        public async Task Delete(int id)
+        {
+            var project = await this._projectRepository.Get(id);
 
             if (project != null)
             {
-                this._projectRepository.Delete(id);
+                await this._projectRepository.Delete(id);
             }
         }
     }

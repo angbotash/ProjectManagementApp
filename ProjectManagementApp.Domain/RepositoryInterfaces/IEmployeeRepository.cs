@@ -9,18 +9,20 @@ namespace ProjectManagementApp.Domain.RepositoryInterfaces
 {
     public interface IEmployeeRepository
     {
-        void Create(Employee newEmployee);
+        Task Create(Employee newEmployee);
 
         Task Update(int id, string firstName, string lastName, string patronymic, string email);
 
-        Employee? GetById(int id);
+        Task<Employee?> Get(int id);
 
-        Employee? GetByEmail(string email);
+        Task<Employee?> Get(string email);
 
         IEnumerable<Employee> GetAll();
 
-        IEnumerable<Project> GetProjects(int id);
+        Task<IEnumerable<Project>> GetProjects(int id);
 
-        void Delete(int id);
+        Task<bool> IsEmployeeOnProject(int employeeId, int projectId);
+
+        Task Delete(int id);
     }
 }

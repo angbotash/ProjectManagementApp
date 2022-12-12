@@ -30,7 +30,10 @@
             @Html.TextBoxFor(m => m.Email, new { placeholder = "Enter email" })
         </div>
         <hr>
-
-        <button type="submit">Create</button>
+        
+        @using (Html.BeginForm("CreateEmployee", "Employee", FormMethod.Post))
+        {
+            <input type="submit" value="Create" />
+        }
     </div>
 }

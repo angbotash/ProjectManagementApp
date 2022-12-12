@@ -18,19 +18,19 @@ namespace ProjectManagementApp.Services
             this._employeeRepository = employeeRepository;
         }
 
-        public void Create(Employee newEmployee)
+        public async Task Create(Employee newEmployee)
         {
-            var employee = this._employeeRepository.GetById(newEmployee.Id);
+            var employee = await this._employeeRepository.Get(newEmployee.Id);
 
             if (employee == null)
             {
-                this._employeeRepository.Create(newEmployee);
+                await this._employeeRepository.Create(newEmployee);
             }
         }
 
         public async Task Edit(Employee updatedEmployee)
         {
-            var employee = this._employeeRepository.GetById(updatedEmployee.Id);
+            var employee = await this._employeeRepository.Get(updatedEmployee.Id);
 
             if (employee != null)
             {
@@ -42,16 +42,16 @@ namespace ProjectManagementApp.Services
             }
         }
 
-        public Employee? Get(int id)
+        public async Task<Employee?> Get(int id)
         {
-            var employee = this._employeeRepository.GetById(id);
+            var employee = await this._employeeRepository.Get(id);
 
             return employee;
         }
 
-        public Employee? Get(string email)
+        public async Task<Employee?> Get(string email)
         {
-            var employee = this._employeeRepository.GetByEmail(email);
+            var employee = await this._employeeRepository.Get(email);
 
             return employee;
         }
@@ -63,20 +63,20 @@ namespace ProjectManagementApp.Services
             return employees;
         }
 
-        public IEnumerable<Project> GetProjects(int id)
+        public async Task<IEnumerable<Project>> GetProjects(int id)
         {
-            var projects = this._employeeRepository.GetProjects(id);
+            var projects = await this._employeeRepository.GetProjects(id);
 
             return projects;
         }
 
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
-            var employee = this._employeeRepository.GetById(id);
+            var employee = await this._employeeRepository.Get(id);
 
             if (employee != null)
             {
-                this._employeeRepository.Delete(id);
+                await this._employeeRepository.Delete(id);
             }
         }
     }

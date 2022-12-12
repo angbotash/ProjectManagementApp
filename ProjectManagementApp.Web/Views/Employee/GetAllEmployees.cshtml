@@ -4,8 +4,9 @@
 
 @if (Model.Any())
 {
-    <table class="table">
-        <thead>
+    <div>
+        <table class="table">
+            <thead>
             <tr>
                 <th>
                     First name
@@ -20,33 +21,34 @@
                     Email
                 </th>
             </tr>
-        </thead>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @item.FirstName
-                </td>
-                <td>
-                    @item.LastName
-                </td>
-                @if (item.Patronymic is null)
-                {
-                <td>
-                </td>
-                }
-                else
-                {
+            </thead>
+            @foreach (var item in Model)
+            {
+                <tr>
                     <td>
-                        @item.Patronymic
+                        @item.FirstName
                     </td>
-                }
-                <td>
-                    <a asp-controller="Employee" asp-action="ViewEmployee" asp-route-id="@item.Id">@item.Email</a>
-                </td>
-            </tr>
-        }
-    </table>
+                    <td>
+                        @item.LastName
+                    </td>
+                    @if (item.Patronymic is null)
+                    {
+                        <td>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            @item.Patronymic
+                        </td>
+                    }
+                    <td>
+                        <a asp-controller="Employee" asp-action="ViewEmployee" asp-route-id="@item.Id">@item.Email</a>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
 }
 else
 {

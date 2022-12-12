@@ -2,23 +2,31 @@
 
 <h4>Employee</h4>
 <div>
-    <p><b>First name: </b>@Model.FirstName</p>
-    <p><b>Last name: </b>@Model.LastName</p>
-    @if (Model.Patronymic != null)
-    {
-        <p><b>Patronymic: </b>@Model.Patronymic</p>
-    }
-    <p><b>Email: </b>@Model.Email</p>
-    <p><b>Email: </b></p>
-    @foreach(var projects in Model.Projects)
-    {
-        <p>@projects.Name</p>
-    }
-
-    <a asp-controller="Employee" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-dark">Edit</a>
+    <div>
+        <p><b>First name: </b>@Model.FirstName</p>
+        <p><b>Last name: </b>@Model.LastName</p>
+        @if (Model.Patronymic != null)
+        {
+            <p><b>Patronymic: </b>@Model.Patronymic</p>
+        }
+        <p><b>Email: </b>@Model.Email</p>
+        <p><b>Projects: </b></p>
+        <ul>
+            @foreach (var projects in Model.Projects)
+            {
+                <li>@projects.Name</li>
+            }
+        </ul>
+    </div>
+    
+    <div>
+        <a asp-controller="Employee" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-dark">Edit</a>
+    </div>
     <br/>
-    @using (Html.BeginForm("Delete", "Employee", new { id = Model.Id }, FormMethod.Post))
-    {
-        <input type="submit" value="Delete" />
-    }
+    <div>
+        @using (Html.BeginForm("Delete", "Employee", new {id = Model.Id}, FormMethod.Post))
+        {
+            <input type="submit" value="Delete"/>
+        }
+    </div>
 </div>

@@ -25,12 +25,12 @@ namespace ProjectManagementApp.Web.Controllers
         }
 
         [HttpPost("CreateEmployee")]
-        public IActionResult CreateEmployee(CreateEmployeeViewModel model)
+        public async Task<IActionResult> CreateEmployee(CreateEmployeeViewModel model)
         {
             if (ModelState.IsValid)
             {
                 var employee = this._mapper.Map<CreateEmployeeViewModel, Employee>(model);
-                this._employeeService.Create(employee);
+                await this._employeeService.Create(employee);
 
                 return RedirectToAction("GetAllEmployees");
             }
@@ -55,14 +55,14 @@ namespace ProjectManagementApp.Web.Controllers
         }
 
         [HttpGet("ViewEmployee")]
-        public IActionResult ViewEmployee(int? id)
+        public async Task<IActionResult> ViewEmployee(int? id)
         {
             if (id is null)
             {
                 return BadRequest();
             }
 
-            var employee = this._employeeService.Get((int)id);
+            var employee = await this._employeeService.Get((int)id);
 
             if (employee is null)
             {
@@ -70,7 +70,7 @@ namespace ProjectManagementApp.Web.Controllers
             }
 
             var result = this._mapper.Map<Employee, EmployeeViewModel>(employee);
-            var projects = this._employeeService.GetProjects((int)id);
+            var projects = await this._employeeService.GetProjects((int)id);
 
             foreach (var proj in projects)
             {
@@ -83,34 +83,34 @@ namespace ProjectManagementApp.Web.Controllers
         }
 
         [HttpPost("Delete")]
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id is null)
             {
                 return BadRequest();
             }
 
-            var employee = this._employeeService.Get((int)id);
+            var employee = await this._employeeService.Get((int)id);
 
             if (employee is null)
             {
                 return NotFound();
             }
 
-            this._employeeService.Delete((int)id);
+            await this._employeeService.Delete((int)id);
 
             return RedirectToAction("GetAllEmployees");
         }
 
         [HttpGet("Edit")]
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id is null)
             {
                 return BadRequest();
             }
 
-            var employee = this._employeeService.Get((int)id);
+            var employee = await this._employeeService.Get((int)id);
 
             if (employee is null)
             {
@@ -125,8 +125,6 @@ namespace ProjectManagementApp.Web.Controllers
         [HttpPost("Edit")]
         public IActionResult Edit(EditEmployeeViewModel model)
         {
-            var temp = model;
-
             if (ModelState.IsValid)
             {
                 var updatedEmployee = this._mapper.Map<EditEmployeeViewModel, Employee>(model);

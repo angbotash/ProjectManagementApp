@@ -9,18 +9,18 @@ namespace ProjectManagementApp.Domain.ServiceInterfaces
 {
     public interface IEmployeeService
     {
-        void Create(Employee newEmployee);
+        Task Create(Employee newEmployee);
 
         Task Edit(Employee updatedEmployee);
 
-        Employee? Get(int id);
+        Task<Employee?> Get(int id);
 
-        Employee? Get(string email);
+        Task<Employee?> Get(string email);
 
         IEnumerable<Employee> GetAll();
 
-        IEnumerable<Project> GetProjects(int id);
+        Task<IEnumerable<Project>> GetProjects(int id);
 
-        void Delete(int id);
+        Task Delete(int id);
     }
 }

@@ -1,29 +1,42 @@
-﻿@model ProjectManagementApp.Web.ViewModels.ProjectViewModel
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model ProjectManagementApp.Web.ViewModels.ProjectViewModel
 
 <h4>Project</h4>
 <div>
-    <p><b>Name: </b>@Model.Name</p>
-    <p><b>Customer: </b>@Model.ClientCompanyName</p>
-    <p><b>Executor: </b>@Model.ExecutorCompanyName</p>
-    <p>
-    <p><b>Manager: </b></p>
-    @if (Model.Manager != null)
-    {
-        @Model.Manager.Email
-    }
-    <p><b>Start date: </b>@Model.StartDate.ToString("dd/MM/yyyy")</p>
-    <p><b>End date: </b>@Model.EndDate.ToString("dd/MM/yyyy")</p>
-    <p><b>Priority: </b>@Model.Priority</p>
-    <p><b>Employees: </b></p>
-    @foreach (var employee in Model.Employees)
-    {
-        <p>@employee.Email</p>
-    }
-
-    <a asp-controller="Project" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-dark">Edit</a>
-    <br />
-    @using (Html.BeginForm("Delete", "Project", new { id = Model.Id }, FormMethod.Post))
-    {
-        <input type="submit" value="Delete" />
-    }
+    <div>
+        <p><b>Name: </b>@Model.Name</p>
+        <p><b>Customer: </b>@Model.ClientCompanyName</p>
+        <p><b>Executor: </b>@Model.ExecutorCompanyName</p>
+        <p>
+            <b>Manager: </b>
+            @if (Model.Manager != null)
+            {
+                @Model.Manager.Email
+            }
+        </p>
+        <p><b>Start date: </b>@Model.StartDate.ToString("dd/MM/yyyy")</p>
+        <p><b>End date: </b>@Model.EndDate.ToString("dd/MM/yyyy")</p>
+        <p><b>Priority: </b>@Model.Priority</p>
+        <p><b>Employees: </b></p>
+        <ul>
+            @foreach (var employee in Model.Employees)
+            {
+                <li>@employee.Email</li>
+            }
+        </ul>
+    </div>
+    <div>
+        <a asp-controller="Project" asp-action="EditProjectEmployees" asp-route-id="@Model.Id" class="btn btn-outline-dark">Edit employees</a>
+    </div>
+    <br/>
+    <div>
+        <a asp-controller="Project" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-dark">Edit</a>
+    </div>
+    <br/>
+    <div>
+        @using (Html.BeginForm("Delete", "Project", new {id = Model.Id}, FormMethod.Post))
+        {
+            <input type="submit" value="Delete"/>
+        }
+    </div>
 </div>
