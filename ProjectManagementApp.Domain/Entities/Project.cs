@@ -12,9 +12,9 @@ namespace ProjectManagementApp.Domain.Entities
         public string Name { get; set; }
         public string ClientCompanyName { get; set; }
         public string ExecutorCompanyName { get; set; }
-        public ICollection<Employee> Employees { get; set; }
-        public Employee TeamLeader { get; set; }
-        public int TeamLeaderId { get; set; }
+        public IList<EmployeeProject> EmployeeProject { get; set; } = null!;
+        public Employee? Manager { get; set; }
+        public int? ManagerId { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public int Priority { get; set; }

@@ -1,0 +1,64 @@
+﻿@model ProjectManagementApp.Web.ViewModels.EditProjectViewModel
+
+@using (Html.BeginForm("Edit", "Project", FormMethod.Post, new {enctype = "multipart/form-data"}))
+{
+    <div asp-validation-summary="ModelOnly"></div>
+    <div class="container">
+        <h1>Edit project "@Model.Name"</h1>
+        <hr>
+        @Html.HiddenFor(m => m.Id)
+
+        <div>
+        <b>@Html.LabelFor(m => m.Name)</b>
+        <br />
+        @Html.TextBoxFor(m => m.Name, new { placeholder = "Enter project name" })
+        </div>
+
+        <div>
+            <b>@Html.LabelFor(m => m.ClientCompanyName)</b>
+            <br />
+            @Html.TextBoxFor(m => m.ClientCompanyName,new { placeholder = "Enter client company name" })
+        </div>
+
+        <div>
+            <b>@Html.LabelFor(m => m.ExecutorCompanyName)</b>
+            <br />
+            @Html.TextBoxFor(m => m.ExecutorCompanyName, new { placeholder = "Enter executor company name" })
+        </div>
+        
+        <div>
+            <b>@Html.LabelFor(m => m.ManagerId)</b>
+            <br />
+            @Html.DropDownListFor(m => m.ManagerId, @Model.Managers, "Select Manager")
+            @Html.HiddenFor(m => m.Managers)
+        </div>
+
+        <div>
+            <b>@Html.LabelFor(m => m.StartDate)</b>
+            <br />
+            @Html.TextBoxFor(x => x.StartDate, "{0:yyyy-MM-dd}", new { @type = "date"})
+        </div>
+
+        <div>
+            <b>@Html.LabelFor(m => m.EndDate)</b>
+            <br />
+            @Html.TextBoxFor(x => x.EndDate, "{0:yyyy-MM-dd}", new { @type = "date"})
+        </div>
+
+        <div>
+            <b>@Html.LabelFor(m => m.Priority)</b>
+            <br />
+            @Html.TextBoxFor(m => m.Priority, new { @type="number", min="1", max="10", placeholder = "Enter executor company name" })
+        </div>
+        
+        <div>
+
+        </div>
+        <hr>
+        
+        @using (Html.BeginForm("Edit", "Project", FormMethod.Post))
+        {
+            <input type="submit" value="Save" />
+        }
+    </div>    
+}

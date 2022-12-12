@@ -6,12 +6,12 @@ namespace ProjectManagementApp.Persistence
 {
     public class ApplicationContext : DbContext
     {
-        public DbSet<Employee> Employees { get; set; }
-        public DbSet<Project> Projects { get; set; }
+        public DbSet<Employee> Employees { get; set; } = null!;
+        public DbSet<Project> Projects { get; set; } = null!;
+        public DbSet<EmployeeProject> EmployeeProject { get; set; } = null!;
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
-            Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -20,6 +20,7 @@ namespace ProjectManagementApp.Persistence
 
             modelBuilder.ApplyConfiguration(new EmployeeMappingConfiguration());
             modelBuilder.ApplyConfiguration(new ProjectMappingConfiguration());
+            modelBuilder.ApplyConfiguration(new EmployeeProjectMappingConfiguration());
         }
     }
 }

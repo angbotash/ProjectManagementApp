@@ -1,0 +1,39 @@
+﻿@model ProjectManagementApp.Web.ViewModels.CreateEmployeeViewModel
+
+@using (Html.BeginForm("CreateEmployee", "Employee", FormMethod.Post, new {enctype = "multipart/form-data"}))
+{
+    <div asp-validation-summary="ModelOnly"></div>
+    <div class="container">
+        <h1>Create a new employee</h1>
+        <hr>
+        <div>
+            <b>@Html.LabelFor(m => m.FirstName)</b>
+            <br />
+            @Html.TextBoxFor(m => m.FirstName, new { placeholder = "Enter first name" })
+        </div>
+
+        <div>
+            <b>@Html.LabelFor(m => m.LastName)</b>
+            <br />
+            @Html.TextBoxFor(m => m.LastName, new { placeholder = "Enter last name" })
+        </div>
+
+        <div>
+            <b>@Html.LabelFor(m => m.Patronymic)</b>
+            <br />
+            @Html.TextBoxFor(m => m.Patronymic, new { placeholder = "Enter patronymic" })
+        </div>
+
+        <div>
+            <b>@Html.LabelFor(m => m.Email)</b>
+            <br />
+            @Html.TextBoxFor(m => m.Email, new { placeholder = "Enter email" })
+        </div>
+        <hr>
+        
+        @using (Html.BeginForm("CreateEmployee", "Employee", FormMethod.Post))
+        {
+            <input type="submit" value="Create" />
+        }
+    </div>
+}

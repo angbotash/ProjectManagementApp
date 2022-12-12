@@ -1,0 +1,68 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model List<ProjectManagementApp.Web.ViewModels.ProjectViewModel>
+
+<h2>Projects<a class="btn btn-outline-dark" asp-controller="Project" asp-action="CreateProject" style="float: right">Create a new project</a></h2>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>
+                <a asp-action="GetAllProjects" asp-route-sortOrder="@ViewData["NameSortParam"]">Project name</a>
+            </th>
+            <th>
+                Customer
+            </th>
+            <th>
+                Executor
+            </th>
+            <th>
+                Manager
+            </th>
+            <th>
+                <a asp-action="GetAllProjects" asp-route-sortOrder="@ViewData["StartDateSortParam"]">Start date</a>
+            </th>
+            <th>
+                <a asp-action="GetAllProjects" asp-route-sortOrder="@ViewData["EndDateSortParam"]">End date</a>
+            </th>
+            <th>
+                <a asp-action="GetAllProjects" asp-route-sortOrder="@ViewData["PrioritySortParam"]">Priority</a>
+            </th>
+        </tr>
+        </thead>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a asp-controller="Project" asp-action="ViewProject" asp-route-Id="@item.Id">@item.Name</a>
+                </td>
+                <td>
+                    @item.ClientCompanyName
+                </td>
+                <td>
+                    @item.ExecutorCompanyName
+                </td>
+                <td>
+                    @if (item.Manager != null)
+                    {
+                        @item.Manager.Email
+                    }
+                </td>
+                <td>
+                    @item.StartDate.ToString("dd/MM/yyyy")
+                </td>
+                <td>
+                    @item.EndDate.ToString("dd/MM/yyyy")
+                </td>
+                <td>
+                    @item.Priority
+                </td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <h6>There is no projects.</h6>
+}

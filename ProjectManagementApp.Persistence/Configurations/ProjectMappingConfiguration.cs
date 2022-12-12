@@ -8,12 +8,14 @@ namespace ProjectManagementApp.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Project> builder)
         {
-            builder.HasMany(p => p.Employees)
-                   .WithMany(e => e.Projects);
 
-            builder.HasOne(p => p.TeamLeader)
-                .WithMany(t => t.Projects)
-                .HasForeignKey(k => k.TeamLeaderId);
+            builder.HasMany(p => p.EmployeeProject)
+                   .WithOne(ep => ep.Project)
+                   .HasForeignKey(p => p.ProjectId);
+
+            builder.HasOne(p => p.Manager)
+                   .WithMany()
+                   .HasForeignKey(p => p.ManagerId);
         }
     }
 }

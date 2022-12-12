@@ -1,0 +1,56 @@
+﻿@model List<ProjectManagementApp.Web.ViewModels.EmployeeViewModel>
+
+<h2>Employees<a class="btn btn-outline-dark" asp-controller="Employee" asp-action="CreateEmployee" style="float: right">Create a new employee</a></h2>
+
+@if (Model.Any())
+{
+    <div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>
+                    First name
+                </th>
+                <th>
+                    Last name
+                </th>
+                <th>
+                    Patronymic
+                </th>
+                <th>
+                    Email
+                </th>
+            </tr>
+            </thead>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.FirstName
+                    </td>
+                    <td>
+                        @item.LastName
+                    </td>
+                    @if (item.Patronymic is null)
+                    {
+                        <td>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            @item.Patronymic
+                        </td>
+                    }
+                    <td>
+                        <a asp-controller="Employee" asp-action="ViewEmployee" asp-route-id="@item.Id">@item.Email</a>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+}
+else
+{
+    <h6>There is no employees.</h6>
+}

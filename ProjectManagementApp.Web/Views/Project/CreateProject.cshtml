@@ -1,0 +1,60 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model ProjectManagementApp.Web.ViewModels.CreateProjectViewModel
+
+
+@using (Html.BeginForm("CreateProject", "Project", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div asp-validation-summary="ModelOnly"></div>
+    <div class="container">
+        <h1>Create a new project</h1>
+        <hr>
+        <div>
+            <b>@Html.LabelFor(m => m.Name)</b>
+            <br />
+            @Html.TextBoxFor(m => m.Name, new { placeholder = "Enter project name" })
+        </div>
+
+        <div>
+            <b>@Html.LabelFor(m => m.ClientCompanyName)</b>
+            <br />
+            @Html.TextBoxFor(m => m.ClientCompanyName,new { placeholder = "Enter client company name" })
+        </div>
+
+        <div>
+            <b>@Html.LabelFor(m => m.ExecutorCompanyName)</b>
+            <br />
+            @Html.TextBoxFor(m => m.ExecutorCompanyName, new { placeholder = "Enter executor company name" })
+        </div>
+
+        <div>
+            <b>@Html.LabelFor(m => m.ManagerId)</b>
+            <br />
+            @Html.DropDownListFor(m => m.ManagerId, @Model.Employees, "Select Manager")
+            @Html.HiddenFor(m => m.Employees)
+        </div>
+
+        <div>
+            <b>@Html.LabelFor(m => m.StartDate)</b>
+            <br />
+            @Html.TextBoxFor(m => m.StartDate, new { @type="date", @Value = Model.StartDate.ToString("dd/MM/yyyy"), placeholder = "Enter start date" })
+        </div>
+
+        <div>
+            <b>@Html.LabelFor(m => m.EndDate)</b>
+            <br />
+            @Html.TextBoxFor(m => m.EndDate, new { @type="date", @Value = Model.EndDate.ToString("dd/MM/yyyy"), placeholder = "Enter end date" })
+        </div>
+
+        <div>
+            <b>@Html.LabelFor(m => m.Priority)</b>
+            <br />
+            @Html.TextBoxFor(m => m.Priority, new { @type="number", min="1", max="10", placeholder = "Enter executor company name" })
+        </div>
+        <hr>
+        
+        @using (Html.BeginForm("CreateProject", "Project", FormMethod.Post))
+        {
+            <input type="submit" value="Create" />
+        }
+    </div>
+}

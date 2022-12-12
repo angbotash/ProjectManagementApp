@@ -1,0 +1,67 @@
+﻿@model ProjectManagementApp.Web.ViewModels.EditProjectEmployeesViewModel
+
+<h4>Edit project @Model.Project.Name employees</h4>
+<br/>
+
+@Html.HiddenFor(m => m.Project)
+@Html.HiddenFor(m => m.ProjectEmployees)
+@Html.HiddenFor(m => m.AllEmployees)
+
+<div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>
+                    Project employees
+            </th>
+            <th>
+            </th>
+        </tr>
+        </thead>
+        @foreach (var employee in Model.ProjectEmployees)
+        {
+            <tr>
+                <td>
+                    @employee.Email
+                </td>
+                <td>
+                    @using (Html.BeginForm("RemoveFromProject", "Project", new { projectId = Model.Project.Id, employeeId = employee.Id }, FormMethod.Post))
+                    {
+                        <input type="submit" value="Remove" />
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+
+<div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>
+                    Add employees
+            </th>
+            <th>
+            </th>
+        </tr>
+        </thead>
+        @foreach (var employee in @Model.AllEmployees)
+        {
+            <tr>
+                <td>
+                    @if (!Model.ProjectEmployees.Contains(employee))
+                    {
+                        @employee.Email
+                    }
+                </td>
+                <td>
+                    @using (Html.BeginForm("AddToProject", "Project", new { projectId = Model.Project.Id, employeeId = employee.Id }, FormMethod.Post))
+                    {
+                        <input type="submit" value="Add" />
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+</div>
