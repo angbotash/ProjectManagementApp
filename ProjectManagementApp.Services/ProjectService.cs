@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ProjectManagementApp.Domain.Entities;
+﻿using ProjectManagementApp.Domain.Entities;
 using ProjectManagementApp.Domain.RepositoryInterfaces;
 using ProjectManagementApp.Domain.ServiceInterfaces;
 
@@ -22,7 +17,7 @@ namespace ProjectManagementApp.Services
 
         public async Task Create(Project newProject)
         {
-            var project = await this._projectRepository.Get(newProject.Id);
+            var project = this._projectRepository.Get(newProject.Id);
 
             if (project == null)
             {
@@ -32,7 +27,7 @@ namespace ProjectManagementApp.Services
 
         public async Task Edit(Project updatedProject)
         {
-            var project = await this._projectRepository.Get(updatedProject.Id);
+            var project = this._projectRepository.Get(updatedProject.Id);
 
             if (project != null)
             {
@@ -47,9 +42,9 @@ namespace ProjectManagementApp.Services
             }
         }
 
-        public async Task<Project?> Get(int id)
+        public Project? Get(int id)
         {
-            var project = await this._projectRepository.Get(id);
+            var project = this._projectRepository.Get(id);
 
             return project;
         }
@@ -61,21 +56,21 @@ namespace ProjectManagementApp.Services
             return projects;
         }
 
-        public async Task<IEnumerable<Employee>> GetEmployees(int id)
+        public IEnumerable<Employee> GetEmployees(int id)
         {
-            var employees = await this._projectRepository.GetEmployees(id);
+            var employees = this._projectRepository.GetEmployees(id);
 
             return employees;
         }
 
         public async Task AddToProject(int projectId, int employeeId)
         {
-            if (await this._projectRepository.Get(projectId) == null)
+            if (this._projectRepository.Get(projectId) == null)
             {
                 return;
             }
 
-            if (await this._employeeRepository.Get(employeeId) == null)
+            if (this._employeeRepository.Get(employeeId) == null)
             {
                 return;
             }
@@ -85,12 +80,12 @@ namespace ProjectManagementApp.Services
 
         public async Task RemoveFromProject(int projectId, int employeeId)
         {
-            if (await this._projectRepository.Get(projectId) == null)
+            if (this._projectRepository.Get(projectId) == null)
             {
                 return;
             }
 
-            if (await this._employeeRepository.Get(employeeId) == null)
+            if (this._employeeRepository.Get(employeeId) == null)
             {
                 return;
             }
@@ -98,16 +93,16 @@ namespace ProjectManagementApp.Services
             await this._projectRepository.RemoveFromProject(projectId, employeeId);
         }
 
-        public async Task<bool> IsOnProject(int projectId, int employeeId)
+        public bool IsOnProject(int projectId, int employeeId)
         {
-            var result = await this._projectRepository.IsEmployeeOnProject(projectId, employeeId);
+            var result = this._projectRepository.IsEmployeeOnProject(projectId, employeeId);
 
             return result;
         }
 
         public async Task Delete(int id)
         {
-            var project = await this._projectRepository.Get(id);
+            var project = this._projectRepository.Get(id);
 
             if (project != null)
             {

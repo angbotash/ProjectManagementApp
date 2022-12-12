@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using ProjectManagementApp.Domain.Entities;
+﻿using ProjectManagementApp.Domain.Entities;
 using ProjectManagementApp.Domain.RepositoryInterfaces;
 
 namespace ProjectManagementApp.Persistence.Repositories
@@ -24,31 +18,31 @@ namespace ProjectManagementApp.Persistence.Repositories
             await this._dbContext.SaveChangesAsync();
         }
 
-        public async Task Update(int id, string firstName, string lastName, string patronymic, string email)
+        public async Task Update(Employee updatedEmployee)
         {
-            var employee = await this._dbContext.Employees.FindAsync(id);
+            var employee = this._dbContext.Employees.FirstOrDefault(e => e.Id == updatedEmployee.Id);
 
             if (employee != null)
             {
-                employee.FirstName = firstName;
-                employee.LastName = lastName;
-                employee.Patronymic = patronymic;
-                employee.Email = email;
+                employee.FirstName = updatedEmployee.FirstName;
+                employee.LastName = updatedEmployee.LastName;
+                employee.Patronymic = updatedEmployee.Patronymic;
+                employee.Email = updatedEmployee.Email;
 
                 await _dbContext.SaveChangesAsync();
             }
         }
 
-        public async Task<Employee?> Get(int id)
+        public Employee? Get(int id)
         {
-            var employee = await this._dbContext.Employees.FindAsync(id);
+            var employee = this._dbContext.Employees.FirstOrDefault(e => e.Id == id);
 
             return employee;
         }
 
-        public async Task<Employee?> Get(string email)
+        public Employee? Get(string email)
         {
-            var employee =await this._dbContext.Employees.FindAsync(email);
+            var employee = this._dbContext.Employees.FirstOrDefault(e => e.Email == email);
 
             return employee;
         }
@@ -60,14 +54,14 @@ namespace ProjectManagementApp.Persistence.Repositories
             return employees;
         }
 
-        public async Task<IEnumerable<Project>> GetProjects(int id)
+        public IEnumerable<Project> GetProjects(int id)
         {
             var projects = this._dbContext.EmployeeProject.Where(p => p.EmployeeId == id).ToList();
             var result = new List<Project>();
 
             foreach (var project in projects)
             {
-                var tempProject = await this._dbContext.Projects.FirstOrDefaultAsync(p => p.Id == project.ProjectId);
+                var tempProject = this._dbContext.Projects.FirstOrDefault(p => p.Id == project.ProjectId);
 
                 if (tempProject != null)
                 {
@@ -78,10 +72,10 @@ namespace ProjectManagementApp.Persistence.Repositories
             return result;
         }
 
-        public async Task<bool> IsEmployeeOnProject(int employeeId, int projectId)
+        public bool IsEmployeeOnProject(int employeeId, int projectId)
         {
             var employeeProject =
-                await this._dbContext.EmployeeProject.FirstOrDefaultAsync(x =>
+                this._dbContext.EmployeeProject.FirstOrDefault(x =>
                     x.EmployeeId == employeeId && x.ProjectId == projectId);
 
             if (employeeProject is null)
@@ -94,12 +88,12 @@ namespace ProjectManagementApp.Persistence.Repositories
 
         public async Task Delete(int id)
         {
-            var employee = await this._dbContext.Employees.FindAsync(id);
+            var employee = this._dbContext.Employees.FirstOrDefault(e => e.Id == id);
 
             if (employee != null)
             {
                 this._dbContext.Employees.Remove(employee);
-                this._dbContext.SaveChanges();
+                await this._dbContext.SaveChangesAsync();
             }
         }
     }

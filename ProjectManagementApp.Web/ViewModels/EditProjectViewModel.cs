@@ -1,5 +1,4 @@
-﻿using ProjectManagementApp.Domain.Entities;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ProjectManagementApp.Web.ViewModels
@@ -11,17 +10,17 @@ namespace ProjectManagementApp.Web.ViewModels
         [Required(ErrorMessage = "Project name is required.")]
         [DataType(DataType.Text)]
         [Display(Name = "Project name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
         [Required(ErrorMessage = "Client company name is required.")]
         [DataType(DataType.Text)]
         [Display(Name = "Client company name")]
-        public string ClientCompanyName { get; set; }
+        public string ClientCompanyName { get; set; } = null!;
 
         [Required(ErrorMessage = "Executor company name is required.")]
         [DataType(DataType.Text)]
         [Display(Name = "Executor company name")]
-        public string ExecutorCompanyName { get; set; }
+        public string ExecutorCompanyName { get; set; } = null!;
 
         [Display(Name = "Project manager")]
         public int? ManagerId { get; set; }

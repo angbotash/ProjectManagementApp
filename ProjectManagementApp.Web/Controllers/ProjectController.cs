@@ -110,14 +110,14 @@ namespace ProjectManagementApp.Web.Controllers
         }
 
         [HttpGet("ViewProject")]
-        public async Task<IActionResult> ViewProject(int? id)
+        public IActionResult ViewProject(int? id)
         {
             if (id is null)
             {
                 return BadRequest();
             }
 
-            var project = await this._projectService.Get((int)id);
+            var project = this._projectService.Get((int)id);
 
             if (project is null)
             {
@@ -125,7 +125,7 @@ namespace ProjectManagementApp.Web.Controllers
             }
 
             var result = this._mapper.Map<Project, ProjectViewModel>(project);
-            var employees = await this._projectService.GetEmployees((int)id);
+            var employees = this._projectService.GetEmployees((int)id);
 
             foreach (var empl in employees)
             {
@@ -145,7 +145,7 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            var project = await this._projectService.Get((int) id);
+            var project = this._projectService.Get((int)id);
 
             if (project is null)
             {
@@ -158,14 +158,14 @@ namespace ProjectManagementApp.Web.Controllers
         }
 
         [HttpGet("Edit")]
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id is null)
             {
                 return BadRequest();
             }
 
-            var project = await this._projectService.Get((int)id);
+            var project = this._projectService.Get((int)id);
             var allEmployees = this._employeeService.GetAll();
 
             if (project is null)
@@ -203,14 +203,14 @@ namespace ProjectManagementApp.Web.Controllers
         }
 
         [HttpGet("EditProjectEmployees")]
-        public async Task<IActionResult> EditProjectEmployees(int? id)
+        public IActionResult EditProjectEmployees(int? id)
         {
             if (id is null)
             {
                 return BadRequest();
             }
 
-            var project = await this._projectService.Get((int) id);
+            var project = this._projectService.Get((int)id);
 
             if (project is null)
             {
@@ -218,7 +218,7 @@ namespace ProjectManagementApp.Web.Controllers
             }
 
             var allEmployees = this._employeeService.GetAll();
-            var projectEmployees = await this._projectService.GetEmployees((int) id);
+            var projectEmployees = this._projectService.GetEmployees((int) id);
             var model = new EditProjectEmployeesViewModel()
                 {Project = this._mapper.Map<Project, ProjectViewModel>(project)};
 
@@ -245,12 +245,12 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            if (await this._projectService.Get((int)projectId) is null)
+            if (this._projectService.Get((int)projectId) is null)
             {
                 return NotFound();
             }
 
-            if (await this._employeeService.Get((int)employeeId) is null)
+            if (this._employeeService.Get((int)employeeId) is null)
             {
                 return NotFound();
             }
@@ -268,12 +268,12 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            if (await this._projectService.Get((int)projectId) is null)
+            if (this._projectService.Get((int)projectId) is null)
             {
                 return NotFound();
             }
 
-            if (await this._employeeService.Get((int)employeeId) is null)
+            if (this._employeeService.Get((int)employeeId) is null)
             {
                 return NotFound();
             }

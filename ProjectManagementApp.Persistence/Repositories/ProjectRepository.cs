@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using ProjectManagementApp.Domain.Entities;
 using ProjectManagementApp.Domain.RepositoryInterfaces;
 
@@ -25,8 +20,7 @@ namespace ProjectManagementApp.Persistence.Repositories
 
             if (newProject.ManagerId != null)
             {
-                var project = await this._dbContext.Projects.FirstOrDefaultAsync(x =>
-                    x.Name == newProject.Name && x.ManagerId == newProject.ManagerId);
+                var project = this._dbContext.Projects.FirstOrDefault(x => x.Name == newProject.Name && x.ManagerId == newProject.ManagerId);
 
                 if (project is null)
                 {
@@ -43,7 +37,7 @@ namespace ProjectManagementApp.Persistence.Repositories
 
         public async Task Update(int id, string name, string clientCompanyName, string executorCompanyName, int? managerId, DateTime startDate, DateTime endDate, int priority)
         {
-            var project = await this._dbContext.Projects.FindAsync(id);
+            var project = this._dbContext.Projects.FirstOrDefault(p => p.Id == id);
 
             if (project != null)
             {
@@ -56,8 +50,8 @@ namespace ProjectManagementApp.Persistence.Repositories
 
                 if (project.ManagerId != null && project.ManagerId != managerId && managerId != null)
                 {
-                    this.RemoveFromProject(project.Id, (int)project.ManagerId);
-                    this.AddToProject(project.Id, (int)managerId);
+                    await this.RemoveFromProject(project.Id, (int)project.ManagerId);
+                    await this.AddToProject(project.Id, (int)managerId);
 
                 }
                 project.ManagerId = managerId;
@@ -66,16 +60,16 @@ namespace ProjectManagementApp.Persistence.Repositories
             }
         }
 
-        public async Task<Project?> Get(int id)
+        public Project? Get(int id)
         {
-            var project = await this._dbContext.Projects.Include(x => x.Manager).FirstOrDefaultAsync(p => p.Id == id);
+            var project = this._dbContext.Projects.Include(x => x.Manager).FirstOrDefault(p => p.Id == id);
 
             return project;
         }
 
-        public async Task<Project?> Get(string name)
+        public Project? Get(string name)
         {
-            var project = await this._dbContext.Projects.Include(x => x.Manager).FirstOrDefaultAsync(p => p.Name == name);
+            var project = this._dbContext.Projects.Include(x => x.Manager).FirstOrDefault(p => p.Name == name);
 
             return project;
         }
@@ -87,14 +81,14 @@ namespace ProjectManagementApp.Persistence.Repositories
             return projects;
         }
 
-        public async Task<IEnumerable<Employee>> GetEmployees(int id)
+        public IEnumerable<Employee> GetEmployees(int id)
         {
-            var employees = await this._dbContext.EmployeeProject.Where(e => e.ProjectId == id).ToListAsync();
+            var employees = this._dbContext.EmployeeProject.Where(e => e.ProjectId == id).ToList();
             var result = new List<Employee>();
 
             foreach (var employee in employees)
             {
-                var tempEmployee = await this._dbContext.Employees.FirstOrDefaultAsync(e => e.Id == employee.EmployeeId);
+                var tempEmployee = this._dbContext.Employees.FirstOrDefault(e => e.Id == employee.EmployeeId);
 
                 if (tempEmployee != null)
                 {
@@ -107,7 +101,7 @@ namespace ProjectManagementApp.Persistence.Repositories
 
         public async Task Delete(int id)
         {
-            var project = await this._dbContext.Projects.FindAsync(id);
+            var project = this._dbContext.Projects.FirstOrDefault(p => p.Id == id);
 
             if (project != null)
             {
@@ -144,16 +138,14 @@ namespace ProjectManagementApp.Persistence.Repositories
 
         public async Task AddToProject(int projectId, int employeeId)
         {
-            var project = await this._dbContext.Projects.FirstOrDefaultAsync(p => p.Id == projectId);
+            var project = this._dbContext.Projects.FirstOrDefault(p => p.Id == projectId);
 
             if (project == null)
             {
                 return;
             }
 
-            var employeeProject = await 
-                this._dbContext.EmployeeProject.FirstOrDefaultAsync(p =>
-                    p.ProjectId == projectId && p.EmployeeId == employeeId);
+            var employeeProject = this._dbContext.EmployeeProject.FirstOrDefault(p => p.ProjectId == projectId && p.EmployeeId == employeeId);
 
             if (employeeProject is null)
             {
@@ -193,7 +185,7 @@ namespace ProjectManagementApp.Persistence.Repositories
 
         public async Task RemoveFromProject(int projectId, int employeeId)
         {
-            var project = await this._dbContext.Projects.FirstOrDefaultAsync(p => p.Id == projectId);
+            var project = this._dbContext.Projects.FirstOrDefault(p => p.Id == projectId);
 
             if (project == null)
             {
@@ -201,7 +193,7 @@ namespace ProjectManagementApp.Persistence.Repositories
             }
 
             var employeeProject =
-                await this._dbContext.EmployeeProject.FirstOrDefaultAsync(p => p.ProjectId == projectId && p.EmployeeId == employeeId);
+                this._dbContext.EmployeeProject.FirstOrDefault(p => p.ProjectId == projectId && p.EmployeeId == employeeId);
 
             if (employeeProject != null)
             {
@@ -210,10 +202,10 @@ namespace ProjectManagementApp.Persistence.Repositories
             }
         }
 
-        public async Task<bool> IsEmployeeOnProject(int employeeId, int projectId)
+        public bool IsEmployeeOnProject(int employeeId, int projectId)
         {
             var employeeProject =
-                await this._dbContext.EmployeeProject.FirstOrDefaultAsync(x =>
+                this._dbContext.EmployeeProject.FirstOrDefault(x =>
                     x.EmployeeId == employeeId && x.ProjectId == projectId);
 
             if (employeeProject is null)

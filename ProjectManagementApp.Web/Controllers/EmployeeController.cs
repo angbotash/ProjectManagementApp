@@ -55,14 +55,14 @@ namespace ProjectManagementApp.Web.Controllers
         }
 
         [HttpGet("ViewEmployee")]
-        public async Task<IActionResult> ViewEmployee(int? id)
+        public IActionResult ViewEmployee(int? id)
         {
             if (id is null)
             {
                 return BadRequest();
             }
 
-            var employee = await this._employeeService.Get((int)id);
+            var employee = this._employeeService.Get((int)id);
 
             if (employee is null)
             {
@@ -70,7 +70,7 @@ namespace ProjectManagementApp.Web.Controllers
             }
 
             var result = this._mapper.Map<Employee, EmployeeViewModel>(employee);
-            var projects = await this._employeeService.GetProjects((int)id);
+            var projects = this._employeeService.GetProjects((int)id);
 
             foreach (var proj in projects)
             {
@@ -90,7 +90,7 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            var employee = await this._employeeService.Get((int)id);
+            var employee = this._employeeService.Get((int)id);
 
             if (employee is null)
             {
@@ -103,14 +103,14 @@ namespace ProjectManagementApp.Web.Controllers
         }
 
         [HttpGet("Edit")]
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id is null)
             {
                 return BadRequest();
             }
 
-            var employee = await this._employeeService.Get((int)id);
+            var employee = this._employeeService.Get((int)id);
 
             if (employee is null)
             {
@@ -123,13 +123,13 @@ namespace ProjectManagementApp.Web.Controllers
         }
 
         [HttpPost("Edit")]
-        public IActionResult Edit(EditEmployeeViewModel model)
+        public async Task<IActionResult> Edit(EditEmployeeViewModel model)
         {
             if (ModelState.IsValid)
             {
                 var updatedEmployee = this._mapper.Map<EditEmployeeViewModel, Employee>(model);
 
-                this._employeeService.Edit(updatedEmployee);
+                await this._employeeService.Edit(updatedEmployee);
             }
 
             return RedirectToAction("ViewEmployee", new { model.Id });
