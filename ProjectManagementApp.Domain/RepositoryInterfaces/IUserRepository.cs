@@ -18,8 +18,6 @@ namespace ProjectManagementApp.Domain.RepositoryInterfaces
 
         Task RemoveFromProject(int projectId, int userId);
 
-        bool IsUserOnProject(int userId, int projectId);
-
         Task Delete(int id);
     }
 }

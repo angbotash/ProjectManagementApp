@@ -23,7 +23,9 @@ builder.Services.AddScoped<IIssueService, IssueService>();
 builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddIdentity<User, IdentityRole<int>>()
+    .AddRoles<IdentityRole<int>>()
     .AddEntityFrameworkStores<ApplicationContext>();
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -34,6 +36,8 @@ using (var scope = app.Services.CreateScope())
     var context = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
     context.Database.Migrate();
 }
+
+await Configure(app);
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -55,3 +59,13 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+// Add roles
+async Task Configure(WebApplication host)
+{
+    using var scope = host.Services.CreateScope();
+    var services = scope.ServiceProvider;
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole<int>>>();
+
+    await ContextSeed.SeedRolesAsync(roleManager);
+}
