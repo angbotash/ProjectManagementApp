@@ -7,10 +7,12 @@ namespace ProjectManagementApp.Services
     public class EmployeeService : IEmployeeService
     {
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IProjectRepository _projectRepository;
 
-        public EmployeeService(IEmployeeRepository employeeRepository)
+        public EmployeeService(IEmployeeRepository employeeRepository, IProjectRepository projectRepository)
         {
             this._employeeRepository = employeeRepository;
+            this._projectRepository = projectRepository;
         }
 
         public async Task Create(Employee newEmployee)
@@ -52,6 +54,36 @@ namespace ProjectManagementApp.Services
             var projects = this._employeeRepository.GetProjects(id);
 
             return projects;
+        }
+
+        public async Task AddToProject(int projectId, int employeeId)
+        {
+            if (this._projectRepository.Get(projectId) == null)
+            {
+                return;
+            }
+
+            if (this._employeeRepository.Get(employeeId) == null)
+            {
+                return;
+            }
+
+            await this._employeeRepository.AddToProject(projectId, employeeId);
+        }
+
+        public async Task RemoveFromProject(int projectId, int employeeId)
+        {
+            if (this._projectRepository.Get(projectId) == null)
+            {
+                return;
+            }
+
+            if (this._employeeRepository.Get(employeeId) == null)
+            {
+                return;
+            }
+
+            await this._employeeRepository.RemoveFromProject(projectId, employeeId);
         }
 
         public async Task Delete(int id)

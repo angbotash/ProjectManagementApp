@@ -48,13 +48,6 @@ namespace ProjectManagementApp.Persistence.Repositories
                 project.StartDate = updatedProject.StartDate;
                 project.EndDate = updatedProject.EndDate;
                 project.Priority = updatedProject.Priority;
-
-                if (project.ManagerId != null && project.ManagerId != updatedProject.ManagerId && updatedProject.ManagerId != null)
-                {
-                    await this.RemoveFromProject(project.Id, (int)project.ManagerId);
-                    await this.AddToProject(project.Id, (int)updatedProject.ManagerId);
-
-                }
                 project.ManagerId = updatedProject.ManagerId;
 
                 await this._dbContext.SaveChangesAsync();
@@ -110,49 +103,6 @@ namespace ProjectManagementApp.Persistence.Repositories
             if (project != null)
             {
                 this._dbContext.Projects.Remove(project);
-                await this._dbContext.SaveChangesAsync();
-            }
-        }
-
-        public async Task AddToProject(int projectId, int employeeId)
-        {
-            var project = this._dbContext.Projects.FirstOrDefault(p => p.Id == projectId);
-
-            if (project == null)
-            {
-                return;
-            }
-
-            var employeeProject =
-                this._dbContext.EmployeeProject.FirstOrDefault(p =>
-                    p.ProjectId == projectId && p.EmployeeId == employeeId);
-
-            if (employeeProject is null)
-            {
-                var newEmployeeProject = new EmployeeProject()
-                    { EmployeeId = employeeId, ProjectId = projectId };
-
-                await this._dbContext.EmployeeProject.AddAsync(newEmployeeProject);
-                await this._dbContext.SaveChangesAsync();
-            }
-        }
-
-        public async Task RemoveFromProject(int projectId, int employeeId)
-        {
-            var project = this._dbContext.Projects.FirstOrDefault(p => p.Id == projectId);
-
-            if (project == null)
-            {
-                return;
-            }
-
-            var employeeProject =
-                this._dbContext.EmployeeProject.FirstOrDefault(p =>
-                    p.ProjectId == projectId && p.EmployeeId == employeeId);
-
-            if (employeeProject != null)
-            {
-                this._dbContext.EmployeeProject.Remove(employeeProject);
                 await this._dbContext.SaveChangesAsync();
             }
         }

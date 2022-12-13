@@ -14,6 +14,10 @@ namespace ProjectManagementApp.Domain.RepositoryInterfaces
 
         IEnumerable<Project> GetProjects(int id);
 
+        Task AddToProject(int projectId, int employeeId);
+
+        Task RemoveFromProject(int projectId, int employeeId);
+
         bool IsEmployeeOnProject(int employeeId, int projectId);
 
         Task Delete(int id);

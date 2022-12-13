@@ -236,51 +236,5 @@ namespace ProjectManagementApp.Web.Controllers
 
             return View(model);
         }
-
-        [HttpPost("AddToProject")]
-        public async Task<IActionResult> AddToProject(int? projectId, int? employeeId)
-        {
-            if (projectId is null || employeeId is null)
-            {
-                return BadRequest();
-            }
-
-            if (this._projectService.Get((int)projectId) is null)
-            {
-                return NotFound();
-            }
-
-            if (this._employeeService.Get((int)employeeId) is null)
-            {
-                return NotFound();
-            }
-
-            await this._projectService.AddToProject((int)projectId, (int)employeeId);
-
-            return RedirectToAction("ViewProject", new { projectId });
-        }
-
-        [HttpPost("RemoveFromProject")]
-        public async Task<IActionResult> RemoveFromProject(int? projectId, int? employeeId)
-        {
-            if (projectId is null || employeeId is null)
-            {
-                return BadRequest();
-            }
-
-            if (this._projectService.Get((int)projectId) is null)
-            {
-                return NotFound();
-            }
-
-            if (this._employeeService.Get((int)employeeId) is null)
-            {
-                return NotFound();
-            }
-
-            await this._projectService.RemoveFromProject((int)projectId, (int)employeeId);
-
-            return RedirectToAction("ViewProject", new { projectId });
-        }
     }
 }

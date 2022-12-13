@@ -14,6 +14,10 @@ namespace ProjectManagementApp.Domain.ServiceInterfaces
 
         IEnumerable<Project> GetProjects(int id);
 
+        Task AddToProject(int projectId, int employeeId);
+
+        Task RemoveFromProject(int projectId, int employeeId);
+
         Task Delete(int id);
     }
 }

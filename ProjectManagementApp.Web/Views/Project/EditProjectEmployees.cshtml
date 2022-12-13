@@ -25,7 +25,7 @@
                     @employee.Email
                 </td>
                 <td>
-                    @using (Html.BeginForm("RemoveFromProject", "Project", new { projectId = Model.Project.Id, employeeId = employee.Id }, FormMethod.Post))
+                    @using (Html.BeginForm("RemoveFromProject", "Employee", new { projectId = Model.Project.Id, employeeId = employee.Id }, FormMethod.Post))
                     {
                         <input type="submit" value="Remove" />
                     }
@@ -56,7 +56,7 @@
                     }
                 </td>
                 <td>
-                    @using (Html.BeginForm("AddToProject", "Project", new { projectId = Model.Project.Id, employeeId = employee.Id }, FormMethod.Post))
+                    @using (Html.BeginForm("AddToProject", "Employee", new { projectId = Model.Project.Id, employeeId = employee.Id }, FormMethod.Post))
                     {
                         <input type="submit" value="Add" />
                     }
