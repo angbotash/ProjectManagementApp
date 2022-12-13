@@ -11,7 +11,12 @@
             <b>Manager: </b>
             @if (Model.Manager != null)
             {
-                @Model.Manager.Email
+                @Html.ActionLink(
+                    @Model.Manager.Email,
+                    "ViewEmployee",
+                    "Employee",
+            new {id = @Model.Manager.Id},
+                    null)
             }
         </p>
         <p><b>Start date: </b>@Model.StartDate.ToString("dd/MM/yyyy")</p>
@@ -21,10 +26,27 @@
         <ul>
             @foreach (var employee in Model.Employees)
             {
-                <li>@employee.Email</li>
+                <li>
+                    @Html.ActionLink(
+                        @employee.Email,
+                         "ViewEmployee",
+                         "Employee",
+                         new {id = @employee.Id},
+                         null)
+                </li>
             }
         </ul>
-        <p><b>@Html.ActionLink("Issues", "ViewProjectIssues", "Issue", new { projectId = @Model.Id }, null)</b></p>
+        <p>
+
+            <b>
+                @Html.ActionLink(
+                    "Issues",
+                    "ViewProjectIssues",
+                    "Issue",
+                    new {projectId = @Model.Id},
+                    null)
+            </b>
+        </p>
         <br/>
     </div>
     <div>

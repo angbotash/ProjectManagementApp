@@ -32,16 +32,36 @@
     {
         <tr>
             <td>
-                <a asp-controller="Issue" asp-action="ViewIssue" asp-route-Id="@issue.Id">@issue.Name</a>
+                @Html.ActionLink(
+            @issue.Name,
+            "ViewIssue",
+            "Issue",
+            new { id = @issue.Id },
+            null)
             </td>
             <td>
-                @issue.Reporter.Email
+                @Html.ActionLink(
+            @issue.Reporter.Email,
+            "ViewEmployee",
+            "Employee",
+            new { id = @issue.Reporter.Id },
+            null)
             </td>
             <td>
-                @issue.Assignee.Email
+                @Html.ActionLink(
+            @issue.Assignee.Email,
+            "ViewEmployee",
+            "Employee",
+            new { id = @issue.Assignee.Id },
+            null)
             </td>
             <td>
-                @issue.Project.Name
+                @Html.ActionLink(
+            @issue.Project.Name,
+            "ViewProject",
+            "Project",
+            new { id = @issue.Project.Id },
+            null)
             </td>
             <td>
                 @issue.Comment
