@@ -134,7 +134,7 @@ namespace ProjectManagementApp.Web.Controllers
                 await this._employeeService.Edit(updatedEmployee);
             }
 
-            return RedirectToAction("ViewEmployee", new { model.Id });
+            return RedirectToAction("ViewEmployee", new { id = model.Id });
         }
 
         [HttpPost("AddToProject")]
@@ -157,7 +157,7 @@ namespace ProjectManagementApp.Web.Controllers
 
             await this._employeeService.AddToProject((int)projectId, (int)employeeId);
 
-            return RedirectToAction("ViewProject", "Project" , new { projectId });
+            return RedirectToAction("EditProjectEmployees", "Project" , new { id = projectId });
         }
 
         [HttpPost("RemoveFromProject")]
@@ -180,7 +180,7 @@ namespace ProjectManagementApp.Web.Controllers
 
             await this._employeeService.RemoveFromProject((int)projectId, (int)employeeId);
 
-            return RedirectToAction("ViewProject", "Project", new { projectId });
+            return RedirectToAction("EditProjectEmployees", "Project", new { id = projectId });
         }
     }
 }

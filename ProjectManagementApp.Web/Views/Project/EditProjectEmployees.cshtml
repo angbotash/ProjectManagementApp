@@ -22,7 +22,12 @@
         {
             <tr>
                 <td>
-                    @employee.Email
+                    @Html.ActionLink(
+                    @employee.Email,
+                        "ViewEmployee",
+                        "Employee",
+                        new { id = @employee.Id },
+                        null)
                 </td>
                 <td>
                     @using (Html.BeginForm("RemoveFromProject", "Employee", new { projectId = Model.Project.Id, employeeId = employee.Id }, FormMethod.Post))
@@ -52,7 +57,12 @@
                 <td>
                     @if (!Model.ProjectEmployees.Contains(employee))
                     {
-                        @employee.Email
+                        @Html.ActionLink(
+                            @employee.Email,
+                            "ViewEmployee",
+                            "Employee",
+                            new { id = @employee.Id },
+                            null)
                     }
                 </td>
                 <td>

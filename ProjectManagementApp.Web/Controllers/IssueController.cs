@@ -70,7 +70,7 @@ namespace ProjectManagementApp.Web.Controllers
 
                 await this._issueService.Create(issue);
 
-                return RedirectToAction("ViewProject", "Project", new { issue.ProjectId });
+                return RedirectToAction("ViewProject", "Project", new { id = issue.ProjectId });
             }
 
             return View(model);
@@ -257,7 +257,7 @@ namespace ProjectManagementApp.Web.Controllers
                 await this._issueService.Edit(updatedIssue);
             }
 
-            return RedirectToAction("ViewIssue", new { model.Id });
+            return RedirectToAction("ViewIssue", new { id = model.Id });
         }
 
         [HttpPost("Delete")]
@@ -275,9 +275,11 @@ namespace ProjectManagementApp.Web.Controllers
                 return NotFound();
             }
 
+            var projectId = issue.ProjectId;
+
             await this._issueService.Delete((int)id);
 
-            return RedirectToAction("GetAllProjects", "Project");
+            return RedirectToAction("ViewProject", "Project", new { id = projectId });
         }
     }
 }

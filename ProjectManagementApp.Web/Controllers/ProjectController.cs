@@ -199,7 +199,7 @@ namespace ProjectManagementApp.Web.Controllers
                 await this._projectService.Edit(updatedProject);
             }
 
-            return RedirectToAction("ViewProject", new { model.Id });
+            return RedirectToAction("ViewProject", new { id = model.Id });
         }
 
         [HttpGet("EditProjectEmployees")]
