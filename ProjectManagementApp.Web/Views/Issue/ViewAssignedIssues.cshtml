@@ -1,0 +1,77 @@
+﻿@model List<ProjectManagementApp.Web.ViewModels.IssueViewModel>
+
+<h4>Issues</h4>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            Reporter
+        </th>
+        <th>
+            Assignee
+        </th>
+        <th>
+            Project
+        </th>
+        <th>
+            Comment
+        </th>
+        <th>
+            Status
+        </th>
+        <th>
+            Priority
+        </th>
+    </tr>
+    </thead>
+    @foreach (var issue in Model)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink(
+            @issue.Name,
+            "ViewIssue",
+            "Issue",
+            new { id = @issue.Id },
+            null)
+            </td>
+            <td>
+                @Html.ActionLink(
+            @issue.Reporter.Email,
+            "ViewEmployee",
+            "Employee",
+            new { id = @issue.Reporter.Id },
+            null)
+            </td>
+            <td>
+                @Html.ActionLink(
+            @issue.Assignee.Email,
+            "ViewEmployee",
+            "Employee",
+            new { id = @issue.Assignee.Id },
+            null)
+            </td>
+            <td>
+                @Html.ActionLink(
+            @issue.Project.Name,
+            "ViewProject",
+            "Project",
+            new { id = @issue.Project.Id },
+            null)
+            </td>
+            <td>
+                @issue.Comment
+            </td>
+            <td>
+                @issue.Status
+            </td>
+            <td>
+                @issue.Priority
+            </td>
+        </tr>
+    }
+</table>

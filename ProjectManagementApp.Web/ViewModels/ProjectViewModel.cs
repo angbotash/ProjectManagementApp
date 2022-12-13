@@ -21,5 +21,7 @@ namespace ProjectManagementApp.Web.ViewModels
         public int Priority { get; set; }
 
         public IList<EmployeeViewModel> Employees { get; set; } = new List<EmployeeViewModel>();
+
+        public IList<IssueViewModel> Issues { get; set; } = new List<IssueViewModel>();
     }
 }

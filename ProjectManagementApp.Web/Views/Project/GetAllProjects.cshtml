@@ -31,32 +31,43 @@
             </th>
         </tr>
         </thead>
-        @foreach (var item in Model)
+        @foreach (var project in Model)
         {
             <tr>
                 <td>
-                    <a asp-controller="Project" asp-action="ViewProject" asp-route-Id="@item.Id">@item.Name</a>
+                    @Html.ActionLink(
+                        @project.Name,
+                        "ViewProject",
+                        "Project",
+                        new { id = @project.Id },
+                        null)
                 </td>
                 <td>
-                    @item.ClientCompanyName
+                    @project.ClientCompanyName
                 </td>
                 <td>
-                    @item.ExecutorCompanyName
+                    @project.ExecutorCompanyName
                 </td>
                 <td>
-                    @if (item.Manager != null)
+                    @if (project.Manager != null)
                     {
-                        @item.Manager.Email
+                        @Html.ActionLink(
+                            @project.Manager.Email,
+                            "ViewEmployee",
+                            "Employee",
+                            new { id = @project.Manager.Id },
+                            null)
+
                     }
                 </td>
                 <td>
-                    @item.StartDate.ToString("dd/MM/yyyy")
+                    @project.StartDate.ToString("dd/MM/yyyy")
                 </td>
                 <td>
-                    @item.EndDate.ToString("dd/MM/yyyy")
+                    @project.EndDate.ToString("dd/MM/yyyy")
                 </td>
                 <td>
-                    @item.Priority
+                    @project.Priority
                 </td>
             </tr>
         }

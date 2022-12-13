@@ -1,4 +1,5 @@
-﻿using ProjectManagementApp.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using ProjectManagementApp.Domain.Entities;
 using ProjectManagementApp.Domain.RepositoryInterfaces;
 
 namespace ProjectManagementApp.Persistence.Repositories
@@ -14,7 +15,7 @@ namespace ProjectManagementApp.Persistence.Repositories
 
         public async Task Create(Employee newEmployee)
         {
-            await this._dbContext.AddAsync(newEmployee);
+            await this._dbContext.Employees.AddAsync(newEmployee);
             await this._dbContext.SaveChangesAsync();
         }
 
@@ -35,14 +36,16 @@ namespace ProjectManagementApp.Persistence.Repositories
 
         public Employee? Get(int id)
         {
-            var employee = this._dbContext.Employees.FirstOrDefault(e => e.Id == id);
-
-            return employee;
-        }
-
-        public Employee? Get(string email)
-        {
-            var employee = this._dbContext.Employees.FirstOrDefault(e => e.Email == email);
+            var employee = this._dbContext.Employees
+                .Include(x => x.AssignedIssues)
+                    .ThenInclude(x => x.Reporter)
+                .Include(x => x.AssignedIssues)
+                    .ThenInclude(x => x.Project)
+                .Include(x => x.ReportedIssues)
+                    .ThenInclude(x => x.Assignee)
+                .Include(x => x.ReportedIssues)
+                    .ThenInclude(x => x.Project)
+                .FirstOrDefault(e => e.Id == id);
 
             return employee;
         }
@@ -56,7 +59,9 @@ namespace ProjectManagementApp.Persistence.Repositories
 
         public IEnumerable<Project> GetProjects(int id)
         {
-            var projects = this._dbContext.EmployeeProject.Where(p => p.EmployeeId == id).ToList();
+            var projects = this._dbContext.EmployeeProject
+                .Where(p => p.EmployeeId == id)
+                .ToList();
             var result = new List<Project>();
 
             foreach (var project in projects)
@@ -70,6 +75,49 @@ namespace ProjectManagementApp.Persistence.Repositories
             }
 
             return result;
+        }
+
+        public async Task AddToProject(int projectId, int employeeId)
+        {
+            var project = this._dbContext.Projects.FirstOrDefault(p => p.Id == projectId);
+
+            if (project == null)
+            {
+                return;
+            }
+
+            var employeeProject =
+                this._dbContext.EmployeeProject.FirstOrDefault(p =>
+                    p.ProjectId == projectId && p.EmployeeId == employeeId);
+
+            if (employeeProject is null)
+            {
+                var newEmployeeProject = new EmployeeProject()
+                    { EmployeeId = employeeId, ProjectId = projectId };
+
+                await this._dbContext.EmployeeProject.AddAsync(newEmployeeProject);
+                await this._dbContext.SaveChangesAsync();
+            }
+        }
+
+        public async Task RemoveFromProject(int projectId, int employeeId)
+        {
+            var project = this._dbContext.Projects.FirstOrDefault(p => p.Id == projectId);
+
+            if (project == null)
+            {
+                return;
+            }
+
+            var employeeProject =
+                this._dbContext.EmployeeProject.FirstOrDefault(p =>
+                    p.ProjectId == projectId && p.EmployeeId == employeeId);
+
+            if (employeeProject != null)
+            {
+                this._dbContext.EmployeeProject.Remove(employeeProject);
+                await this._dbContext.SaveChangesAsync();
+            }
         }
 
         public bool IsEmployeeOnProject(int employeeId, int projectId)

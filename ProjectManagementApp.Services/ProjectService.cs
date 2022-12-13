@@ -56,36 +56,6 @@ namespace ProjectManagementApp.Services
             return employees;
         }
 
-        public async Task AddToProject(int projectId, int employeeId)
-        {
-            if (this._projectRepository.Get(projectId) == null)
-            {
-                return;
-            }
-
-            if (this._employeeRepository.Get(employeeId) == null)
-            {
-                return;
-            }
-
-            await this._projectRepository.AddToProject(projectId, employeeId);
-        }
-
-        public async Task RemoveFromProject(int projectId, int employeeId)
-        {
-            if (this._projectRepository.Get(projectId) == null)
-            {
-                return;
-            }
-
-            if (this._employeeRepository.Get(employeeId) == null)
-            {
-                return;
-            }
-
-            await this._projectRepository.RemoveFromProject(projectId, employeeId);
-        }
-
         public bool IsOnProject(int projectId, int employeeId)
         {
             var result = this._projectRepository.IsEmployeeOnProject(projectId, employeeId);

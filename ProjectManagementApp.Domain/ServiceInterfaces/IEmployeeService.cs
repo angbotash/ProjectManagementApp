@@ -10,11 +10,13 @@ namespace ProjectManagementApp.Domain.ServiceInterfaces
 
         Employee? Get(int id);
 
-        Employee? Get(string email);
-
         IEnumerable<Employee> GetAll();
 
         IEnumerable<Project> GetProjects(int id);
+
+        Task AddToProject(int projectId, int employeeId);
+
+        Task RemoveFromProject(int projectId, int employeeId);
 
         Task Delete(int id);
     }

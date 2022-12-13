@@ -22,10 +22,15 @@
         {
             <tr>
                 <td>
-                    @employee.Email
+                    @Html.ActionLink(
+                    @employee.Email,
+                        "ViewEmployee",
+                        "Employee",
+                        new { id = @employee.Id },
+                        null)
                 </td>
                 <td>
-                    @using (Html.BeginForm("RemoveFromProject", "Project", new { projectId = Model.Project.Id, employeeId = employee.Id }, FormMethod.Post))
+                    @using (Html.BeginForm("RemoveFromProject", "Employee", new { projectId = Model.Project.Id, employeeId = employee.Id }, FormMethod.Post))
                     {
                         <input type="submit" value="Remove" />
                     }
@@ -52,11 +57,16 @@
                 <td>
                     @if (!Model.ProjectEmployees.Contains(employee))
                     {
-                        @employee.Email
+                        @Html.ActionLink(
+                            @employee.Email,
+                            "ViewEmployee",
+                            "Employee",
+                            new { id = @employee.Id },
+                            null)
                     }
                 </td>
                 <td>
-                    @using (Html.BeginForm("AddToProject", "Project", new { projectId = Model.Project.Id, employeeId = employee.Id }, FormMethod.Post))
+                    @using (Html.BeginForm("AddToProject", "Employee", new { projectId = Model.Project.Id, employeeId = employee.Id }, FormMethod.Post))
                     {
                         <input type="submit" value="Add" />
                     }

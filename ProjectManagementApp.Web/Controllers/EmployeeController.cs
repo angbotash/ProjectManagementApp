@@ -10,11 +10,13 @@ namespace ProjectManagementApp.Web.Controllers
     public class EmployeeController : Controller
     {
         private readonly IEmployeeService _employeeService;
+        private readonly IProjectService _projectService;
         private readonly IMapper _mapper;
 
-        public EmployeeController(IEmployeeService employeeService, IMapper mapper)
+        public EmployeeController(IEmployeeService employeeService, IProjectService projectService, IMapper mapper)
         {
             this._employeeService = employeeService;
+            this._projectService = projectService;
             this._mapper = mapper;
         }
 
@@ -132,7 +134,53 @@ namespace ProjectManagementApp.Web.Controllers
                 await this._employeeService.Edit(updatedEmployee);
             }
 
-            return RedirectToAction("ViewEmployee", new { model.Id });
+            return RedirectToAction("ViewEmployee", new { id = model.Id });
+        }
+
+        [HttpPost("AddToProject")]
+        public async Task<IActionResult> AddToProject(int? projectId, int? employeeId)
+        {
+            if (projectId is null || employeeId is null)
+            {
+                return BadRequest();
+            }
+
+            if (this._projectService.Get((int)projectId) is null)
+            {
+                return NotFound();
+            }
+
+            if (this._employeeService.Get((int)employeeId) is null)
+            {
+                return NotFound();
+            }
+
+            await this._employeeService.AddToProject((int)projectId, (int)employeeId);
+
+            return RedirectToAction("EditProjectEmployees", "Project" , new { id = projectId });
+        }
+
+        [HttpPost("RemoveFromProject")]
+        public async Task<IActionResult> RemoveFromProject(int? projectId, int? employeeId)
+        {
+            if (projectId is null || employeeId is null)
+            {
+                return BadRequest();
+            }
+
+            if (this._projectService.Get((int)projectId) is null)
+            {
+                return NotFound();
+            }
+
+            if (this._employeeService.Get((int)employeeId) is null)
+            {
+                return NotFound();
+            }
+
+            await this._employeeService.RemoveFromProject((int)projectId, (int)employeeId);
+
+            return RedirectToAction("EditProjectEmployees", "Project", new { id = projectId });
         }
     }
 }

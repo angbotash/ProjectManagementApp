@@ -14,9 +14,34 @@
         <ul>
             @foreach (var projects in Model.Projects)
             {
-                <li>@projects.Name</li>
+                <li>
+                    @Html.ActionLink(
+                        @projects.Name,
+                        "ViewProject",
+                        "Project",
+                        new { id = @projects.Id },
+                        null)
+                </li>
             }
         </ul>
+        <p>
+            @Html.ActionLink(
+                "Assigned issues",
+                "ViewAssignedIssues",
+                "Issue",
+                new { employeeId = @Model.Id },
+                null)
+        </p>
+        <p>
+        @Html.ActionLink(
+                "Reported issues",
+                "ViewReportedIssues",
+                "Issue",
+                new { employeeId = @Model.Id },
+                null)
+        </p>
+        
+
     </div>
     
     <div>

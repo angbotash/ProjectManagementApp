@@ -10,11 +10,13 @@ namespace ProjectManagementApp.Domain.RepositoryInterfaces
 
         Employee? Get(int id);
 
-        Employee? Get(string email);
-
         IEnumerable<Employee> GetAll();
 
         IEnumerable<Project> GetProjects(int id);
+
+        Task AddToProject(int projectId, int employeeId);
+
+        Task RemoveFromProject(int projectId, int employeeId);
 
         bool IsEmployeeOnProject(int employeeId, int projectId);
 

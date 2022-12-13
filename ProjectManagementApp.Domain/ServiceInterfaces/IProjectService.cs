@@ -14,10 +14,6 @@ namespace ProjectManagementApp.Domain.ServiceInterfaces
 
         IEnumerable<Employee> GetEmployees(int id);
 
-        Task AddToProject(int projectId, int employeeId);
-
-        Task RemoveFromProject(int projectId, int employeeId);
-
         bool IsOnProject(int projectId, int employeeId);
 
         Task Delete(int id);
