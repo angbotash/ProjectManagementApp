@@ -1,10 +1,10 @@
-﻿@model ProjectManagementApp.Web.ViewModels.CreateUserViewModel
+﻿@model ProjectManagementApp.Web.ViewModels.RegisterViewModel
 
-@using (Html.BeginForm("CreateUser", "User", FormMethod.Post, new {enctype = "multipart/form-data"}))
+@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     <div asp-validation-summary="ModelOnly"></div>
     <div class="container">
-        <h1>Create a new employee</h1>
+        <h1>Register</h1>
         <hr>
         <div>
             <b>@Html.LabelFor(m => m.FirstName)</b>
@@ -41,7 +41,7 @@
             <br />
             @Html.TextBoxFor(m => m.ConfirmPassword, new { placeholder = "Repeat password" })
         </div>
-        
+
         <div>
             <b>@Html.LabelFor(m => m.Role)</b>
             <br />
@@ -49,10 +49,15 @@
             @Html.HiddenFor(m => m.Roles)
         </div>
         <hr>
-        
-        @using (Html.BeginForm("CreateUser", "User", FormMethod.Post))
+
+        @using (Html.BeginForm("Register", "Account", FormMethod.Post))
         {
-            <input type="submit" value="Create" />
+            <input type="submit" value="Register" />
         }
+        <br/>
+        <div>
+            @Html.ActionLink("Log in", "Login", "Account")
+
+        </div>
     </div>
 }

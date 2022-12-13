@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ProjectManagementApp.Domain.Entities;
@@ -7,6 +8,7 @@ using ProjectManagementApp.Web.ViewModels;
 
 namespace ProjectManagementApp.Web.Controllers
 {
+    [Route("Issue")]
     public class IssueController : Controller
     {
         private readonly IIssueService _issueService;
@@ -22,6 +24,8 @@ namespace ProjectManagementApp.Web.Controllers
             this._mapper = mapper;
         }
 
+        [Authorize(Policy = "Supervisor")]
+        [Authorize(Policy = "Manager")]
         [HttpGet("Create")]
         public ActionResult Create(int? projectId)
         {
@@ -61,6 +65,8 @@ namespace ProjectManagementApp.Web.Controllers
             return View(model);
         }
 
+        [Authorize(Policy = "Supervisor")]
+        [Authorize(Policy = "Manager")]
         [HttpPost("Create")]
         public async Task<ActionResult> Create(CreateIssueViewModel model)
         {

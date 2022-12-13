@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using ProjectManagementApp.Domain.Entities;
 using ProjectManagementApp.Domain.RepositoryInterfaces;
 
@@ -118,6 +119,13 @@ namespace ProjectManagementApp.Persistence.Repositories
                 this._dbContext.UserProject.Remove(userProject);
                 await this._dbContext.SaveChangesAsync();
             }
+        }
+
+        public IEnumerable<IdentityRole<int>> GetRoles()
+        {
+            var roles = this._dbContext.Roles;
+
+            return roles;
         }
 
         public async Task Delete(int id)

@@ -1,7 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model ProjectManagementApp.Web.ViewModels.CreateIssueViewModel
 
-
 @using (Html.BeginForm("Create", "Issue", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     <div asp-validation-summary="ModelOnly"></div>

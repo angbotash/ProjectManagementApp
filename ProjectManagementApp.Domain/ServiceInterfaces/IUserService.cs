@@ -1,12 +1,14 @@
-﻿using ProjectManagementApp.Domain.Entities;
+﻿using Microsoft.AspNetCore.Identity;
+using ProjectManagementApp.Domain.Entities;
+using ProjectManagementApp.Domain.Infrastructure;
 
 namespace ProjectManagementApp.Domain.ServiceInterfaces
 {
     public interface IUserService
     {
-        Task Create(User newUser);
+        Task<OperationResult> Create(User newUser, string password, string role);
 
-        Task Edit(User updatedUser);
+        Task<OperationResult> Edit(User updatedUser);
 
         User? Get(int id);
 
@@ -18,6 +20,12 @@ namespace ProjectManagementApp.Domain.ServiceInterfaces
 
         Task RemoveFromProject(int projectId, int userId);
 
+        IEnumerable<IdentityRole<int>> GetRoles();
+
         Task Delete(int id);
+
+        Task<OperationResult> Authenticate(string email, string password);
+
+        Task Logout();
     }
 }

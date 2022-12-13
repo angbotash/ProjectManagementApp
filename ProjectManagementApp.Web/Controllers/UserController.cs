@@ -3,6 +3,7 @@ using ProjectManagementApp.Domain.ServiceInterfaces;
 using ProjectManagementApp.Web.ViewModels;
 using AutoMapper;
 using ProjectManagementApp.Domain.Entities;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ProjectManagementApp.Web.Controllers
 {
@@ -23,7 +24,11 @@ namespace ProjectManagementApp.Web.Controllers
         [HttpGet("CreateUser")]
         public IActionResult CreateUser()
         {
-            return View();
+            var roles = this._userService.GetRoles();
+            var selectList = roles.Select(x => new SelectListItem(x.Name, x.Name.ToString())).ToList();
+            var model = new CreateUserViewModel() { Roles = selectList };
+
+            return View(model);
         }
 
         [HttpPost("CreateUser")]
@@ -32,9 +37,17 @@ namespace ProjectManagementApp.Web.Controllers
             if (ModelState.IsValid)
             {
                 var user = this._mapper.Map<CreateUserViewModel, User>(model);
-                await this._userService.Create(user);
+                var result = await this._userService.Create(user, model.Password, model.Role);
 
-                return RedirectToAction("GetAllUsers");
+                if (result.Success)
+                {
+                    return RedirectToAction("GetAllUsers");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error);
+                }
             }
 
             return View(model);
@@ -131,7 +144,17 @@ namespace ProjectManagementApp.Web.Controllers
             {
                 var updatedUser = this._mapper.Map<EditUserViewModel, User>(model);
 
-                await this._userService.Edit(updatedUser);
+                var result = await this._userService.Edit(updatedUser);
+
+                if (result.Success)
+                {
+                    return RedirectToAction("GetAllUsers");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error);
+                }
             }
 
             return RedirectToAction("ViewUser", new { id = model.Id });

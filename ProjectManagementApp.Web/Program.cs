@@ -26,6 +26,21 @@ builder.Services.AddIdentity<User, IdentityRole<int>>()
     .AddRoles<IdentityRole<int>>()
     .AddEntityFrameworkStores<ApplicationContext>();
 
+builder.Services.Configure<IdentityOptions>(opts => {
+    opts.User.RequireUniqueEmail = true;
+    opts.Password.RequireNonAlphanumeric = false;
+    opts.Password.RequireLowercase = true;
+    opts.Password.RequireUppercase = false;
+    opts.Password.RequireDigit = false;
+    opts.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-._@+";
+});
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(Role.Supervisor.ToString(), policy => policy.RequireRole(Role.Supervisor.ToString()));
+    options.AddPolicy(Role.Manager.ToString(), policy => policy.RequireRole(Role.Manager.ToString()));
+    options.AddPolicy(Role.Employee.ToString(), policy => policy.RequireRole(Role.Employee.ToString()));
+});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -36,8 +51,6 @@ using (var scope = app.Services.CreateScope())
     var context = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
     context.Database.Migrate();
 }
-
-await Configure(app);
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -52,6 +65,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
@@ -59,13 +73,3 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
-
-// Add roles
-async Task Configure(WebApplication host)
-{
-    using var scope = host.Services.CreateScope();
-    var services = scope.ServiceProvider;
-    var roleManager = services.GetRequiredService<RoleManager<IdentityRole<int>>>();
-
-    await ContextSeed.SeedRolesAsync(roleManager);
-}

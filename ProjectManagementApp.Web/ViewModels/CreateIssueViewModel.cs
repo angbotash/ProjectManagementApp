@@ -36,6 +36,5 @@ namespace ProjectManagementApp.Web.ViewModels
         public IList<SelectListItem> Users { get; set; } = null!;
 
         public IList<SelectListItem> Statuses { get; set; } = null!;
-
     }
 }

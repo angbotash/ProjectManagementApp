@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectManagementApp.Persistence;
 
@@ -11,9 +12,11 @@ using ProjectManagementApp.Persistence;
 namespace ProjectManagementApp.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20221213205754_SeedData")]
+    partial class SeedData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -216,7 +219,7 @@ namespace ProjectManagementApp.Persistence.Migrations
 
                     b.HasIndex("ReporterId");
 
-                    b.ToTable("Issues", (string)null);
+                    b.ToTable("Issues");
                 });
 
             modelBuilder.Entity("ProjectManagementApp.Domain.Entities.Project", b =>
@@ -255,7 +258,7 @@ namespace ProjectManagementApp.Persistence.Migrations
 
                     b.HasIndex("ManagerId");
 
-                    b.ToTable("Projects", (string)null);
+                    b.ToTable("Projects");
                 });
 
             modelBuilder.Entity("ProjectManagementApp.Domain.Entities.User", b =>
@@ -368,7 +371,7 @@ namespace ProjectManagementApp.Persistence.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("UserProject", (string)null);
+                    b.ToTable("UserProject");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

@@ -1,0 +1,31 @@
+﻿@model ProjectManagementApp.Web.ViewModels.LoginViewModel
+
+@using (Html.BeginForm("Login", "Account", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div asp-validation-summary="ModelOnly"></div>
+    <div class="container">
+        <h1>Log in</h1>
+        <hr>
+        <div>
+            <b>@Html.LabelFor(m => m.Email)</b>
+            <br />
+            @Html.TextBoxFor(m => m.Email, new { placeholder = "Enter email" })
+        </div>
+
+        <div>
+            <b>@Html.LabelFor(m => m.Password)</b>
+            <br />
+            @Html.TextBoxFor(m => m.Password, new { placeholder = "Enter password" })
+        </div>
+        <hr>
+
+        @using (Html.BeginForm("Login", "Account", FormMethod.Post))
+        {
+            <input type="submit" value="Log in" />
+        }
+        <br/>
+        <div>
+        @Html.ActionLink("Register", "Register", "Account")
+        </div>
+    </div>
+}

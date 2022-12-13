@@ -1,4 +1,5 @@
-﻿using ProjectManagementApp.Domain.Entities;
+﻿using Microsoft.AspNetCore.Identity;
+using ProjectManagementApp.Domain.Entities;
 
 namespace ProjectManagementApp.Domain.RepositoryInterfaces
 {
@@ -17,6 +18,8 @@ namespace ProjectManagementApp.Domain.RepositoryInterfaces
         Task AddToProject(int projectId, int userId);
 
         Task RemoveFromProject(int projectId, int userId);
+
+        IEnumerable<IdentityRole<int>> GetRoles();
 
         Task Delete(int id);
     }
