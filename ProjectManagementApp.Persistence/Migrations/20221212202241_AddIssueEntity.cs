@@ -5,20 +5,20 @@
 namespace ProjectManagementApp.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class AddTaskEntity : Migration
+    public partial class AddIssueEntity : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "ProjectTasks",
+                name: "Issues",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AssigneeId = table.Column<int>(type: "int", nullable: false),
                     ReporterId = table.Column<int>(type: "int", nullable: false),
-                    AssigneeId = table.Column<int>(type: "int", nullable: true),
                     ProjectId = table.Column<int>(type: "int", nullable: false),
                     Comment = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false),
@@ -26,15 +26,21 @@ namespace ProjectManagementApp.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProjectTasks", x => x.Id);
+                    table.PrimaryKey("PK_Issues", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProjectTasks_Employees_ReporterId",
+                        name: "FK_Issues_Employees_AssigneeId",
+                        column: x => x.AssigneeId,
+                        principalTable: "Employees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Issues_Employees_ReporterId",
                         column: x => x.ReporterId,
                         principalTable: "Employees",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_ProjectTasks_Projects_ProjectId",
+                        name: "FK_Issues_Projects_ProjectId",
                         column: x => x.ProjectId,
                         principalTable: "Projects",
                         principalColumn: "Id",
@@ -42,13 +48,18 @@ namespace ProjectManagementApp.Persistence.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProjectTasks_ProjectId",
-                table: "ProjectTasks",
+                name: "IX_Issues_AssigneeId",
+                table: "Issues",
+                column: "AssigneeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Issues_ProjectId",
+                table: "Issues",
                 column: "ProjectId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProjectTasks_ReporterId",
-                table: "ProjectTasks",
+                name: "IX_Issues_ReporterId",
+                table: "Issues",
                 column: "ReporterId");
         }
 
@@ -56,7 +67,7 @@ namespace ProjectManagementApp.Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ProjectTasks");
+                name: "Issues");
         }
     }
 }

@@ -1,16 +1,16 @@
 ﻿using System.ComponentModel;
 
-namespace ProjectManagementApp.Web.ViewModels.TaskStatus
+namespace ProjectManagementApp.Web.ViewModels.IssueStatus
 {
-    public enum TaskStatus
+    public enum IssueStatus
     {
         [Description("To Do")]
-        ToDo,
+        ToDo = 0,
 
         [Description("In Progress")]
-        InProgress,
+        InProgress = 1,
 
         [Description("Done")]
-        Done
+        Done = 2
     }
 }

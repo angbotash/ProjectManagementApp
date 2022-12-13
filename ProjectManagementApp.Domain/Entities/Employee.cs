@@ -14,6 +14,8 @@
 
         public IList<EmployeeProject> EmployeeProject { get; set; } = null!;
 
-        public IList<ProjectTask> Tasks { get; set; } = null!;
+        public IList<Issue> AssignedIssues { get; set; } = null!;
+
+        public IList<Issue> ReportedIssues { get; set; } = null!;
     }
 }

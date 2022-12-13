@@ -1,0 +1,58 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model ProjectManagementApp.Web.ViewModels.CreateIssueViewModel
+
+
+@using (Html.BeginForm("Create", "Issue", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div asp-validation-summary="ModelOnly"></div>
+    <div class="container">
+        <h1>Create a new issue</h1>
+        <hr>
+        <div>
+            <b>@Html.LabelFor(m => m.Name)</b>
+            <br />
+            @Html.TextBoxFor(m => m.Name, new { placeholder = "Enter issue name" })
+        </div>
+
+        <div>
+            <b>@Html.LabelFor(m => m.ReporterId)</b>
+            <br />
+            @Html.DropDownListFor(m => m.ReporterId, @Model.Employees, "Select reporter")
+            @Html.HiddenFor(m => m.Employees)
+        </div>
+        
+        <div>
+            <b>@Html.LabelFor(m => m.AssigneeId)</b>
+            <br />
+            @Html.DropDownListFor(m => m.AssigneeId, @Model.Employees, "Select assignee")
+            @Html.HiddenFor(m => m.Employees)
+        </div>
+
+        @Html.HiddenFor(m => m.ProjectId)
+        
+        <div>
+            <b>@Html.LabelFor(m => m.Comment)</b>
+            <br />
+            @Html.TextBoxFor(m => m.Comment, new { placeholder = "Comment" })
+        </div>
+        
+        <div>
+            <b>@Html.LabelFor(m => m.Status)</b>
+            <br />
+            @Html.DropDownListFor(m => m.Status, @Model.Statuses, "Select status")
+            @Html.HiddenFor(m => m.Statuses)
+        </div>
+
+        <div>
+            <b>@Html.LabelFor(m => m.Priority)</b>
+            <br />
+            @Html.TextBoxFor(m => m.Priority, new { @type="number", min="1", max="10", placeholder = "Enter executor company name" })
+        </div>
+        <hr>
+
+        @using (Html.BeginForm("Create", "Issue", FormMethod.Post))
+        {
+            <input type="submit" value="Create" />
+        }
+    </div>
+}

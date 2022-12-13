@@ -74,39 +74,39 @@ namespace ProjectManagementApp.Web.Controllers
                 result.Add(tempProject);
             }
 
-            ViewData["NameSortParam"] = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["NameSortParam"] = string.IsNullOrEmpty(sortOrder) ? "name_desc" : String.Empty;
             ViewData["StartDateSortParam"] = sortOrder == "Date" ? "start_date_desc" : "Date";
             ViewData["EndDateSortParam"] = sortOrder == "Date" ? "end_date_desc" : "Date";
             ViewData["PrioritySortParam"] = sortOrder == "Priority" ? "priority_desc" : "Priority";
 
-            IEnumerable<ProjectViewModel> temp = result;
+            IEnumerable<ProjectViewModel> sortedProjects = result;
 
             switch (sortOrder)
             {
                 case "name_desc":
-                    temp = temp.OrderByDescending(s => s.Name);
+                    sortedProjects = sortedProjects.OrderByDescending(s => s.Name);
                     break;
                 case "Date":
-                    temp = temp.OrderBy(s => s.StartDate);
+                    sortedProjects = sortedProjects.OrderBy(s => s.StartDate);
                     break;
                 case "start_date_desc":
-                    temp = temp.OrderByDescending(s => s.StartDate);
+                    sortedProjects = sortedProjects.OrderByDescending(s => s.StartDate);
                     break;
                 case "end_date_desc":
-                    temp = temp.OrderByDescending(s => s.StartDate);
+                    sortedProjects = sortedProjects.OrderByDescending(s => s.StartDate);
                     break;
                 case "Priority":
-                    temp = temp.OrderBy(s => s.Priority);
+                    sortedProjects = sortedProjects.OrderBy(s => s.Priority);
                     break;
                 case "priority_desc":
-                    temp = temp.OrderByDescending(s => s.Priority);
+                    sortedProjects = sortedProjects.OrderByDescending(s => s.Priority);
                     break;
                 default:
-                    temp = temp.OrderBy(s => s.Name);
+                    sortedProjects = sortedProjects.OrderBy(s => s.Name);
                     break;
             }
 
-            return View(temp.ToList());
+            return View(sortedProjects.ToList());
         }
 
         [HttpGet("ViewProject")]

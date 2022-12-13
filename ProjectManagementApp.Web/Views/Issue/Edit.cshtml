@@ -1,0 +1,54 @@
+﻿@model ProjectManagementApp.Web.ViewModels.EditIssueViewModel
+
+@using (Html.BeginForm("Edit", "Issue", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div asp-validation-summary="ModelOnly"></div>
+    <div class="container">
+        <h1>Edit issue "@Model.Name"</h1>
+        <hr>
+        @Html.HiddenFor(m => m.Id)
+        @Html.HiddenFor(m => m.ReporterId)
+        @Html.HiddenFor(m => m.ProjectId)
+
+        <div>
+            <b>@Html.LabelFor(m => m.Name)</b>
+            <br />
+            @Html.TextBoxFor(m => m.Name, new { placeholder = "Enter project name" })
+        </div>
+
+        <div>
+            <b>@Html.LabelFor(m => m.AssigneeId)</b>
+            <br />
+            @Html.DropDownListFor(m => m.AssigneeId, @Model.Employees, "Select assignee")
+            @Html.HiddenFor(m => m.Employees)
+        </div>
+
+        <div>
+            <b>@Html.LabelFor(m => m.Status)</b>
+            <br />
+            @Html.DropDownListFor(m => m.Status, @Model.Statuses, "Select status")
+            @Html.HiddenFor(m => m.Statuses)
+        </div>
+
+        <div>
+            <b>@Html.LabelFor(m => m.Comment)</b>
+            <br />
+            @Html.TextBoxFor(x => x.Comment)
+        </div>
+
+        <div>
+            <b>@Html.LabelFor(m => m.Priority)</b>
+            <br />
+            @Html.TextBoxFor(m => m.Priority, new { @type="number", min="1", max="10", placeholder = "Enter executor company name" })
+        </div>
+
+        <div>
+        </div>
+        <hr>
+
+        @using (Html.BeginForm("Edit", "Project", FormMethod.Post))
+        {
+            <input type="submit" value="Save" />
+        }
+    </div>
+}

@@ -1,0 +1,57 @@
+﻿@model List<ProjectManagementApp.Web.ViewModels.IssueViewModel>
+
+<h4>Issues</h4>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            Reporter
+        </th>
+        <th>
+            Assignee
+        </th>
+        <th>
+            Project
+        </th>
+        <th>
+            Comment
+        </th>
+        <th>
+            Status
+        </th>
+        <th>
+            Priority
+        </th>
+    </tr>
+    </thead>
+    @foreach (var issue in Model)
+    {
+        <tr>
+            <td>
+                <a asp-controller="Issue" asp-action="ViewIssue" asp-route-Id="@issue.Id">@issue.Name</a>
+            </td>
+            <td>
+                @issue.Reporter.Email
+            </td>
+            <td>
+                @issue.Assignee.Email
+            </td>
+            <td>
+                @issue.Project.Name
+            </td>
+            <td>
+                @issue.Comment
+            </td>
+            <td>
+                @issue.Status
+            </td>
+            <td>
+                @issue.Priority
+            </td>
+        </tr>
+    }
+</table>

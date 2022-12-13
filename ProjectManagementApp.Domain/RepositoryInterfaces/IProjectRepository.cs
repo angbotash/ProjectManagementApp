@@ -18,11 +18,7 @@ namespace ProjectManagementApp.Domain.RepositoryInterfaces
 
         Task Delete(int id);
 
-        //void AddToProject(int projectId, IEnumerable<Employee> employees);
-
         Task AddToProject(int projectId, int employeeId);
-
-        //void RemoveFromProject(int projectId, IEnumerable<Employee> employees);
 
         Task RemoveFromProject(int projectId, int employeeId);
 

@@ -1,16 +1,18 @@
 ﻿namespace ProjectManagementApp.Domain.Entities
 {
-    public class ProjectTask
+    public class Issue
     {
         public int Id { get; set; }
 
         public string Name { get; set; } = null!;
 
+        public int AssigneeId { get; set; }
+
+        public Employee Assignee { get; set; } = null!;
+
         public int ReporterId { get; set; }
 
         public Employee Reporter { get; set; } = null!;
-
-        public int? AssigneeId { get; set; }
 
         public int ProjectId { get; set; }
 
@@ -18,7 +20,7 @@
 
         public string? Comment { get; set; }
 
-        public TaskStatus Status { get; set; }
+        public IssueStatus Status { get; set; }
 
         public int Priority { get; set; }
     }

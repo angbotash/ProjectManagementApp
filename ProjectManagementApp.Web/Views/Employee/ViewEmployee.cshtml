@@ -17,6 +17,17 @@
                 <li>@projects.Name</li>
             }
         </ul>
+        <p>
+            @Html.ActionLink("Assigned issues", "ViewAssignedIssues", "Issue", new { employeeId = @Model.Id }, null)
+            @*<a asp-controller="Issue" asp-action="ViewAllIssues" asp-route-employeeId="@Model.Id" asp-route-sortOrder="" asp-route-issueKind="assignee" class="btn btn-outline-dark">See</a>*@
+        </p>
+        @*<a asp-controller="Issue" asp-action="ViewAllIssues" asp-route-issues="@Model.AssignedIssues" asp-route-sortOrder="" class="btn btn-outline-dark">See</a>*@
+        <p>
+            <b>Reported issues: </b>
+            <a asp-controller="Issue" asp-action="ViewAllIssues" asp-route-employeeId="@Model.Id" asp-route-sortOrder="" class="btn btn-outline-dark">See</a>
+        </p>
+        @*<a asp-controller="Issue" asp-action="ViewAllIssues" asp-route-issues="@Model.ReportedIssues" asp-route-sortOrder="" class="btn btn-outline-dark">See</a>*@
+
     </div>
     
     <div>

@@ -17,6 +17,11 @@ namespace ProjectManagementApp.Web.ViewModels.Mapper
             CreateMap<Employee, EditEmployeeViewModel>();
             CreateMap<EditProjectViewModel, Project>();
             CreateMap<Project, EditProjectViewModel>();
+            CreateMap<CreateIssueViewModel, Issue>();
+            CreateMap<IssueViewModel, Issue>();
+            CreateMap<Issue, IssueViewModel>();
+            CreateMap<Issue, EditIssueViewModel>();
+            CreateMap<EditIssueViewModel, Issue>();
         }
     }
 }

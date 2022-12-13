@@ -22,6 +22,6 @@
 
         public int Priority { get; set; }
 
-        public IList<ProjectTask> Tasks { get; set; } = null!;
+        public IList<Issue> Issues { get; set; } = null!;
     }
 }

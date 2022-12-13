@@ -10,16 +10,16 @@ namespace ProjectManagementApp.Persistence.Configurations
         {
 
             builder.HasMany(p => p.EmployeeProject)
-                   .WithOne(ep => ep.Project)
-                   .HasForeignKey(p => p.ProjectId);
+                .WithOne(ep => ep.Project)
+                .HasForeignKey(p => p.ProjectId);
 
             builder.HasOne(p => p.Manager)
-                   .WithMany()
-                   .HasForeignKey(p => p.ManagerId);
+                .WithMany()
+                .HasForeignKey(p => p.ManagerId);
 
-            builder.HasMany(p => p.Tasks)
-                   .WithOne(t => t.Project)
-                   .HasForeignKey(t => t.ProjectId);
+            builder.HasMany(p => p.Issues)
+                .WithOne(t => t.Project)
+                .HasForeignKey(t => t.ProjectId);
         }
     }
 }

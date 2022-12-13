@@ -65,6 +65,47 @@ namespace ProjectManagementApp.Persistence.Migrations
                     b.ToTable("EmployeeProject");
                 });
 
+            modelBuilder.Entity("ProjectManagementApp.Domain.Entities.Issue", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AssigneeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReporterId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssigneeId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("ReporterId");
+
+                    b.ToTable("Issues");
+                });
+
             modelBuilder.Entity("ProjectManagementApp.Domain.Entities.Project", b =>
                 {
                     b.Property<int>("Id")
@@ -104,45 +145,6 @@ namespace ProjectManagementApp.Persistence.Migrations
                     b.ToTable("Projects");
                 });
 
-            modelBuilder.Entity("ProjectManagementApp.Domain.Entities.ProjectTask", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("AssigneeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Comment")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Priority")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ReporterId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProjectId");
-
-                    b.HasIndex("ReporterId");
-
-                    b.ToTable("ProjectTasks");
-                });
-
             modelBuilder.Entity("ProjectManagementApp.Domain.Entities.EmployeeProject", b =>
                 {
                     b.HasOne("ProjectManagementApp.Domain.Entities.Employee", "Employee")
@@ -162,6 +164,33 @@ namespace ProjectManagementApp.Persistence.Migrations
                     b.Navigation("Project");
                 });
 
+            modelBuilder.Entity("ProjectManagementApp.Domain.Entities.Issue", b =>
+                {
+                    b.HasOne("ProjectManagementApp.Domain.Entities.Employee", "Assignee")
+                        .WithMany("AssignedIssues")
+                        .HasForeignKey("AssigneeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ProjectManagementApp.Domain.Entities.Project", "Project")
+                        .WithMany("Issues")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ProjectManagementApp.Domain.Entities.Employee", "Reporter")
+                        .WithMany("ReportedIssues")
+                        .HasForeignKey("ReporterId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Assignee");
+
+                    b.Navigation("Project");
+
+                    b.Navigation("Reporter");
+                });
+
             modelBuilder.Entity("ProjectManagementApp.Domain.Entities.Project", b =>
                 {
                     b.HasOne("ProjectManagementApp.Domain.Entities.Employee", "Manager")
@@ -171,37 +200,20 @@ namespace ProjectManagementApp.Persistence.Migrations
                     b.Navigation("Manager");
                 });
 
-            modelBuilder.Entity("ProjectManagementApp.Domain.Entities.ProjectTask", b =>
-                {
-                    b.HasOne("ProjectManagementApp.Domain.Entities.Project", "Project")
-                        .WithMany("Tasks")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ProjectManagementApp.Domain.Entities.Employee", "Reporter")
-                        .WithMany("Tasks")
-                        .HasForeignKey("ReporterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Project");
-
-                    b.Navigation("Reporter");
-                });
-
             modelBuilder.Entity("ProjectManagementApp.Domain.Entities.Employee", b =>
                 {
+                    b.Navigation("AssignedIssues");
+
                     b.Navigation("EmployeeProject");
 
-                    b.Navigation("Tasks");
+                    b.Navigation("ReportedIssues");
                 });
 
             modelBuilder.Entity("ProjectManagementApp.Domain.Entities.Project", b =>
                 {
                     b.Navigation("EmployeeProject");
 
-                    b.Navigation("Tasks");
+                    b.Navigation("Issues");
                 });
 #pragma warning restore 612, 618
         }

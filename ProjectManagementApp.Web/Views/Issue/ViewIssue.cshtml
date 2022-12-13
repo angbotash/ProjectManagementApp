@@ -1,0 +1,26 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model ProjectManagementApp.Web.ViewModels.IssueViewModel
+
+<h4>Issue</h4>
+<div>
+    <div>
+        <p><b>Name: </b>@Model.Name</p>
+        <p><b>Reporter: </b>@Model.Reporter.Email</p>
+        <p><b>Assignee: </b>@Model.Assignee.Email</p>
+        <p><b>Project: </b>@Model.Project.Name</p>
+        <p><b>Comment: </b>@Model.Comment</p>
+        <p><b>Status: </b>@Model.Status</p>
+        <p><b>Priority: </b>@Model.Priority</p>
+    </div>
+
+    <div>
+        <a asp-controller="Issue" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-dark">Edit</a>
+    </div>
+    <br />
+    <div>
+        @using (Html.BeginForm("Delete", "Issue", new { id = Model.Id }, FormMethod.Post))
+        {
+            <input type="submit" value="Delete" />
+        }
+    </div>
+</div>

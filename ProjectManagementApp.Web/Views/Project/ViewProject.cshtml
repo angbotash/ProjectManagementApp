@@ -24,7 +24,13 @@
                 <li>@employee.Email</li>
             }
         </ul>
+        <p><b>@Html.ActionLink("Issues", "ViewProjectIssues", "Issue", new { projectId = @Model.Id }, null)</b></p>
+        <br/>
     </div>
+    <div>
+        <a asp-controller="Issue" asp-action="Create" asp-route-projectId="@Model.Id" class="btn btn-outline-dark">Add issue</a>
+    </div>
+    <br/>
     <div>
         <a asp-controller="Project" asp-action="EditProjectEmployees" asp-route-id="@Model.Id" class="btn btn-outline-dark">Edit employees</a>
     </div>
