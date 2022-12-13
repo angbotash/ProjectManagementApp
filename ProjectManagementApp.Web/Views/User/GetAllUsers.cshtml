@@ -1,6 +1,6 @@
-﻿@model List<ProjectManagementApp.Web.ViewModels.EmployeeViewModel>
+﻿@model List<ProjectManagementApp.Web.ViewModels.UserViewModel>
 
-<h2>Employees<a class="btn btn-outline-dark" asp-controller="Employee" asp-action="CreateEmployee" style="float: right">Create a new employee</a></h2>
+<h2>Users<a class="btn btn-outline-dark" asp-controller="User" asp-action="CreateUser" style="float: right">Create a new employee</a></h2>
 
 @if (Model.Any())
 {
@@ -22,16 +22,16 @@
                 </th>
             </tr>
             </thead>
-            @foreach (var employee in Model)
+            @foreach (var user in Model)
             {
                 <tr>
                     <td>
-                        @employee.FirstName
+                        @user.FirstName
                     </td>
                     <td>
-                        @employee.LastName
+                        @user.LastName
                     </td>
-                    @if (employee.Patronymic is null)
+                    @if (user.Patronymic is null)
                     {
                         <td>
                         </td>
@@ -39,15 +39,15 @@
                     else
                     {
                         <td>
-                            @employee.Patronymic
+                            @user.Patronymic
                         </td>
                     }
                     <td>
                         @Html.ActionLink(
-                            employee.Email,
-                            "ViewEmployee",
-                            "Employee",
-                            new { id = @employee.Id },
+                            user.Email,
+                            "ViewUser",
+                            "User",
+                            new { id = user.Id },
                             null)
                     </td>
                 </tr>

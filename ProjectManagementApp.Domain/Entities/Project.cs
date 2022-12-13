@@ -10,9 +10,9 @@
 
         public string ExecutorCompanyName { get; set; } = null!;
 
-        public IList<EmployeeProject> EmployeeProject { get; set; } = null!;
+        public IList<UserProject> UserProject { get; set; } = null!;
 
-        public Employee? Manager { get; set; }
+        public User? Manager { get; set; }
 
         public int? ManagerId { get; set; }
 

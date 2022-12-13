@@ -12,10 +12,10 @@ namespace ProjectManagementApp.Domain.RepositoryInterfaces
 
         IEnumerable<Project> GetAll();
 
-        IEnumerable<Employee> GetEmployees(int id);
+        IEnumerable<User> GetUsers(int id);
 
         Task Delete(int id);
 
-        bool IsEmployeeOnProject(int employeeId, int projectId);
+        bool IsUserOnProject(int userId, int projectId);
     }
 }

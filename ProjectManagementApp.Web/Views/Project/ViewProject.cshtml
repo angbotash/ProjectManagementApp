@@ -13,9 +13,9 @@
             {
                 @Html.ActionLink(
                     @Model.Manager.Email,
-                    "ViewEmployee",
-                    "Employee",
-            new {id = @Model.Manager.Id},
+                    "ViewUser",
+                    "User",
+                    new {id = @Model.Manager.Id},
                     null)
             }
         </p>
@@ -24,15 +24,15 @@
         <p><b>Priority: </b>@Model.Priority</p>
         <p><b>Employees: </b></p>
         <ul>
-            @foreach (var employee in Model.Employees)
+            @foreach (var employee in Model.Users)
             {
                 <li>
                     @Html.ActionLink(
                         @employee.Email,
-                         "ViewEmployee",
-                         "Employee",
-                         new {id = @employee.Id},
-                         null)
+                        "ViewUser",
+                        "User",
+                        new {id = @employee.Id},
+                        null)
                 </li>
             }
         </ul>

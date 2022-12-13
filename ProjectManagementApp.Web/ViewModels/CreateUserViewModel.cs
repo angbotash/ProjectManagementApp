@@ -2,7 +2,7 @@
 
 namespace ProjectManagementApp.Web.ViewModels
 {
-    public class CreateEmployeeViewModel
+    public class CreateUserViewModel
     {
         [Required(ErrorMessage = "First name is required.")]
         [DataType(DataType.Text)]

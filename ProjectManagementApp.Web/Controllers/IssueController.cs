@@ -10,14 +10,14 @@ namespace ProjectManagementApp.Web.Controllers
     public class IssueController : Controller
     {
         private readonly IIssueService _issueService;
-        private readonly IEmployeeService _employeeService;
+        private readonly IUserService _userService;
         private readonly IProjectService _projectService;
         private readonly IMapper _mapper;
 
-        public IssueController(IIssueService issueService, IEmployeeService employeeService, IProjectService projectService, IMapper mapper)
+        public IssueController(IIssueService issueService, IUserService userService, IProjectService projectService, IMapper mapper)
         {
             this._issueService = issueService;
-            this._employeeService = employeeService;
+            this._userService = userService;
             this._projectService = projectService;
             this._mapper = mapper;
         }
@@ -35,20 +35,20 @@ namespace ProjectManagementApp.Web.Controllers
                 return NotFound();
             }
 
-            var allEmployees = this._employeeService.GetAll();
-            var employees = new List<EmployeeViewModel>();
+            var allUsers = this._userService.GetAll();
+            var users = new List<UserViewModel>();
 
-            foreach (var empl in allEmployees)
+            foreach (var empl in allUsers)
             {
-                var tempEmployee = this._mapper.Map<Employee, EmployeeViewModel>(empl);
+                var tempUser = this._mapper.Map<User, UserViewModel>(empl);
 
-                employees.Add(tempEmployee);
+                users.Add(tempUser);
             }
 
-            var selectList = employees.Select(x => new SelectListItem(x.Email, x.Id.ToString())).ToList();
+            var selectList = users.Select(x => new SelectListItem(x.Email, x.Id.ToString())).ToList();
             var model = new CreateIssueViewModel
             {
-                Employees = selectList,
+                Users = selectList,
                 ProjectId = (int)projectId,
                 Statuses = new List<SelectListItem>()
                 {
@@ -97,21 +97,21 @@ namespace ProjectManagementApp.Web.Controllers
         }
 
         //[HttpGet("ViewAllIssues")]
-        //public IActionResult ViewAllIssues(int? employeeId, string sortOrder, string issueKind = "")
+        //public IActionResult ViewAllIssues(int? userId, string sortOrder, string issueKind = "")
         //{
-        //    if (employeeId is null)
+        //    if (userId is null)
         //    {
         //        return BadRequest();
         //    }
 
-        //    var employee = this._employeeService.Get((int) employeeId);
+        //    var employee = this._userService.Get((int) userId);
 
         //    if (employee is null)
         //    {
         //        return NotFound();
         //    }
 
-        //    var tempEmployee = this._mapper.Map<Employee, EmployeeViewModel>(employee);
+        //    var tempEmployee = this._mapper.Map<User, UserViewModel>(employee);
 
         //    ViewData["NameSortParam"] = string.IsNullOrEmpty(sortOrder) ? "name_desc" : string.Empty;
         //    ViewData["StatusSortParam"] = sortOrder == "Status" ? "status_desc" : "Status";
@@ -147,43 +147,43 @@ namespace ProjectManagementApp.Web.Controllers
         //}
 
         [HttpGet("ViewAssignedIssues")]
-        public IActionResult ViewAssignedIssues(int? employeeId)
+        public IActionResult ViewAssignedIssues(int? userId)
         {
-            if (employeeId is null)
+            if (userId is null)
             {
                 return BadRequest();
             }
 
-            var employee = this._employeeService.Get((int)employeeId);
+            var user = this._userService.Get((int)userId);
 
-            if (employee is null)
+            if (user is null)
             {
                 return NotFound();
             }
 
-            var tempEmployee = this._mapper.Map<Employee, EmployeeViewModel>(employee);
-            var issues = tempEmployee.AssignedIssues;
+            var tempUser = this._mapper.Map<User, UserViewModel>(user);
+            var issues = tempUser.AssignedIssues;
 
             return View(issues);
         }
 
         [HttpGet("ViewReportedIssues")]
-        public IActionResult ViewReportedIssues(int? employeeId)
+        public IActionResult ViewReportedIssues(int? userId)
         {
-            if (employeeId is null)
+            if (userId is null)
             {
                 return BadRequest();
             }
 
-            var employee = this._employeeService.Get((int)employeeId);
+            var user = this._userService.Get((int)userId);
 
-            if (employee is null)
+            if (user is null)
             {
                 return NotFound();
             }
 
-            var tempEmployee = this._mapper.Map<Employee, EmployeeViewModel>(employee);
-            var issues = tempEmployee.ReportedIssues;
+            var tempUser = this._mapper.Map<User, UserViewModel>(user);
+            var issues = tempUser.ReportedIssues;
 
             return View(issues);
         }
@@ -218,7 +218,7 @@ namespace ProjectManagementApp.Web.Controllers
             }
 
             var issue = this._issueService.Get((int)id);
-            var allEmployees = this._employeeService.GetAll();
+            var allUsers = this._userService.GetAll();
 
             if (issue is null)
             {
@@ -226,17 +226,17 @@ namespace ProjectManagementApp.Web.Controllers
             }
 
             var model = this._mapper.Map<Issue, EditIssueViewModel>(issue);
-            var employees = new List<EmployeeViewModel>();
+            var users = new List<UserViewModel>();
 
-            foreach (var empl in allEmployees)
+            foreach (var empl in allUsers)
             {
-                var tempEmployee = this._mapper.Map<Employee, EmployeeViewModel>(empl);
+                var tempUser = this._mapper.Map<User, UserViewModel>(empl);
 
-                employees.Add(tempEmployee);
+                users.Add(tempUser);
             }
 
-            var selectList = employees.Select(x => new SelectListItem(x.Email, x.Id.ToString())).ToList();
-            model.Employees = selectList;
+            var selectList = users.Select(x => new SelectListItem(x.Email, x.Id.ToString())).ToList();
+            model.Users = selectList;
             model.Statuses = new List<SelectListItem>()
             {
                 new SelectListItem(IssueStatus.ToDo.ToString(), IssueStatus.ToDo.ToString()),

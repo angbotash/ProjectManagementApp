@@ -12,9 +12,7 @@ namespace ProjectManagementApp.Domain.ServiceInterfaces
 
         IEnumerable<Project> GetAll();
 
-        IEnumerable<Employee> GetEmployees(int id);
-
-        bool IsOnProject(int projectId, int employeeId);
+        IEnumerable<User> GetUsers(int projectId);
 
         Task Delete(int id);
     }

@@ -11,31 +11,31 @@ namespace ProjectManagementApp.Web.Controllers
     public class ProjectController : Controller
     {
         private readonly IProjectService _projectService;
-        private readonly IEmployeeService _employeeService;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
-        public ProjectController(IProjectService projectService, IEmployeeService employeeService, IMapper mapper)
+        public ProjectController(IProjectService projectService, IUserService userService, IMapper mapper)
         {
             this._projectService = projectService;
-            this._employeeService = employeeService;
+            this._userService = userService;
             this._mapper = mapper;
         }
 
         [HttpGet("CreateProject")]
         public ActionResult CreateProject()
         {
-            var allEmployees = this._employeeService.GetAll();
-            var employees = new List<EmployeeViewModel>();
+            var allUsers = this._userService.GetAll();
+            var users = new List<UserViewModel>();
 
-            foreach (var empl in allEmployees)
+            foreach (var empl in allUsers)
             {
-                var tempEmployee = this._mapper.Map<Employee, EmployeeViewModel>(empl);
+                var tempUser = this._mapper.Map<User, UserViewModel>(empl);
 
-                employees.Add(tempEmployee);
+                users.Add(tempUser);
             }
 
-            var selectList = employees.Select(x => new SelectListItem(x.Email, x.Id.ToString())).ToList();
-            var model = new CreateProjectViewModel() { Employees = selectList };
+            var selectList = users.Select(x => new SelectListItem(x.Email, x.Id.ToString())).ToList();
+            var model = new CreateProjectViewModel() { Users = selectList };
 
             return View(model);
         }
@@ -66,7 +66,7 @@ namespace ProjectManagementApp.Web.Controllers
 
                 if (proj.Manager != null)
                 {
-                    var tempManager = this._mapper.Map<Employee, EmployeeViewModel>(proj.Manager);
+                    var tempManager = this._mapper.Map<User, UserViewModel>(proj.Manager);
 
                     tempProject.Manager = tempManager;
                 }
@@ -125,13 +125,13 @@ namespace ProjectManagementApp.Web.Controllers
             }
 
             var result = this._mapper.Map<Project, ProjectViewModel>(project);
-            var employees = this._projectService.GetEmployees((int)id);
+            var users = this._projectService.GetUsers((int)id);
 
-            foreach (var empl in employees)
+            foreach (var empl in users)
             {
-                var tempEmployee = this._mapper.Map<Employee, EmployeeViewModel>(empl);
+                var tempUser = this._mapper.Map<User, UserViewModel>(empl);
 
-                result.Employees.Add(tempEmployee);
+                result.Users.Add(tempUser);
             }
 
             return View(result);
@@ -166,7 +166,7 @@ namespace ProjectManagementApp.Web.Controllers
             }
 
             var project = this._projectService.Get((int)id);
-            var allEmployees = this._employeeService.GetAll();
+            var allUsers = this._userService.GetAll();
 
             if (project is null)
             {
@@ -174,13 +174,13 @@ namespace ProjectManagementApp.Web.Controllers
             }
 
             var model = this._mapper.Map<Project, EditProjectViewModel>(project);
-            var managers = new List<EmployeeViewModel>();
+            var managers = new List<UserViewModel>();
 
-            foreach (var empl in allEmployees)
+            foreach (var empl in allUsers)
             {
-                var tempEmployee = this._mapper.Map<Employee, EmployeeViewModel>(empl);
+                var tempUser = this._mapper.Map<User, UserViewModel>(empl);
 
-                managers.Add(tempEmployee);
+                managers.Add(tempUser);
             }
 
             var selectList = managers.Select(x => new SelectListItem(x.Email, x.Id.ToString())).ToList();
@@ -217,21 +217,21 @@ namespace ProjectManagementApp.Web.Controllers
                 return NotFound();
             }
 
-            var allEmployees = this._employeeService.GetAll();
-            var projectEmployees = this._projectService.GetEmployees((int) id);
+            var allUsers = this._userService.GetAll();
+            var projectUsers = this._projectService.GetUsers((int) id);
             var model = new EditProjectEmployeesViewModel()
                 {Project = this._mapper.Map<Project, ProjectViewModel>(project)};
 
-            foreach (var employee in allEmployees)
+            foreach (var user in allUsers)
             {
-                var tempEmployee = this._mapper.Map<Employee, EmployeeViewModel>(employee);
-                model.AllEmployees.Add(tempEmployee);
+                var tempUser = this._mapper.Map<User, UserViewModel>(user);
+                model.AllUsers.Add(tempUser);
             }
 
-            foreach (var employee in projectEmployees)
+            foreach (var user in projectUsers)
             {
-                var tempEmployee = this._mapper.Map<Employee, EmployeeViewModel>(employee);
-                model.ProjectEmployees.Add(tempEmployee);
+                var tempUser = this._mapper.Map<User, UserViewModel>(user);
+                model.ProjectUsers.Add(tempUser);
             }
 
             return View(model);

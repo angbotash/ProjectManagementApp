@@ -4,8 +4,8 @@
 <br/>
 
 @Html.HiddenFor(m => m.Project)
-@Html.HiddenFor(m => m.ProjectEmployees)
-@Html.HiddenFor(m => m.AllEmployees)
+@Html.HiddenFor(m => m.ProjectUsers)
+@Html.HiddenFor(m => m.AllUsers)
 
 <div>
     <table class="table">
@@ -18,19 +18,19 @@
             </th>
         </tr>
         </thead>
-        @foreach (var employee in Model.ProjectEmployees)
+        @foreach (var employee in Model.ProjectUsers)
         {
             <tr>
                 <td>
                     @Html.ActionLink(
-                    @employee.Email,
-                        "ViewEmployee",
-                        "Employee",
+                        @employee.Email,
+                        "ViewUser",
+                        "User",
                         new { id = @employee.Id },
                         null)
                 </td>
                 <td>
-                    @using (Html.BeginForm("RemoveFromProject", "Employee", new { projectId = Model.Project.Id, employeeId = employee.Id }, FormMethod.Post))
+                    @using (Html.BeginForm("RemoveFromProject", "User", new { projectId = Model.Project.Id, userId = employee.Id }, FormMethod.Post))
                     {
                         <input type="submit" value="Remove" />
                     }
@@ -51,22 +51,22 @@
             </th>
         </tr>
         </thead>
-        @foreach (var employee in @Model.AllEmployees)
+        @foreach (var employee in @Model.AllUsers)
         {
             <tr>
                 <td>
-                    @if (!Model.ProjectEmployees.Contains(employee))
+                    @if (!Model.ProjectUsers.Contains(employee))
                     {
                         @Html.ActionLink(
                             @employee.Email,
-                            "ViewEmployee",
-                            "Employee",
+                            "ViewUser",
+                            "User",
                             new { id = @employee.Id },
                             null)
                     }
                 </td>
                 <td>
-                    @using (Html.BeginForm("AddToProject", "Employee", new { projectId = Model.Project.Id, employeeId = employee.Id }, FormMethod.Post))
+                    @using (Html.BeginForm("AddToProject", "User", new { projectId = Model.Project.Id, userId = employee.Id }, FormMethod.Post))
                     {
                         <input type="submit" value="Add" />
                     }

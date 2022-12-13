@@ -7,12 +7,10 @@ namespace ProjectManagementApp.Services
     public class ProjectService : IProjectService
     {
         private readonly IProjectRepository _projectRepository;
-        private readonly IEmployeeRepository _employeeRepository;
 
-        public ProjectService(IProjectRepository projectRepository, IEmployeeRepository employeeRepository)
+        public ProjectService(IProjectRepository projectRepository)
         {
             this._projectRepository = projectRepository;
-            this._employeeRepository = employeeRepository;
         }
 
         public async Task Create(Project newProject)
@@ -49,18 +47,11 @@ namespace ProjectManagementApp.Services
             return projects;
         }
 
-        public IEnumerable<Employee> GetEmployees(int id)
+        public IEnumerable<User> GetUsers(int projectId)
         {
-            var employees = this._projectRepository.GetEmployees(id);
+            var users = this._projectRepository.GetUsers(projectId);
 
-            return employees;
-        }
-
-        public bool IsOnProject(int projectId, int employeeId)
-        {
-            var result = this._projectRepository.IsEmployeeOnProject(projectId, employeeId);
-
-            return result;
+            return users;
         }
 
         public async Task Delete(int id)

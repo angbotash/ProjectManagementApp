@@ -4,8 +4,8 @@
     {
         public ProjectViewModel Project { get; set; } = null!;
 
-        public IList<EmployeeViewModel> ProjectEmployees { get; set; } = new List<EmployeeViewModel>();
+        public IList<UserViewModel> ProjectUsers { get; set; } = new List<UserViewModel>();
 
-        public IList<EmployeeViewModel> AllEmployees { get; set; } = new List<EmployeeViewModel>();
+        public IList<UserViewModel> AllUsers { get; set; } = new List<UserViewModel>();
     }
 }

@@ -4,18 +4,18 @@ using ProjectManagementApp.Domain.Entities;
 
 namespace ProjectManagementApp.Persistence.Configurations
 {
-    public class EmployeeProjectMappingConfiguration : IEntityTypeConfiguration<EmployeeProject>
+    public class UserProjectMappingConfiguration : IEntityTypeConfiguration<UserProject>
     {
-        public void Configure(EntityTypeBuilder<EmployeeProject> builder)
+        public void Configure(EntityTypeBuilder<UserProject> builder)
         {
-            builder.HasKey(k => new { k.EmployeeId, k.ProjectId });
+            builder.HasKey(k => new { UserId = k.UserId, k.ProjectId });
 
-            builder.HasOne(ep => ep.Employee)
-                .WithMany(e => e.EmployeeProject)
+            builder.HasOne(ep => ep.User)
+                .WithMany(e => e.UserProject)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(ep => ep.Project)
-                .WithMany(p => p.EmployeeProject)
+                .WithMany(p => p.UserProject)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

@@ -10,11 +10,11 @@ namespace ProjectManagementApp.Web.ViewModels
 
         public int ReporterId { get; set; }
 
-        public EmployeeViewModel Reporter { get; set; } = null!;
+        public UserViewModel Reporter { get; set; } = null!;
 
         public int AssigneeId { get; set; }
 
-        public EmployeeViewModel Assignee { get; set; } = null!;
+        public UserViewModel Assignee { get; set; } = null!;
 
         public int ProjectId { get; set; }
 

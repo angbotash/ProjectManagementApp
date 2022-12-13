@@ -7,14 +7,14 @@ namespace ProjectManagementApp.Web.ViewModels.Mapper
     {
         public AppProfile()
         {
-            CreateMap<CreateEmployeeViewModel, Employee>();
+            CreateMap<CreateUserViewModel, User>();
             CreateMap<CreateProjectViewModel, Project>();
-            CreateMap<EmployeeViewModel, Employee>();
-            CreateMap<Employee, EmployeeViewModel>();
+            CreateMap<UserViewModel, User>();
+            CreateMap<User, UserViewModel>();
             CreateMap<ProjectViewModel, Project>();
             CreateMap<Project, ProjectViewModel>();
-            CreateMap<EditEmployeeViewModel, Employee>();
-            CreateMap<Employee, EditEmployeeViewModel>();
+            CreateMap<EditUserViewModel, User>();
+            CreateMap<User, EditUserViewModel>();
             CreateMap<EditProjectViewModel, Project>();
             CreateMap<Project, EditProjectViewModel>();
             CreateMap<CreateIssueViewModel, Issue>();

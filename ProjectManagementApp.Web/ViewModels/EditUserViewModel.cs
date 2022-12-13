@@ -2,7 +2,7 @@
 
 namespace ProjectManagementApp.Web.ViewModels
 {
-    public class EditEmployeeViewModel
+    public class EditUserViewModel
     {
         public int Id { get; set; }
 

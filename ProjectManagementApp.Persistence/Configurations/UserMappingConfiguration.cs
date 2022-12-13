@@ -4,13 +4,13 @@ using ProjectManagementApp.Domain.Entities;
 
 namespace ProjectManagementApp.Persistence.Configurations
 {
-    public class EmployeeMappingConfiguration : IEntityTypeConfiguration<Employee>
+    public class UserMappingConfiguration : IEntityTypeConfiguration<User>
     {
-        public void Configure(EntityTypeBuilder<Employee> builder)
+        public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.HasMany(e => e.EmployeeProject)
-                .WithOne(ep => ep.Employee)
-                .HasForeignKey(e => e.EmployeeId);
+            builder.HasMany(e => e.UserProject)
+                .WithOne(ep => ep.User)
+                .HasForeignKey(e => e.UserId);
 
             builder.HasMany(e => e.AssignedIssues)
                 .WithOne(t => t.Assignee)

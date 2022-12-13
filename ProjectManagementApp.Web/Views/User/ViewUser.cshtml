@@ -1,6 +1,6 @@
-﻿@model ProjectManagementApp.Web.ViewModels.EmployeeViewModel
+﻿@model ProjectManagementApp.Web.ViewModels.UserViewModel
 
-<h4>Employee</h4>
+<h4>User</h4>
 <div>
     <div>
         <p><b>First name: </b>@Model.FirstName</p>
@@ -29,7 +29,7 @@
                 "Assigned issues",
                 "ViewAssignedIssues",
                 "Issue",
-                new { employeeId = @Model.Id },
+                new { userId = @Model.Id },
                 null)
         </p>
         <p>
@@ -37,7 +37,7 @@
                 "Reported issues",
                 "ViewReportedIssues",
                 "Issue",
-                new { employeeId = @Model.Id },
+                new { userId = @Model.Id },
                 null)
         </p>
         
@@ -45,11 +45,11 @@
     </div>
     
     <div>
-        <a asp-controller="Employee" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-dark">Edit</a>
+        <a asp-controller="User" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-dark">Edit</a>
     </div>
     <br/>
     <div>
-        @using (Html.BeginForm("Delete", "Employee", new {id = Model.Id}, FormMethod.Post))
+        @using (Html.BeginForm("Delete", "User", new {id = Model.Id}, FormMethod.Post))
         {
             <input type="submit" value="Delete"/>
         }

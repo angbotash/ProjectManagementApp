@@ -8,11 +8,11 @@
 
         public int AssigneeId { get; set; }
 
-        public Employee Assignee { get; set; } = null!;
+        public User Assignee { get; set; } = null!;
 
         public int ReporterId { get; set; }
 
-        public Employee Reporter { get; set; } = null!;
+        public User Reporter { get; set; } = null!;
 
         public int ProjectId { get; set; }
 

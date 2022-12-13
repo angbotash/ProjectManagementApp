@@ -1,11 +1,13 @@
-﻿@model ProjectManagementApp.Web.ViewModels.CreateEmployeeViewModel
+﻿@model ProjectManagementApp.Web.ViewModels.EditUserViewModel
 
-@using (Html.BeginForm("CreateEmployee", "Employee", FormMethod.Post, new {enctype = "multipart/form-data"}))
+@using (Html.BeginForm("Edit", "User", FormMethod.Post, new {enctype = "multipart/form-data"}))
 {
     <div asp-validation-summary="ModelOnly"></div>
     <div class="container">
-        <h1>Create a new employee</h1>
+        <h1>Edit employee @Model.Email</h1>
         <hr>
+        @Html.HiddenFor(m => m.Id)
+
         <div>
             <b>@Html.LabelFor(m => m.FirstName)</b>
             <br />
@@ -30,10 +32,10 @@
             @Html.TextBoxFor(m => m.Email, new { placeholder = "Enter email" })
         </div>
         <hr>
-        
-        @using (Html.BeginForm("CreateEmployee", "Employee", FormMethod.Post))
+
+        @using (Html.BeginForm("Edit", "User", FormMethod.Post))
         {
-            <input type="submit" value="Create" />
+            <input type="submit" value="Save" />
         }
     </div>
 }

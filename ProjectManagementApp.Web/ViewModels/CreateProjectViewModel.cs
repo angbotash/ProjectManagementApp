@@ -38,6 +38,6 @@ namespace ProjectManagementApp.Web.ViewModels
         [Display(Name = "Start date")]
         public int Priority { get; set; }
 
-        public IList<SelectListItem> Employees { get; set; } = null!;
+        public IList<SelectListItem> Users { get; set; } = null!;
     }
 }

@@ -42,16 +42,16 @@
             <td>
                 @Html.ActionLink(
                     @issue.Reporter.Email, 
-                    "ViewEmployee",
-                    "Employee",
+                    "ViewUser",
+                    "User",
                     new { id = @issue.Reporter.Id },
                     null)
             </td>
             <td>
                 @Html.ActionLink(
                     @issue.Assignee.Email, 
-                    "ViewEmployee",
-                    "Employee",
+                    "ViewUser",
+                    "User",
                     new { id = @issue.Assignee.Id },
                     null)
             </td>

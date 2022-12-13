@@ -1,14 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using ProjectManagementApp.Domain.Entities;
 using ProjectManagementApp.Persistence.Configurations;
 
 namespace ProjectManagementApp.Persistence
 {
-    public class ApplicationContext : DbContext
+    public class ApplicationContext : IdentityDbContext<User, IdentityRole<int>, int>
     {
-        public DbSet<Employee> Employees { get; set; } = null!;
         public DbSet<Project> Projects { get; set; } = null!;
-        public DbSet<EmployeeProject> EmployeeProject { get; set; } = null!;
+        public DbSet<UserProject> UserProject { get; set; } = null!;
         public DbSet<Issue> Issues { get; set; } = null!;
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
@@ -19,9 +20,9 @@ namespace ProjectManagementApp.Persistence
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.ApplyConfiguration(new EmployeeMappingConfiguration());
+            modelBuilder.ApplyConfiguration(new UserMappingConfiguration());
             modelBuilder.ApplyConfiguration(new ProjectMappingConfiguration());
-            modelBuilder.ApplyConfiguration(new EmployeeProjectMappingConfiguration());
+            modelBuilder.ApplyConfiguration(new UserProjectMappingConfiguration());
             modelBuilder.ApplyConfiguration(new IssueMappingConfiguration());
         }
     }

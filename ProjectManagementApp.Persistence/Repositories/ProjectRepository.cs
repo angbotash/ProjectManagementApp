@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using ProjectManagementApp.Domain.Entities;
 using ProjectManagementApp.Domain.RepositoryInterfaces;
 
@@ -7,10 +8,12 @@ namespace ProjectManagementApp.Persistence.Repositories
     public class ProjectRepository : IProjectRepository
     {
         private readonly ApplicationContext _dbContext;
+        private readonly UserManager<User> _userManager;
 
-        public ProjectRepository(ApplicationContext dbContext)
+        public ProjectRepository(ApplicationContext dbContext, UserManager<User> userManager)
         {
             this._dbContext = dbContext;
+            this._userManager = userManager;
         }
 
         public async Task Create(Project newProject)
@@ -28,10 +31,10 @@ namespace ProjectManagementApp.Persistence.Repositories
                     return;
                 }
 
-                var newEmployeeProject = new EmployeeProject()
-                    {EmployeeId = (int)newProject.ManagerId, ProjectId = project.Id};
+                var newUserProject = new UserProject()
+                    {UserId = (int)newProject.ManagerId, ProjectId = project.Id};
 
-                await this._dbContext.EmployeeProject.AddAsync(newEmployeeProject);
+                await this._dbContext.UserProject.AddAsync(newUserProject);
                 await this._dbContext.SaveChangesAsync();
             }
         }
@@ -78,18 +81,18 @@ namespace ProjectManagementApp.Persistence.Repositories
             return projects;
         }
 
-        public IEnumerable<Employee> GetEmployees(int id)
+        public IEnumerable<User> GetUsers(int id)
         {
-            var employees = this._dbContext.EmployeeProject.Where(e => e.ProjectId == id).ToList();
-            var result = new List<Employee>();
+            var users = this._dbContext.UserProject.Where(e => e.ProjectId == id).ToList();
+            var result = new List<User>();
 
-            foreach (var employee in employees)
+            foreach (var user in users)
             {
-                var tempEmployee = this._dbContext.Employees.FirstOrDefault(e => e.Id == employee.EmployeeId);
+                var tempUser = this._userManager.Users.FirstOrDefault(e => e.Id == user.UserId);
 
-                if (tempEmployee != null)
+                if (tempUser != null)
                 {
-                    result.Add(tempEmployee);
+                    result.Add(tempUser);
                 }
             }
 
@@ -107,13 +110,13 @@ namespace ProjectManagementApp.Persistence.Repositories
             }
         }
 
-        public bool IsEmployeeOnProject(int employeeId, int projectId)
+        public bool IsUserOnProject(int userId, int projectId)
         {
-            var employeeProject =
-                this._dbContext.EmployeeProject.FirstOrDefault(x =>
-                    x.EmployeeId == employeeId && x.ProjectId == projectId);
+            var userProject =
+                this._dbContext.UserProject.FirstOrDefault(x =>
+                    x.UserId == userId && x.ProjectId == projectId);
 
-            if (employeeProject is null)
+            if (userProject is null)
             {
                 return false;
             }

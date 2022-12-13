@@ -29,8 +29,8 @@
         <div>
             <b>@Html.LabelFor(m => m.ManagerId)</b>
             <br />
-            @Html.DropDownListFor(m => m.ManagerId, @Model.Employees, "Select Manager")
-            @Html.HiddenFor(m => m.Employees)
+            @Html.DropDownListFor(m => m.ManagerId, @Model.Users, "Select Manager")
+            @Html.HiddenFor(m => m.Users)
         </div>
 
         <div>

@@ -41,19 +41,19 @@
             </td>
             <td>
                 @Html.ActionLink(
-            @issue.Reporter.Email,
-            "ViewEmployee",
-            "Employee",
-            new { id = @issue.Reporter.Id },
-            null)
+                    @issue.Reporter.Email,
+                    "ViewUser",
+                    "User",
+                    new { id = @issue.Reporter.Id },
+                    null)
             </td>
             <td>
                 @Html.ActionLink(
-            @issue.Assignee.Email,
-            "ViewEmployee",
-            "Employee",
-            new { id = @issue.Assignee.Id },
-            null)
+                    @issue.Assignee.Email,
+                    "ViewUser",
+                    "User",
+                    new { id = @issue.Assignee.Id },
+                    null)
             </td>
             <td>
                 @Html.ActionLink(

@@ -1,10 +1,10 @@
 ﻿namespace ProjectManagementApp.Domain.Entities
 {
-    public class EmployeeProject
+    public class UserProject
     {
-        public int EmployeeId { get; set; }
+        public int UserId { get; set; }
 
-        public Employee Employee { get; set; } = null!;
+        public User User { get; set; } = null!;
 
         public int ProjectId { get; set; }
 

@@ -12,7 +12,7 @@ namespace ProjectManagementApp.Web.ViewModels
 
         public string ExecutorCompanyName { get; set; } = null!;
 
-        public EmployeeViewModel? Manager { get; set; }
+        public UserViewModel? Manager { get; set; }
 
         public DateTime StartDate { get; set; }
 
@@ -20,7 +20,7 @@ namespace ProjectManagementApp.Web.ViewModels
 
         public int Priority { get; set; }
 
-        public IList<EmployeeViewModel> Employees { get; set; } = new List<EmployeeViewModel>();
+        public IList<UserViewModel> Users { get; set; } = new List<UserViewModel>();
 
         public IList<IssueViewModel> Issues { get; set; } = new List<IssueViewModel>();
     }
