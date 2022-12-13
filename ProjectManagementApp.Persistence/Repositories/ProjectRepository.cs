@@ -73,18 +73,6 @@ namespace ProjectManagementApp.Persistence.Repositories
             return project;
         }
 
-        public Project? Get(string name)
-        {
-            var project = this._dbContext.Projects.Include(x => x.Manager)
-                .Include(x => x.Issues)
-                    .ThenInclude(x => x.Assignee)
-                .Include(x => x.Issues)
-                    .ThenInclude(x => x.Reporter)
-                .FirstOrDefault(p => p.Name == name);
-
-            return project;
-        }
-
         public IEnumerable<Project> GetAll()
         {
             var projects = this._dbContext.Projects

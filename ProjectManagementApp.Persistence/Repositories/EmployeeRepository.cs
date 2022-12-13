@@ -50,22 +50,6 @@ namespace ProjectManagementApp.Persistence.Repositories
             return employee;
         }
 
-        public Employee? Get(string email)
-        {
-            var employee = this._dbContext.Employees
-                .Include(x => x.AssignedIssues)
-                    .ThenInclude(x => x.Reporter)
-                .Include(x => x.AssignedIssues)
-                    .ThenInclude(x => x.Project)
-                .Include(x => x.ReportedIssues)
-                    .ThenInclude(x => x.Assignee)
-                .Include(x => x.ReportedIssues)
-                    .ThenInclude(x => x.Project)
-                .FirstOrDefault(e => e.Email == email);
-
-            return employee;
-        }
-
         public IEnumerable<Employee> GetAll()
         {
             var employees = this._dbContext.Employees;

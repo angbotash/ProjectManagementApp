@@ -10,8 +10,6 @@ namespace ProjectManagementApp.Domain.RepositoryInterfaces
 
         Project? Get(int id);
 
-        Project? Get(string name);
-
         IEnumerable<Project> GetAll();
 
         IEnumerable<Employee> GetEmployees(int id);

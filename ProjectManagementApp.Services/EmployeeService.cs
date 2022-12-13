@@ -40,13 +40,6 @@ namespace ProjectManagementApp.Services
             return employee;
         }
 
-        public Employee? Get(string email)
-        {
-            var employee = this._employeeRepository.Get(email);
-
-            return employee;
-        }
-
         public IEnumerable<Employee> GetAll()
         {
             var employees = this._employeeRepository.GetAll();

@@ -10,8 +10,6 @@ namespace ProjectManagementApp.Domain.RepositoryInterfaces
 
         Issue? Get(int id);
 
-        Issue? Get(string name);
-
         IEnumerable<Issue>? GetAllIssues();
 
         Task Delete(int id);

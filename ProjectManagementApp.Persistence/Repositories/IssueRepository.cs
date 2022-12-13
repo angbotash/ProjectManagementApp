@@ -45,16 +45,6 @@ namespace ProjectManagementApp.Persistence.Repositories
             return issue;
         }
 
-        public Issue? Get(string name)
-        {
-            var issue = this._dbContext.Issues.Include(x => x.Project)
-                .Include(x => x.Assignee)
-                .Include(x => x.Reporter)
-                .FirstOrDefault(i => i.Name == name);
-
-            return issue;
-        }
-
         public IEnumerable<Issue>? GetAllIssues()
         {
             var issues = this._dbContext.Issues.Include(x => x.Project)

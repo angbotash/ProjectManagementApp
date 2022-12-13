@@ -10,8 +10,6 @@ namespace ProjectManagementApp.Domain.ServiceInterfaces
 
         Employee? Get(int id);
 
-        Employee? Get(string email);
-
         IEnumerable<Employee> GetAll();
 
         IEnumerable<Project> GetProjects(int id);
