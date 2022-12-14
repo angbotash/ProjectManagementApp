@@ -35,7 +35,9 @@ namespace ProjectManagementApp.Web.ViewModels
         [Display(Name = "Priority")]
         public int Priority { get; set; }
 
-        public IList<SelectListItem> Users { get; set; } = null!;
+        public IList<SelectListItem> Managers { get; set; } = null!;
+
+        public IList<SelectListItem> Employees { get; set; } = null!;
 
         public IList<SelectListItem> Statuses { get; set; } = null!;
     }

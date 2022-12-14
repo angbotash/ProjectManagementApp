@@ -17,16 +17,16 @@
         <div>
             <b>@Html.LabelFor(m => m.ReporterId)</b>
             <br />
-            @Html.DropDownListFor(m => m.ReporterId, @Model.Users, "Select reporter")
-            @Html.HiddenFor(m => m.Users)
+            @Html.DropDownListFor(m => m.ReporterId, @Model.Managers, "Select reporter")
+            @Html.HiddenFor(m => m.Managers)
             @Html.ValidationMessageFor(m => m.ReporterId)
         </div>
         
         <div>
             <b>@Html.LabelFor(m => m.AssigneeId)</b>
             <br />
-            @Html.DropDownListFor(m => m.AssigneeId, @Model.Users, "Select assignee")
-            @Html.HiddenFor(m => m.Users)
+            @Html.DropDownListFor(m => m.AssigneeId, @Model.Employees, "Select assignee")
+            @Html.HiddenFor(m => m.Employees)
             @Html.ValidationMessageFor(m => m.AssigneeId)
         </div>
 

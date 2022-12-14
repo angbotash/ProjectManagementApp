@@ -20,12 +20,7 @@ namespace ProjectManagementApp.Web.Controllers
         {
             var currentUserId = await _userService.GetCurrentUserId(User);
 
-            if (currentUserId is null)
-            {
-                return BadRequest();
-            }
-
-            return View((int)currentUserId);
+            return View(currentUserId);
         }
 
         public IActionResult Privacy()

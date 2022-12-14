@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using ProjectManagementApp.Domain.Entities
 @model ProjectManagementApp.Web.ViewModels.IssueViewModel
 
 <h4>Issue</h4>
@@ -17,10 +18,13 @@
         <a asp-controller="Issue" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-dark">Edit</a>
     </div>
     <br />
-    <div>
-        @using (Html.BeginForm("Delete", "Issue", new { id = Model.Id }, FormMethod.Post))
-        {
-            <input type="submit" value="Delete" />
-        }
-    </div>
+    @if (User.IsInRole(Role.Supervisor.ToString()) || User.IsInRole(Role.Manager.ToString()))
+    {
+        <div>
+            @using (Html.BeginForm("Delete", "Issue", new { id = Model.Id }, FormMethod.Post))
+            {
+                <input type="submit" value="Delete" />
+            }
+        </div>
+    }
 </div>

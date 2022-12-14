@@ -34,7 +34,12 @@
         {
             <tr>
                 <td>
-                    @project.Name
+                    @Html.ActionLink(
+                        @project.Name,
+                        "ViewProject",
+                        "Project",
+                        new { id = @project.Id },
+                        null)
                 </td>
                 <td>
                     @project.ClientCompanyName

@@ -19,6 +19,8 @@ namespace ProjectManagementApp.Web.ViewModels
         [Display(Name = "Assignee")]
         public int AssigneeId { get; set; }
 
+        public UserViewModel? Assignee { get; set; }
+
         public int ProjectId { get; set; }
 
         [DataType(DataType.Text)]
@@ -35,8 +37,8 @@ namespace ProjectManagementApp.Web.ViewModels
         [Display(Name = "Priority 1-10")]
         public int Priority { get; set; }
 
-        public IList<SelectListItem> Users { get; set; } = null!;
+        public IList<SelectListItem>? Employees { get; set; }
 
-        public IList<SelectListItem> Statuses { get; set; } = null!;
+        public IList<SelectListItem>? Statuses { get; set; }
     }
 }

@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using ProjectManagementApp.Domain.Entities;
 using ProjectManagementApp.Domain.ServiceInterfaces;
 using ProjectManagementApp.Web.ViewModels;
-using System.Data;
 
 namespace ProjectManagementApp.Web.Controllers
 {
@@ -28,7 +27,7 @@ namespace ProjectManagementApp.Web.Controllers
 
         [HttpGet("Create")]
         [Authorize(Roles = "Supervisor, Manager")]
-        public ActionResult Create(int? projectId)
+        public async Task<ActionResult> Create(int? projectId)
         {
             if (projectId is null)
             {
@@ -40,20 +39,15 @@ namespace ProjectManagementApp.Web.Controllers
                 return NotFound();
             }
 
-            var allUsers = this._userService.GetAll();
-            var users = new List<UserViewModel>();
+            var allEmployees = await this._userService.GetEmployees();
+            var allManagers = await this._userService.GetManagers();
 
-            foreach (var empl in allUsers)
-            {
-                var tempUser = this._mapper.Map<User, UserViewModel>(empl);
-
-                users.Add(tempUser);
-            }
-
-            var selectList = users.Select(x => new SelectListItem(x.Email, x.Id.ToString())).ToList();
+            var selectListEmployees = allEmployees.Select(x => new SelectListItem(x.Email, x.Id.ToString())).ToList();
+            var selectListManagers = allManagers.Select(x => new SelectListItem(x.Email, x.Id.ToString())).ToList();
             var model = new CreateIssueViewModel
             {
-                Users = selectList,
+                Employees = selectListEmployees,
+                Managers = selectListManagers,
                 ProjectId = (int)projectId,
                 Statuses = new List<SelectListItem>()
                 {
@@ -216,7 +210,7 @@ namespace ProjectManagementApp.Web.Controllers
         }
 
         [HttpGet("Edit")]
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id is null)
             {
@@ -224,7 +218,6 @@ namespace ProjectManagementApp.Web.Controllers
             }
 
             var issue = this._issueService.Get((int)id);
-            var allUsers = this._userService.GetAll();
 
             if (issue is null)
             {
@@ -232,17 +225,9 @@ namespace ProjectManagementApp.Web.Controllers
             }
 
             var model = this._mapper.Map<Issue, EditIssueViewModel>(issue);
-            var users = new List<UserViewModel>();
-
-            foreach (var empl in allUsers)
-            {
-                var tempUser = this._mapper.Map<User, UserViewModel>(empl);
-
-                users.Add(tempUser);
-            }
-
-            var selectList = users.Select(x => new SelectListItem(x.Email, x.Id.ToString())).ToList();
-            model.Users = selectList;
+            var allEmployees = await this._userService.GetEmployees();
+            
+            model.Employees = allEmployees.Select(x => new SelectListItem(x.Email, x.Id.ToString())).ToList();
             model.Statuses = new List<SelectListItem>()
             {
                 new SelectListItem(IssueStatus.ToDo.ToString(), IssueStatus.ToDo.ToString()),
@@ -261,9 +246,11 @@ namespace ProjectManagementApp.Web.Controllers
                 var updatedIssue = this._mapper.Map<EditIssueViewModel, Issue>(model);
 
                 await this._issueService.Edit(updatedIssue);
+
+                return RedirectToAction("ViewIssue", new { id = model.Id });
             }
 
-            return RedirectToAction("ViewIssue", new { id = model.Id });
+            return View(model);
         }
 
         [HttpPost("Delete")]

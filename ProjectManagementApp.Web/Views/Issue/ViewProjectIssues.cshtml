@@ -1,4 +1,5 @@
-﻿@model List<ProjectManagementApp.Web.ViewModels.IssueViewModel>
+﻿@using ProjectManagementApp.Domain.Entities
+@model IList<ProjectManagementApp.Web.ViewModels.IssueViewModel>
 
 <h4>Issues</h4>
 
@@ -40,20 +41,34 @@
             null)
             </td>
             <td>
-                @Html.ActionLink(
-                    @issue.Reporter.Email,
-                    "ViewUser",
-                    "User",
-                    new { id = @issue.Reporter.Id },
-                    null)
+                @if (User.IsInRole(Role.Supervisor.ToString()))
+                {
+                    @Html.ActionLink(
+                        @issue.Reporter.Email,
+                        "ViewUser",
+                        "User",
+                        new {id = @issue.Reporter.Id},
+                        null)
+                }
+                else
+                {
+                    @issue.Reporter.Email
+                }
             </td>
             <td>
-                @Html.ActionLink(
-                    @issue.Assignee.Email,
-                    "ViewUser",
-                    "User",
-                    new { id = @issue.Assignee.Id },
-                    null)
+                @if (User.IsInRole(Role.Supervisor.ToString()))
+                {
+                    @Html.ActionLink(
+                        @issue.Assignee.Email,
+                        "ViewUser",
+                        "User",
+                        new {id = @issue.Assignee.Id},
+                        null)
+                }
+                else
+                {
+                    @issue.Assignee.Email
+                }
             </td>
             <td>
                 @Html.ActionLink(

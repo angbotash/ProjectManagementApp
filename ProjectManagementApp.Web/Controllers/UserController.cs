@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace ProjectManagementApp.Web.Controllers
 {
     [Route("User")]
-    [Authorize(Roles = "Supervisor, Manager")]
+    [Authorize(Roles = "Supervisor, Manager, Employee")]
     public class UserController : Controller
     {
         private readonly IUserService _userService;
@@ -75,7 +75,6 @@ namespace ProjectManagementApp.Web.Controllers
         }
 
         [HttpGet("ViewUser")]
-        [Authorize(Roles = "Supervisor")]
         public IActionResult ViewUser(int? id)
         {
             if (id is null)

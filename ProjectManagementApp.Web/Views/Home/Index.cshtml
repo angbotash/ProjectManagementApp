@@ -1,10 +1,18 @@
 ﻿@using ProjectManagementApp.Domain.Entities
-@model Int32
+@model Int32?
 
+﻿@if (!User.Identity.IsAuthenticated)
+{
+<span style="display: inline; float: left">
+    <a class="btn btn-outline-dark" asp-controller="Account" asp-action="Login">Create employee</a>
+    <a class="btn btn-outline-dark" asp-controller="Account" asp-action="Login">Create project</a>
+</span>
+}
 @if (User.IsInRole(Role.Employee.ToString()))
 {
     <span style="display: inline; float: left">
         <a class="btn btn-outline-dark" asp-controller="Project" asp-action="GetEmployeeProjects" asp-route-employeeId="@Model">My projects</a>
+        <a class="btn btn-outline-dark" asp-controller="Issue" asp-action="ViewAssignedIssues" asp-route-userId="@Model">My issues</a>
     </span>
 }
 
@@ -12,6 +20,7 @@
 {
     <span style="display: inline; float: left">
         <a class="btn btn-outline-dark" asp-controller="Project" asp-action="GetManagerProjects" asp-route-managerId="@Model">My projects</a>
+        <a class="btn btn-outline-dark" asp-controller="Issue" asp-action="ViewReportedIssues" asp-route-userId="@Model">My issues</a>
     </span>
 }
 
