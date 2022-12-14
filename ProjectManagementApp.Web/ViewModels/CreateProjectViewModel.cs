@@ -38,9 +38,9 @@ namespace ProjectManagementApp.Web.ViewModels
 
         [Required(ErrorMessage = "Priority 1-10 is required.")]
         [Range(1, 10)]
-        [Display(Name = "Start date")]
+        [Display(Name = "Priority")]
         public int Priority { get; set; }
 
-        public IList<SelectListItem> Users { get; set; } = null!;
+        public IList<SelectListItem> Managers { get; set; } = null!;
     }
 }

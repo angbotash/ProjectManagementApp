@@ -47,6 +47,13 @@ namespace ProjectManagementApp.Services
             return projects;
         }
 
+        public IEnumerable<Project> GetManagerProjects(int managerId)
+        {
+            var projects = this._projectRepository.GetManagerProjects(managerId);
+
+            return projects;
+        }
+
         public IEnumerable<User> GetUsers(int projectId)
         {
             var users = this._projectRepository.GetUsers(projectId);

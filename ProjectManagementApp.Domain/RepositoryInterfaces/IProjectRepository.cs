@@ -12,6 +12,8 @@ namespace ProjectManagementApp.Domain.RepositoryInterfaces
 
         IEnumerable<Project> GetAll();
 
+        IEnumerable<Project> GetManagerProjects(int managerId);
+
         IEnumerable<User> GetUsers(int id);
 
         Task Delete(int id);

@@ -4,8 +4,8 @@
 <br/>
 
 @Html.HiddenFor(m => m.Project)
-@Html.HiddenFor(m => m.ProjectUsers)
-@Html.HiddenFor(m => m.AllUsers)
+@Html.HiddenFor(m => m.ProjectEmployees)
+@Html.HiddenFor(m => m.AllEmployees)
 
 <div>
     <table class="table">
@@ -18,7 +18,7 @@
             </th>
         </tr>
         </thead>
-        @foreach (var employee in Model.ProjectUsers)
+        @foreach (var employee in Model.ProjectEmployees)
         {
             <tr>
                 <td>
@@ -28,6 +28,11 @@
                         "User",
                         new { id = @employee.Id },
                         null)
+
+                    @if (Model.Project.Manager != null && Model.Project.Manager.Id == employee.Id)
+                    {
+                        <i> Manager</i>
+                    }
                 </td>
                 <td>
                     @using (Html.BeginForm("RemoveFromProject", "User", new { projectId = Model.Project.Id, userId = employee.Id }, FormMethod.Post))
@@ -51,19 +56,16 @@
             </th>
         </tr>
         </thead>
-        @foreach (var employee in @Model.AllUsers)
+        @foreach (var employee in @Model.AllEmployees)
         {
             <tr>
                 <td>
-                    @if (!Model.ProjectUsers.Contains(employee))
-                    {
-                        @Html.ActionLink(
-                            @employee.Email,
-                            "ViewUser",
-                            "User",
-                            new { id = @employee.Id },
-                            null)
-                    }
+                    @Html.ActionLink(
+                        @employee.Email,
+                        "ViewUser",
+                        "User",
+                        new { id = @employee.Id },
+                        null)
                 </td>
                 <td>
                     @using (Html.BeginForm("AddToProject", "User", new { projectId = Model.Project.Id, userId = employee.Id }, FormMethod.Post))

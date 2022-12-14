@@ -1,11 +1,21 @@
-﻿@if (!User.Identity.IsAuthenticated)
+﻿@using ProjectManagementApp.Domain.Entities
+@model Int32
+
+@if (User.IsInRole(Role.Employee.ToString()))
 {
     <span style="display: inline; float: left">
-        <a class="btn btn-outline-dark" asp-controller="Account" asp-action="Login">Create employee</a>
-        <a class="btn btn-outline-dark" asp-controller="Account" asp-action="Login">Create project</a>
+        <a class="btn btn-outline-dark" asp-controller="Project" asp-action="GetEmployeeProjects" asp-route-employeeId="@Model">My projects</a>
     </span>
 }
-@if (User.IsInRole("Supervisor"))
+
+@if (User.IsInRole(Role.Manager.ToString()))
+{
+    <span style="display: inline; float: left">
+        <a class="btn btn-outline-dark" asp-controller="Project" asp-action="GetManagerProjects" asp-route-managerId="@Model">My projects</a>
+    </span>
+}
+
+@if (User.IsInRole(Role.Supervisor.ToString()))
 {
     <span style="display: inline; float: left">
         <a class="btn btn-outline-dark" asp-controller="User" asp-action="CreateUser">Create employee</a>

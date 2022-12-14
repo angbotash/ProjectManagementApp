@@ -12,8 +12,8 @@ using ProjectManagementApp.Persistence;
 namespace ProjectManagementApp.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20221213205754_SeedData")]
-    partial class SeedData
+    [Migration("20221214080530_SeedDataAddValidation")]
+    partial class SeedDataAddValidation
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -160,6 +160,13 @@ namespace ProjectManagementApp.Persistence.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = 1,
+                            RoleId = 1
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
@@ -193,11 +200,13 @@ namespace ProjectManagementApp.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Comment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -232,21 +241,24 @@ namespace ProjectManagementApp.Persistence.Migrations
 
                     b.Property<string>("ClientCompanyName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ExecutorCompanyName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int?>("ManagerId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -285,11 +297,13 @@ namespace ProjectManagementApp.Persistence.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -309,7 +323,8 @@ namespace ProjectManagementApp.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Patronymic")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
@@ -344,16 +359,17 @@ namespace ProjectManagementApp.Persistence.Migrations
                         {
                             Id = 1,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "d39d71ac-1b00-404f-98a9-dfda3307cef8",
+                            ConcurrencyStamp = "142a6a94-f5b2-45d2-aa54-620a2e58cc3c",
                             Email = "supervisor@email.com",
                             EmailConfirmed = false,
                             FirstName = "Super",
                             LastName = "Visor",
-                            LockoutEnabled = false,
+                            LockoutEnabled = true,
                             NormalizedEmail = "SUPERVISOR@EMAIL.COM",
                             NormalizedUserName = "SUPERVISOR@EMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEC2+9TV9xIze8N9n2cQa7/cfSvjioZI6/rYUhcwxWMNUd4zGSmAt5ahUKNkwFV0s0Q==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJ+BzOTcyJLGs5M/8e9wEPPWctUJIw0JWLdtnp690LdirinhmzG2Dsh5MmrjrFJ2xQ==",
                             PhoneNumberConfirmed = false,
+                            SecurityStamp = "LSXZ6IVP5EFL69WLQPVRJRJ2RM45HT2T",
                             TwoFactorEnabled = false,
                             UserName = "supervisor@email.com"
                         });

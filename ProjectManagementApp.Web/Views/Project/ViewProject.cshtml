@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using ProjectManagementApp.Domain.Entities
 @model ProjectManagementApp.Web.ViewModels.ProjectViewModel
 
 <h4>Project</h4>
@@ -11,12 +12,19 @@
             <b>Manager: </b>
             @if (Model.Manager != null)
             {
-                @Html.ActionLink(
-                    @Model.Manager.Email,
-                    "ViewUser",
-                    "User",
-                    new {id = @Model.Manager.Id},
-                    null)
+                @if (User.IsInRole(Role.Supervisor.ToString()))
+                {
+                    @Html.ActionLink(
+                        @Model.Manager.Email,
+                        "ViewUser",
+                        "User",
+                        new {id = @Model.Manager.Id},
+                        null)
+                }
+                else
+                {
+                    @Model.Manager.Email
+                }
             }
         </p>
         <p><b>Start date: </b>@Model.StartDate.ToString("dd/MM/yyyy")</p>
@@ -27,12 +35,19 @@
             @foreach (var employee in Model.Users)
             {
                 <li>
-                    @Html.ActionLink(
-                        @employee.Email,
-                        "ViewUser",
-                        "User",
-                        new {id = @employee.Id},
-                        null)
+                    @if (User.IsInRole(Role.Supervisor.ToString()))
+                    {
+                        @Html.ActionLink(
+                            @employee.Email,
+                            "ViewUser",
+                            "User",
+                            new {id = @employee.Id},
+                            null)
+                    }
+                    else
+                    {
+                        @employee.Email
+                    }
                 </li>
             }
         </ul>
@@ -57,14 +72,17 @@
         <a asp-controller="Project" asp-action="EditProjectEmployees" asp-route-id="@Model.Id" class="btn btn-outline-dark">Edit employees</a>
     </div>
     <br/>
-    <div>
-        <a asp-controller="Project" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-dark">Edit</a>
-    </div>
-    <br/>
-    <div>
-        @using (Html.BeginForm("Delete", "Project", new {id = Model.Id}, FormMethod.Post))
-        {
-            <input type="submit" value="Delete"/>
-        }
-    </div>
+    @if (User.IsInRole(Role.Supervisor.ToString()))
+    {
+        <div>
+            <a asp-controller="Project" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-dark">Edit</a>
+        </div>
+        <br/>
+        <div>
+            @using (Html.BeginForm("Delete", "Project", new {id = Model.Id}, FormMethod.Post))
+            {
+                <input type="submit" value="Delete"/>
+            }
+        </div>
+    }
 </div>

@@ -157,6 +157,13 @@ namespace ProjectManagementApp.Persistence.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = 1,
+                            RoleId = 1
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
@@ -349,16 +356,17 @@ namespace ProjectManagementApp.Persistence.Migrations
                         {
                             Id = 1,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "615eed78-27fa-48bd-80ea-6da9453307f8",
+                            ConcurrencyStamp = "142a6a94-f5b2-45d2-aa54-620a2e58cc3c",
                             Email = "supervisor@email.com",
                             EmailConfirmed = false,
                             FirstName = "Super",
                             LastName = "Visor",
-                            LockoutEnabled = false,
+                            LockoutEnabled = true,
                             NormalizedEmail = "SUPERVISOR@EMAIL.COM",
                             NormalizedUserName = "SUPERVISOR@EMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGFie9zPFVbk1b1k0TQNg6IUVomNS/xJ16kH8oSUDV4HltcBu0bjluRo8vN/QbuFfw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJ+BzOTcyJLGs5M/8e9wEPPWctUJIw0JWLdtnp690LdirinhmzG2Dsh5MmrjrFJ2xQ==",
                             PhoneNumberConfirmed = false,
+                            SecurityStamp = "LSXZ6IVP5EFL69WLQPVRJRJ2RM45HT2T",
                             TwoFactorEnabled = false,
                             UserName = "supervisor@email.com"
                         });

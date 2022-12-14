@@ -1,0 +1,72 @@
+﻿@model List<ProjectManagementApp.Web.ViewModels.ProjectViewModel>
+
+<h2>Projects</h2>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Customer
+                </th>
+                <th>
+                    Executor
+                </th>
+                <th>
+                    Manager
+                </th>
+                <th>
+                    Start date
+                </th>
+                <th>
+                    End date
+                </th>
+                <th>
+                    Priority
+                </th>
+            </tr>
+        </thead>
+        @foreach (var project in Model)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink(
+            @project.Name,
+            "ViewProject",
+            "Project",
+            new { id = @project.Id },
+            null)
+                </td>
+                <td>
+                    @project.ClientCompanyName
+                </td>
+                <td>
+                    @project.ExecutorCompanyName
+                </td>
+                <td>
+                    @if (project.Manager != null)
+                    {
+                        @project.Manager.Email
+                    }
+                </td>
+                <td>
+                    @project.StartDate.ToString("dd/MM/yyyy")
+                </td>
+                <td>
+                    @project.EndDate.ToString("dd/MM/yyyy")
+                </td>
+                <td>
+                    @project.Priority
+                </td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <h6>You have no projects.</h6>
+}

@@ -2,12 +2,14 @@
 using ProjectManagementApp.Domain.ServiceInterfaces;
 using ProjectManagementApp.Web.ViewModels;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using ProjectManagementApp.Domain.Entities;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ProjectManagementApp.Web.Controllers
 {
     [Route("User")]
+    [Authorize(Roles = "Supervisor, Manager")]
     public class UserController : Controller
     {
         private readonly IUserService _userService;
@@ -22,6 +24,7 @@ namespace ProjectManagementApp.Web.Controllers
         }
 
         [HttpGet("CreateUser")]
+        [Authorize(Roles = "Supervisor")]
         public IActionResult CreateUser()
         {
             var roles = this._userService.GetRoles();
@@ -32,6 +35,7 @@ namespace ProjectManagementApp.Web.Controllers
         }
 
         [HttpPost("CreateUser")]
+        [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> CreateUser(CreateUserViewModel model)
         {
             if (ModelState.IsValid)
@@ -54,6 +58,7 @@ namespace ProjectManagementApp.Web.Controllers
         }
 
         [HttpGet("GetAllUsers")]
+        [Authorize(Roles = "Supervisor")]
         public IActionResult GetAllUsers()
         {
             var users = this._userService.GetAll();
@@ -70,6 +75,7 @@ namespace ProjectManagementApp.Web.Controllers
         }
 
         [HttpGet("ViewUser")]
+        [Authorize(Roles = "Supervisor")]
         public IActionResult ViewUser(int? id)
         {
             if (id is null)
@@ -98,6 +104,7 @@ namespace ProjectManagementApp.Web.Controllers
         }
 
         [HttpPost("Delete")]
+        [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id is null)

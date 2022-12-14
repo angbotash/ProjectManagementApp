@@ -67,7 +67,13 @@ namespace ProjectManagementApp.Persistence.Repositories
 
             foreach (var project in projects)
             {
-                var tempProject = this._dbContext.Projects.FirstOrDefault(p => p.Id == project.ProjectId);
+                var tempProject = this._dbContext.Projects
+                    .Include(x => x.Manager)
+                    .Include(x => x.Issues)
+                        .ThenInclude(x => x.Assignee)
+                    .Include(x => x.Issues)
+                        .ThenInclude(x => x.Reporter)
+                    .FirstOrDefault(p => p.Id == project.ProjectId);
 
                 if (tempProject != null)
                 {

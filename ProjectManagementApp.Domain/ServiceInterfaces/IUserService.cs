@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using ProjectManagementApp.Domain.Entities;
 using ProjectManagementApp.Domain.Infrastructure;
+using System.Security.Claims;
 
 namespace ProjectManagementApp.Domain.ServiceInterfaces
 {
@@ -12,7 +13,13 @@ namespace ProjectManagementApp.Domain.ServiceInterfaces
 
         User? Get(int id);
 
+        Task<int?> GetCurrentUserId(ClaimsPrincipal currentUser);
+
         IEnumerable<User> GetAll();
+
+        Task<IEnumerable<User>> GetManagers();
+
+        Task<IEnumerable<User>> GetEmployees();
 
         IEnumerable<Project> GetProjects(int id);
 

@@ -35,6 +35,8 @@ namespace ProjectManagementApp.Persistence
                 NormalizedEmail = "SUPERVISOR@EMAIL.COM",
                 UserName = "supervisor@email.com",
                 NormalizedUserName = "SUPERVISOR@EMAIL.COM",
+                SecurityStamp = "LSXZ6IVP5EFL69WLQPVRJRJ2RM45HT2T",
+                LockoutEnabled = true,
             };
 
             // Set password
@@ -43,6 +45,9 @@ namespace ProjectManagementApp.Persistence
 
             // Seed supervisor
             modelBuilder.Entity<User>().HasData(supervisor);
+
+            // Seed supervisor's role
+            modelBuilder.Entity<IdentityUserRole<int>>(entity => { entity.HasData(new { RoleId = 1, UserId = 1 }); });
 
             // Seed roles
             modelBuilder.Entity<IdentityRole<int>>()

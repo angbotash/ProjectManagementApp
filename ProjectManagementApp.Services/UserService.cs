@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
 using ProjectManagementApp.Domain.Entities;
 using ProjectManagementApp.Domain.Infrastructure;
 using ProjectManagementApp.Domain.RepositoryInterfaces;
@@ -94,11 +95,39 @@ namespace ProjectManagementApp.Services
             return user;
         }
 
+        public async Task<int?> GetCurrentUserId(ClaimsPrincipal currentUser)
+        {
+            var user = await this._userManager.GetUserAsync(currentUser);
+
+            if (user != null)
+            {
+                var id = user.Id;
+
+                return id;
+            }
+
+            return null;
+        }
+
         public IEnumerable<User> GetAll()
         {
             var users = this._userRepository.GetAll();
 
             return users;
+        }
+
+        public async Task<IEnumerable<User>> GetManagers()
+        {
+            var managers = await this._userManager.GetUsersInRoleAsync(Role.Manager.ToString());
+
+            return managers;
+        }
+
+        public async Task<IEnumerable<User>> GetEmployees()
+        {
+            var employees = await this._userManager.GetUsersInRoleAsync(Role.Employee.ToString());
+
+            return employees;
         }
 
         public IEnumerable<Project> GetProjects(int id)

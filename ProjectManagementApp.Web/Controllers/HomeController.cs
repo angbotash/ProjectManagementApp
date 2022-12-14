@@ -1,21 +1,31 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProjectManagementApp.Web.Models;
 using System.Diagnostics;
+using ProjectManagementApp.Domain.ServiceInterfaces;
 
 namespace ProjectManagementApp.Web.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IUserService _userService;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IUserService userService, ILogger<HomeController> logger)
         {
-            _logger = logger;
+            this._userService = userService;
+            this._logger = logger;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var currentUserId = await _userService.GetCurrentUserId(User);
+
+            if (currentUserId is null)
+            {
+                return BadRequest();
+            }
+
+            return View((int)currentUserId);
         }
 
         public IActionResult Privacy()

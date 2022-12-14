@@ -81,6 +81,19 @@ namespace ProjectManagementApp.Persistence.Repositories
             return projects;
         }
 
+        public IEnumerable<Project> GetManagerProjects(int managerId)
+        {
+            var managerProjects = this._dbContext.Projects
+                .Where(x => x.ManagerId == managerId)
+                .Include(x => x.Manager)
+                .Include(x => x.Issues)
+                    .ThenInclude(x => x.Assignee)
+                .Include(x => x.Issues)
+                    .ThenInclude(x => x.Reporter);
+
+            return managerProjects;
+        }
+
         public IEnumerable<User> GetUsers(int id)
         {
             var users = this._dbContext.UserProject.Where(e => e.ProjectId == id).ToList();

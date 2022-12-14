@@ -5,10 +5,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using ProjectManagementApp.Domain.Entities;
 using ProjectManagementApp.Domain.ServiceInterfaces;
 using ProjectManagementApp.Web.ViewModels;
+using System.Data;
 
 namespace ProjectManagementApp.Web.Controllers
 {
     [Route("Issue")]
+    [Authorize(Roles = "Supervisor, Manager, Employee")]
     public class IssueController : Controller
     {
         private readonly IIssueService _issueService;
@@ -24,9 +26,8 @@ namespace ProjectManagementApp.Web.Controllers
             this._mapper = mapper;
         }
 
-        [Authorize(Policy = "Supervisor")]
-        [Authorize(Policy = "Manager")]
         [HttpGet("Create")]
+        [Authorize(Roles = "Supervisor, Manager")]
         public ActionResult Create(int? projectId)
         {
             if (projectId is null)
@@ -65,9 +66,8 @@ namespace ProjectManagementApp.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Policy = "Supervisor")]
-        [Authorize(Policy = "Manager")]
         [HttpPost("Create")]
+        [Authorize(Roles = "Supervisor, Manager")]
         public async Task<ActionResult> Create(CreateIssueViewModel model)
         {
             if (ModelState.IsValid)
@@ -267,6 +267,7 @@ namespace ProjectManagementApp.Web.Controllers
         }
 
         [HttpPost("Delete")]
+        [Authorize(Roles = "Supervisor, Manager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id is null)
