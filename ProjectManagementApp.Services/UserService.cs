@@ -60,29 +60,26 @@ namespace ProjectManagementApp.Services
             var result = new OperationResult(false);
             var user = _userRepository.Get(updatedUser.Id);
 
-            if (user != null)
+            if (user is null)
             {
-                await _userRepository.Update(updatedUser);
+                throw new KeyNotFoundException($"There is no User with Id {updatedUser.Id}.");
             }
 
-            if (user != null)
+            user.FirstName = updatedUser.FirstName;
+            user.LastName = updatedUser.LastName;
+            user.Patronymic = updatedUser.Patronymic;
+            user.Email = updatedUser.Email;
+
+            var updateResult = await _userManager.UpdateAsync(user);
+
+            if (updateResult.Succeeded)
             {
-                user.FirstName = updatedUser.FirstName;
-                user.LastName = updatedUser.LastName;
-                user.Patronymic = updatedUser.Patronymic;
-                user.Email = updatedUser.Email;
+                return new OperationResult(true);
+            }
 
-                var updateResult = await _userManager.UpdateAsync(user);
-
-                if (updateResult.Succeeded)
-                {
-                    return new OperationResult(true);
-                }
-
-                foreach (var error in updateResult.Errors)
-                {
-                    result.AddError(error.Description);
-                }
+            foreach (var error in updateResult.Errors)
+            {
+                result.AddError(error.Description);
             }
 
             return result;
@@ -92,10 +89,12 @@ namespace ProjectManagementApp.Services
         {
             var user = _userRepository.Get(id);
 
-            if (user != null)
+            if (user is null)
             {
-                await _userRepository.Delete(id);
+                throw new KeyNotFoundException($"There is no User with Id {id}.");
             }
+
+            await _userRepository.Delete(id);
         }
 
         public async Task<OperationResult> Authenticate(string email, string password)
@@ -132,7 +131,7 @@ namespace ProjectManagementApp.Services
 
         public IEnumerable<User> GetAll()
         {
-            var users = _userRepository.GetAll();
+            var users = _userManager.Users;
 
             return users;
         }
@@ -176,12 +175,12 @@ namespace ProjectManagementApp.Services
         {
             if (_projectRepository.Get(projectId) == null)
             {
-                return;
+                throw new KeyNotFoundException($"There is no Project with Id {projectId}.");
             }
 
             if (_userRepository.Get(userId) == null)
             {
-                return;
+                throw new KeyNotFoundException($"There is no User with Id {userId}.");
             }
 
             await _userRepository.AddToProject(projectId, userId);
@@ -191,12 +190,12 @@ namespace ProjectManagementApp.Services
         {
             if (_projectRepository.Get(projectId) == null)
             {
-                return;
+                throw new KeyNotFoundException($"There is no Project with Id {projectId}.");
             }
 
             if (_userRepository.Get(userId) == null)
             {
-                return;
+                throw new KeyNotFoundException($"There is no User with Id {userId}.");
             }
 
             await _userRepository.RemoveFromProject(projectId, userId);

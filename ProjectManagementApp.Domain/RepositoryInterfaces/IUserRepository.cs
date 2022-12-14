@@ -7,13 +7,9 @@ namespace ProjectManagementApp.Domain.RepositoryInterfaces
     {
         Task Create(User newUser);
 
-        Task Update(User updatedUser);
-
         Task Delete(int id);
 
         User? Get(int id);
-
-        IEnumerable<User> GetAll();
 
         IEnumerable<Project> GetProjects(int id);
 

@@ -20,30 +20,17 @@ namespace ProjectManagementApp.Persistence.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task Update(User updatedUser)
-        {
-            var user = _dbContext.Users.FirstOrDefault(u => u.Id == updatedUser.Id);
-
-            if (user != null)
-            {
-                user.FirstName = updatedUser.FirstName;
-                user.LastName = updatedUser.LastName;
-                user.Patronymic = updatedUser.Patronymic;
-                user.Email = updatedUser.Email;
-
-                await _dbContext.SaveChangesAsync();
-            }
-        }
-
         public async Task Delete(int id)
         {
             var user = _dbContext.Users.FirstOrDefault(u => u.Id == id);
 
-            if (user != null)
+            if (user is null)
             {
-                _dbContext.Remove(user);
-                await _dbContext.SaveChangesAsync();
+                throw new KeyNotFoundException($"There is no User with Id {id}.");
             }
+
+            _dbContext.Remove(user);
+            await _dbContext.SaveChangesAsync();
         }
 
         public User? Get(int id)
@@ -60,13 +47,6 @@ namespace ProjectManagementApp.Persistence.Repositories
                 .FirstOrDefault(u => u.Id == id);
 
             return user;
-        }
-
-        public IEnumerable<User> GetAll()
-        {
-            var users = _dbContext.Users;
-
-            return users;
         }
 
         public IEnumerable<Project> GetProjects(int id)

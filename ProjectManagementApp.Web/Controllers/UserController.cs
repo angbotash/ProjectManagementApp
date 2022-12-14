@@ -89,17 +89,7 @@ namespace ProjectManagementApp.Web.Controllers
             {
                 var updatedUser = _mapper.Map<EditUserViewModel, User>(model);
 
-                var result = await _userService.Edit(updatedUser);
-
-                if (result.Success)
-                {
-                    return RedirectToAction("GetAllUsers");
-                }
-
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error);
-                }
+                await _userService.Edit(updatedUser);
             }
 
             return RedirectToAction("ViewUser", new { id = model.Id });

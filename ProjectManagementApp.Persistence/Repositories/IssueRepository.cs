@@ -21,29 +21,33 @@ namespace ProjectManagementApp.Persistence.Repositories
 
         public async Task Update(Issue updatedTask)
         {
-            var task = _dbContext.Issues.FirstOrDefault(i => i.Id == updatedTask.Id);
+            var issue = _dbContext.Issues.FirstOrDefault(i => i.Id == updatedTask.Id);
 
-            if (task != null)
+            if (issue is null)
             {
-                task.Name = updatedTask.Name;
-                task.AssigneeId = updatedTask.AssigneeId;
-                task.Comment = updatedTask.Comment;
-                task.Status = updatedTask.Status;
-                task.Priority = updatedTask.Priority;
-
-                await _dbContext.SaveChangesAsync();
+                throw new KeyNotFoundException($"There is no Issue with Id {updatedTask.Id}.");
             }
+
+            issue.Name = updatedTask.Name;
+            issue.AssigneeId = updatedTask.AssigneeId;
+            issue.Comment = updatedTask.Comment;
+            issue.Status = updatedTask.Status;
+            issue.Priority = updatedTask.Priority;
+
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task Delete(int id)
         {
             var issue = _dbContext.Issues.FirstOrDefault(i => i.Id == id);
 
-            if (issue != null)
+            if (issue is null)
             {
-                _dbContext.Issues.Remove(issue);
-                await _dbContext.SaveChangesAsync();
+                throw new KeyNotFoundException($"There is no Issue with Id {id}.");
             }
+
+            _dbContext.Issues.Remove(issue);
+            await _dbContext.SaveChangesAsync();
         }
 
         public Issue? Get(int id)

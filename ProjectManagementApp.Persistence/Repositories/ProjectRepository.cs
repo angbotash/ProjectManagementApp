@@ -20,59 +20,43 @@ namespace ProjectManagementApp.Persistence.Repositories
         {
             await _dbContext.Projects.AddAsync(newProject);
             await _dbContext.SaveChangesAsync();
-
-            if (newProject.ManagerId != null)
-            {
-                var project = _dbContext.Projects
-                    .FirstOrDefault(p => p.Name == newProject.Name && p.ManagerId == newProject.ManagerId);
-
-                if (project is null)
-                {
-                    return;
-                }
-
-                var newUserProject = new UserProject
-                {
-                    UserId = (int)newProject.ManagerId,
-                    ProjectId = project.Id
-                };
-
-                await _dbContext.UserProject.AddAsync(newUserProject);
-                await _dbContext.SaveChangesAsync();
-            }
         }
 
         public async Task Update(Project updatedProject)
         {
-            //this._dbContext.Projects.Update(updatedProject);
+            //var project = _dbContext.Projects.FirstOrDefault(p => p.Id == updatedProject.Id);
 
-            //await this._dbContext.SaveChangesAsync();
+            //if (project is null)
+            //{
+            //    throw new KeyNotFoundException($"There is no Project with Id {updatedProject.Id}.");
+            //}
 
-            var project = _dbContext.Projects.FirstOrDefault(p => p.Id == updatedProject.Id);
+            this._dbContext.Projects.Update(updatedProject);
 
-            if (project != null)
-            {
-                project.Name = updatedProject.Name;
-                project.ClientCompanyName = updatedProject.ClientCompanyName;
-                project.ExecutorCompanyName = updatedProject.ExecutorCompanyName;
-                project.StartDate = updatedProject.StartDate;
-                project.EndDate = updatedProject.EndDate;
-                project.Priority = updatedProject.Priority;
-                project.ManagerId = updatedProject.ManagerId;
-            }
+            await this._dbContext.SaveChangesAsync();
 
-            await _dbContext.SaveChangesAsync();
+            //project.Name = updatedProject.Name;
+            //project.ClientCompanyName = updatedProject.ClientCompanyName;
+            //project.ExecutorCompanyName = updatedProject.ExecutorCompanyName;
+            //project.StartDate = updatedProject.StartDate;
+            //project.EndDate = updatedProject.EndDate;
+            //project.Priority = updatedProject.Priority;
+            //project.ManagerId = updatedProject.ManagerId;
+
+            //await _dbContext.SaveChangesAsync();
         }
 
         public async Task Delete(int id)
         {
             var project = _dbContext.Projects.FirstOrDefault(p => p.Id == id);
 
-            if (project != null)
+            if (project is null)
             {
-                _dbContext.Projects.Remove(project);
-                await _dbContext.SaveChangesAsync();
+                throw new KeyNotFoundException($"There is no Project with Id {id}.");
             }
+
+            _dbContext.Projects.Remove(project);
+            await _dbContext.SaveChangesAsync();
         }
 
         public Project? Get(int id)

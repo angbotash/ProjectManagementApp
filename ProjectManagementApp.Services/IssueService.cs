@@ -17,30 +17,36 @@ namespace ProjectManagementApp.Services
         {
             var issue = _issueRepository.Get(newIssue.Id);
 
-            if (issue == null)
+            if (issue is null)
             {
-                await _issueRepository.Create(newIssue);
+                throw new KeyNotFoundException($"There is no Issue with Id {newIssue.Id}.");
             }
+
+            await _issueRepository.Create(newIssue);
         }
 
         public async Task Edit(Issue updatedIssue)
         {
             var issue = _issueRepository.Get(updatedIssue.Id);
 
-            if (issue != null)
+            if (issue is null)
             {
-                await _issueRepository.Update(updatedIssue);
+                throw new KeyNotFoundException($"There is no Issue with Id {updatedIssue.Id}.");
             }
+            
+            await _issueRepository.Update(updatedIssue);
         }
 
         public async Task Delete(int id)
         {
             var issue = _issueRepository.Get(id);
 
-            if (issue != null)
+            if (issue is null)
             {
-                await _issueRepository.Delete(id);
+                throw new KeyNotFoundException($"There is no Issue with Id {id}.");
             }
+            
+            await _issueRepository.Delete(id);
         }
 
         public Issue? Get(int id)

@@ -17,30 +17,29 @@ namespace ProjectManagementApp.Services
         {
             var project = _projectRepository.Get(newProject.Id);
 
-            if (project == null)
+            if (project is null)
             {
-                await _projectRepository.Create(newProject);
+                throw new KeyNotFoundException($"There is no Project with Id {newProject.Id}.");
             }
+
+            await _projectRepository.Create(newProject);
         }
 
         public async Task Edit(Project updatedProject)
         {
-            var project = _projectRepository.Get(updatedProject.Id);
-
-            if (project != null)
-            {
-                await _projectRepository.Update(updatedProject);
-            }
+            await _projectRepository.Update(updatedProject);
         }
 
         public async Task Delete(int id)
         {
             var project = _projectRepository.Get(id);
 
-            if (project != null)
+            if (project is null)
             {
-                await _projectRepository.Delete(id);
+                throw new KeyNotFoundException($"There is no Project with Id {id}.");
             }
+
+            await _projectRepository.Delete(id);
         }
 
         public Project? Get(int id)
