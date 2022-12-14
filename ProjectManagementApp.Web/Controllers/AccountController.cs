@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using ProjectManagementApp.Domain.Entities;
 using ProjectManagementApp.Domain.Infrastructure;
 using ProjectManagementApp.Domain.ServiceInterfaces;
@@ -16,18 +15,13 @@ namespace ProjectManagementApp.Web.Controllers
 
         public AccountController(IUserService userService, IMapper mapper)
         {
-            this._userService = userService;
-            this._mapper = mapper;
+            _userService = userService;
+            _mapper = mapper;
         }
 
         [HttpGet("Register")]
         public IActionResult Register()
         {
-            //var roles = this._userService.GetRoles();
-            //var selectList = roles.Select(x => new SelectListItem(x.Name, x.Name.ToString())).ToList();
-            //var model = new RegisterViewModel() { Roles = selectList };
-
-            //return View(model);
             return View();
         }
 
@@ -39,7 +33,7 @@ namespace ProjectManagementApp.Web.Controllers
                 model.Role = "Employee";
                 var newUser = _mapper.Map<RegisterViewModel, User>(model);
 
-                var result = await this._userService.Create(newUser, model.Password, model.Role);
+                var result = await _userService.Create(newUser, model.Password, model.Role);
 
                 if (result.Success)
                 {

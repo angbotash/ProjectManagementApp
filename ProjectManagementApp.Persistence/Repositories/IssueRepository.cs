@@ -15,13 +15,13 @@ namespace ProjectManagementApp.Persistence.Repositories
 
         public async Task Create(Issue newTask)
         {
-            await this._dbContext.Issues.AddAsync(newTask);
-            await this._dbContext.SaveChangesAsync();
+            await _dbContext.Issues.AddAsync(newTask);
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task Update(Issue updatedTask)
         {
-            var task = this._dbContext.Issues.FirstOrDefault(p => p.Id == updatedTask.Id);
+            var task = _dbContext.Issues.FirstOrDefault(i => i.Id == updatedTask.Id);
 
             if (task != null)
             {
@@ -31,27 +31,27 @@ namespace ProjectManagementApp.Persistence.Repositories
                 task.Status = updatedTask.Status;
                 task.Priority = updatedTask.Priority;
 
-                await this._dbContext.SaveChangesAsync();
+                await _dbContext.SaveChangesAsync();
             }
         }
 
         public async Task Delete(int id)
         {
-            var issue = this._dbContext.Issues.FirstOrDefault(i => i.Id == id);
+            var issue = _dbContext.Issues.FirstOrDefault(i => i.Id == id);
 
             if (issue != null)
             {
-                this._dbContext.Issues.Remove(issue);
-                await this._dbContext.SaveChangesAsync();
+                _dbContext.Issues.Remove(issue);
+                await _dbContext.SaveChangesAsync();
             }
         }
 
         public Issue? Get(int id)
         {
-            var issue = this._dbContext.Issues
-                .Include(x => x.Project)
-                .Include(x => x.Assignee)
-                .Include(x => x.Reporter)
+            var issue = _dbContext.Issues
+                .Include(i => i.Project)
+                .Include(i => i.Assignee)
+                .Include(i => i.Reporter)
                 .FirstOrDefault(i => i.Id == id);
 
             return issue;
@@ -59,10 +59,10 @@ namespace ProjectManagementApp.Persistence.Repositories
 
         public IEnumerable<Issue>? GetAllIssues()
         {
-            var issues = this._dbContext.Issues
-                .Include(x => x.Project)
-                .Include(x => x.Assignee)
-                .Include(x => x.Reporter);
+            var issues = _dbContext.Issues
+                .Include(i => i.Project)
+                .Include(i => i.Assignee)
+                .Include(i => i.Reporter);
 
             return issues;
         }

@@ -8,18 +8,18 @@ namespace ProjectManagementApp.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.HasMany(e => e.UserProject)
-                .WithOne(ep => ep.User)
-                .HasForeignKey(e => e.UserId);
+            builder.HasMany(u => u.UserProject)
+                .WithOne(up => up.User)
+                .HasForeignKey(up => up.UserId);
 
-            builder.HasMany(e => e.AssignedIssues)
-                .WithOne(t => t.Assignee)
-                .HasForeignKey(t => t.AssigneeId)
+            builder.HasMany(u => u.AssignedIssues)
+                .WithOne(i => i.Assignee)
+                .HasForeignKey(i => i.AssigneeId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasMany(e => e.ReportedIssues)
-                .WithOne(t => t.Reporter)
-                .HasForeignKey(t => t.ReporterId)
+            builder.HasMany(u => u.ReportedIssues)
+                .WithOne(i => i.Reporter)
+                .HasForeignKey(i => i.ReporterId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

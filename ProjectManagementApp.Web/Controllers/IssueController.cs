@@ -19,10 +19,10 @@ namespace ProjectManagementApp.Web.Controllers
 
         public IssueController(IIssueService issueService, IUserService userService, IProjectService projectService, IMapper mapper)
         {
-            this._issueService = issueService;
-            this._userService = userService;
-            this._projectService = projectService;
-            this._mapper = mapper;
+            _issueService = issueService;
+            _userService = userService;
+            _projectService = projectService;
+            _mapper = mapper;
         }
 
         [HttpGet("Create")]
@@ -34,16 +34,16 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            if (this._projectService.Get((int)projectId) == null)
+            if (_projectService.Get((int)projectId) == null)
             {
                 return NotFound();
             }
 
-            var allEmployees = await this._userService.GetEmployees();
-            var allManagers = await this._userService.GetManagers();
+            var allEmployees = await _userService.GetEmployees();
+            var allManagers = await _userService.GetManagers();
 
-            var selectListEmployees = allEmployees.Select(x => new SelectListItem(x.Email, x.Id.ToString())).ToList();
-            var selectListManagers = allManagers.Select(x => new SelectListItem(x.Email, x.Id.ToString())).ToList();
+            var selectListEmployees = allEmployees .Select(u => new SelectListItem(u.Email, u.Id.ToString())).ToList();
+            var selectListManagers = allManagers.Select(u => new SelectListItem(u.Email, u.Id.ToString())).ToList();
             var model = new CreateIssueViewModel
             {
                 Employees = selectListEmployees,
@@ -51,9 +51,15 @@ namespace ProjectManagementApp.Web.Controllers
                 ProjectId = (int)projectId,
                 Statuses = new List<SelectListItem>()
                 {
-                    new SelectListItem(IssueStatus.ToDo.ToString(), IssueStatus.ToDo.ToString()),
-                    new SelectListItem(IssueStatus.InProgress.ToString(), IssueStatus.InProgress.ToString()),
-                    new SelectListItem(IssueStatus.Done.ToString(), IssueStatus.Done.ToString())
+                    new SelectListItem(
+                        IssueStatus.ToDo.ToString(),
+                        IssueStatus.ToDo.ToString()),
+                    new SelectListItem(
+                        IssueStatus.InProgress.ToString(),
+                        IssueStatus.InProgress.ToString()),
+                    new SelectListItem(
+                        IssueStatus.Done.ToString(),
+                        IssueStatus.Done.ToString())
                 }
             };
 
@@ -66,9 +72,9 @@ namespace ProjectManagementApp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var issue = this._mapper.Map<CreateIssueViewModel, Issue>(model);
+                var issue = _mapper.Map<CreateIssueViewModel, Issue>(model);
 
-                await this._issueService.Create(issue);
+                await _issueService.Create(issue);
 
                 return RedirectToAction("ViewProject", "Project", new { id = issue.ProjectId });
             }
@@ -84,22 +90,28 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            var issue = this._issueService.Get((int)id);
+            var issue = _issueService.Get((int)id);
 
             if (issue is null)
             {
                 return NotFound();
             }
 
-            var model = this._mapper.Map<Issue, EditIssueViewModel>(issue);
-            var allEmployees = await this._userService.GetEmployees();
+            var model = _mapper.Map<Issue, EditIssueViewModel>(issue);
+            var allEmployees = await _userService.GetEmployees();
 
-            model.Employees = allEmployees.Select(x => new SelectListItem(x.Email, x.Id.ToString())).ToList();
+            model.Employees = allEmployees.Select(u => new SelectListItem(u.Email, u.Id.ToString())).ToList();
             model.Statuses = new List<SelectListItem>()
             {
-                new SelectListItem(IssueStatus.ToDo.ToString(), IssueStatus.ToDo.ToString()),
-                new SelectListItem(IssueStatus.InProgress.ToString(), IssueStatus.InProgress.ToString()),
-                new SelectListItem(IssueStatus.Done.ToString(), IssueStatus.Done.ToString())
+                new SelectListItem(
+                    IssueStatus.ToDo.ToString(),
+                    IssueStatus.ToDo.ToString()),
+                new SelectListItem(
+                    IssueStatus.InProgress.ToString(),
+                    IssueStatus.InProgress.ToString()),
+                new SelectListItem(
+                    IssueStatus.Done.ToString(),
+                    IssueStatus.Done.ToString())
             };
 
             return View(model);
@@ -110,9 +122,9 @@ namespace ProjectManagementApp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var updatedIssue = this._mapper.Map<EditIssueViewModel, Issue>(model);
+                var updatedIssue = _mapper.Map<EditIssueViewModel, Issue>(model);
 
-                await this._issueService.Edit(updatedIssue);
+                await _issueService.Edit(updatedIssue);
 
                 return RedirectToAction("ViewIssue", new { id = model.Id });
             }
@@ -129,7 +141,7 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            var issue = this._issueService.Get((int)id);
+            var issue = _issueService.Get((int)id);
 
             if (issue is null)
             {
@@ -138,7 +150,7 @@ namespace ProjectManagementApp.Web.Controllers
 
             var projectId = issue.ProjectId;
 
-            await this._issueService.Delete((int)id);
+            await _issueService.Delete((int)id);
 
             return RedirectToAction("ViewProject", "Project", new { id = projectId });
         }
@@ -151,14 +163,14 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            var issue = this._issueService.Get((int)id);
+            var issue = _issueService.Get((int)id);
 
             if (issue is null)
             {
                 return NotFound();
             }
 
-            var result = this._mapper.Map<Issue, IssueViewModel>(issue);
+            var result = _mapper.Map<Issue, IssueViewModel>(issue);
 
             return View(result);
         }
@@ -221,14 +233,14 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            var user = this._userService.Get((int)userId);
+            var user = _userService.Get((int)userId);
 
             if (user is null)
             {
                 return NotFound();
             }
 
-            var tempUser = this._mapper.Map<User, UserViewModel>(user);
+            var tempUser = _mapper.Map<User, UserViewModel>(user);
             var issues = tempUser.AssignedIssues;
 
             return View(issues);
@@ -242,14 +254,14 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            var user = this._userService.Get((int)userId);
+            var user = _userService.Get((int)userId);
 
             if (user is null)
             {
                 return NotFound();
             }
 
-            var tempUser = this._mapper.Map<User, UserViewModel>(user);
+            var tempUser = _mapper.Map<User, UserViewModel>(user);
             var issues = tempUser.ReportedIssues;
 
             return View(issues);
@@ -263,14 +275,14 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            var project = this._projectService.Get((int)projectId);
+            var project = _projectService.Get((int)projectId);
 
             if (project is null)
             {
                 return NotFound();
             }
 
-            var tempProject = this._mapper.Map<Project, ProjectViewModel>(project);
+            var tempProject = _mapper.Map<Project, ProjectViewModel>(project);
             var issues = tempProject.Issues;
 
             return View(issues);

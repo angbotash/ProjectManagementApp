@@ -12,19 +12,19 @@ namespace ProjectManagementApp.Persistence.Repositories
 
         public ProjectRepository(ApplicationContext dbContext, UserManager<User> userManager)
         {
-            this._dbContext = dbContext;
-            this._userManager = userManager;
+            _dbContext = dbContext;
+            _userManager = userManager;
         }
 
         public async Task Create(Project newProject)
         {
-            await this._dbContext.Projects.AddAsync(newProject);
-            await this._dbContext.SaveChangesAsync();
+            await _dbContext.Projects.AddAsync(newProject);
+            await _dbContext.SaveChangesAsync();
 
             if (newProject.ManagerId != null)
             {
-                var project = this._dbContext.Projects
-                    .FirstOrDefault(x => x.Name == newProject.Name && x.ManagerId == newProject.ManagerId);
+                var project = _dbContext.Projects
+                    .FirstOrDefault(p => p.Name == newProject.Name && p.ManagerId == newProject.ManagerId);
 
                 if (project is null)
                 {
@@ -37,8 +37,8 @@ namespace ProjectManagementApp.Persistence.Repositories
                     ProjectId = project.Id
                 };
 
-                await this._dbContext.UserProject.AddAsync(newUserProject);
-                await this._dbContext.SaveChangesAsync();
+                await _dbContext.UserProject.AddAsync(newUserProject);
+                await _dbContext.SaveChangesAsync();
             }
         }
 
@@ -48,7 +48,7 @@ namespace ProjectManagementApp.Persistence.Repositories
 
             //await this._dbContext.SaveChangesAsync();
 
-            var project = this._dbContext.Projects.FirstOrDefault(p => p.Id == updatedProject.Id);
+            var project = _dbContext.Projects.FirstOrDefault(p => p.Id == updatedProject.Id);
 
             if (project != null)
             {
@@ -61,28 +61,28 @@ namespace ProjectManagementApp.Persistence.Repositories
                 project.ManagerId = updatedProject.ManagerId;
             }
 
-            await this._dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task Delete(int id)
         {
-            var project = this._dbContext.Projects.FirstOrDefault(p => p.Id == id);
+            var project = _dbContext.Projects.FirstOrDefault(p => p.Id == id);
 
             if (project != null)
             {
-                this._dbContext.Projects.Remove(project);
-                await this._dbContext.SaveChangesAsync();
+                _dbContext.Projects.Remove(project);
+                await _dbContext.SaveChangesAsync();
             }
         }
 
         public Project? Get(int id)
         {
-            var project = this._dbContext.Projects
-                .Include(x => x.Manager)
-                .Include(x => x.Issues)
-                    .ThenInclude(x => x.Assignee)
-                .Include(x => x.Issues)
-                    .ThenInclude(x => x.Reporter)
+            var project = _dbContext.Projects
+                .Include(p => p.Manager)
+                .Include(p => p.Issues)
+                    .ThenInclude(i => i.Assignee)
+                .Include(p => p.Issues)
+                    .ThenInclude(i => i.Reporter)
                 .FirstOrDefault(p => p.Id == id);
 
             return project;
@@ -90,37 +90,37 @@ namespace ProjectManagementApp.Persistence.Repositories
 
         public IEnumerable<Project> GetAll()
         {
-            var projects = this._dbContext.Projects
-                .Include(x => x.Manager)
-                .Include(x => x.Issues)
-                    .ThenInclude(x => x.Assignee)
-                .Include(x => x.Issues)
-                    .ThenInclude(x => x.Reporter);
+            var projects = _dbContext.Projects
+                .Include(p => p.Manager)
+                .Include(p => p.Issues)
+                    .ThenInclude(i => i.Assignee)
+                .Include(p => p.Issues)
+                    .ThenInclude(i => i.Reporter);
 
             return projects;
         }
 
         public IEnumerable<Project> GetManagerProjects(int managerId)
         {
-            var managerProjects = this._dbContext.Projects
-                .Where(x => x.ManagerId == managerId)
-                .Include(x => x.Manager)
-                .Include(x => x.Issues)
-                    .ThenInclude(x => x.Assignee)
-                .Include(x => x.Issues)
-                    .ThenInclude(x => x.Reporter);
+            var managerProjects = _dbContext.Projects
+                .Where(p => p.ManagerId == managerId)
+                .Include(p => p.Manager)
+                .Include(p => p.Issues)
+                    .ThenInclude(i => i.Assignee)
+                .Include(p => p.Issues)
+                    .ThenInclude(i => i.Reporter);
 
             return managerProjects;
         }
 
         public IEnumerable<User> GetUsers(int id)
         {
-            var users = this._dbContext.UserProject.Where(e => e.ProjectId == id).ToList();
+            var users = _dbContext.UserProject.Where(up => up.ProjectId == id).ToList();
             var result = new List<User>();
 
             foreach (var user in users)
             {
-                var tempUser = this._userManager.Users.FirstOrDefault(e => e.Id == user.UserId);
+                var tempUser = _userManager.Users.FirstOrDefault(u => u.Id == user.UserId);
 
                 if (tempUser != null)
                 {
@@ -133,8 +133,7 @@ namespace ProjectManagementApp.Persistence.Repositories
 
         public bool IsUserOnProject(int userId, int projectId)
         {
-            var userProject = this._dbContext.UserProject
-                .FirstOrDefault(x => x.UserId == userId && x.ProjectId == projectId);
+            var userProject = _dbContext.UserProject.FirstOrDefault(up => up.UserId == userId && up.ProjectId == projectId);
 
             return userProject != null;
         }

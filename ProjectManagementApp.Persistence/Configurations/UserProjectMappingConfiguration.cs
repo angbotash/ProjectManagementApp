@@ -8,13 +8,13 @@ namespace ProjectManagementApp.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<UserProject> builder)
         {
-            builder.HasKey(k => new { UserId = k.UserId, k.ProjectId });
+            builder.HasKey(up => new { UserId = up.UserId, up.ProjectId });
 
-            builder.HasOne(ep => ep.User)
-                .WithMany(e => e.UserProject)
+            builder.HasOne(up => up.User)
+                .WithMany(u => u.UserProject)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasOne(ep => ep.Project)
+            builder.HasOne(up => up.Project)
                 .WithMany(p => p.UserProject)
                 .OnDelete(DeleteBehavior.Restrict);
         }

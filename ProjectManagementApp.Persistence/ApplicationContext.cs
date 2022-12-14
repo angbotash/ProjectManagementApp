@@ -47,7 +47,14 @@ namespace ProjectManagementApp.Persistence
             modelBuilder.Entity<User>().HasData(supervisor);
 
             // Seed supervisor's role
-            modelBuilder.Entity<IdentityUserRole<int>>(entity => { entity.HasData(new { RoleId = 1, UserId = 1 }); });
+            modelBuilder.Entity<IdentityUserRole<int>>(entity =>
+            {
+                entity.HasData(new
+                {
+                    RoleId = 1,
+                    UserId = 1
+                });
+            });
 
             // Seed roles
             modelBuilder.Entity<IdentityRole<int>>()
