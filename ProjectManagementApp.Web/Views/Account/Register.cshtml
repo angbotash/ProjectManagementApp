@@ -46,13 +46,6 @@
             @Html.TextBoxFor(m => m.ConfirmPassword, new { placeholder = "Repeat password" })
             @Html.ValidationMessageFor(m => m.ConfirmPassword)
         </div>
-
-        <div>
-            <b>@Html.LabelFor(m => m.Role)</b>
-            <br />
-            @Html.DropDownListFor(m => m.Role, @Model.Roles, "Select role")
-            @Html.HiddenFor(m => m.Roles)
-        </div>
         <hr>
 
         @using (Html.BeginForm("Register", "Account", FormMethod.Post))

@@ -15,8 +15,6 @@ namespace ProjectManagementApp.Web.Controllers
 
         public IActionResult Index()
         {
-            var temp = User.Identity.IsAuthenticated;
-
             return View();
         }
 

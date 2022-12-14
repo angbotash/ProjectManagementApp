@@ -36,10 +36,6 @@ namespace ProjectManagementApp.Web.ViewModels
         [Display(Name = "Confirm password")]
         public string ConfirmPassword { get; set; } = null!;
 
-        [Required]
-        public string Role { get; set; } = null!;
-
-        public IList<SelectListItem> Roles { get; set; } = null!;
-
+        public string? Role { get; set; }
     }
 }
