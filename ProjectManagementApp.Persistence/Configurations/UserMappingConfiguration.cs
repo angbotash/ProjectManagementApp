@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProjectManagementApp.Domain.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace ProjectManagementApp.Persistence.Configurations
 {
@@ -21,6 +22,17 @@ namespace ProjectManagementApp.Persistence.Configurations
                 .WithOne(i => i.Reporter)
                 .HasForeignKey(i => i.ReporterId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Property(p => p.FirstName)
+                .IsRequired()
+                .HasMaxLength(30);
+
+            builder.Property(p => p.LastName)
+                .IsRequired()
+                .HasMaxLength(30);
+
+            builder.Property(p => p.Patronymic)
+                .HasMaxLength(30);
         }
     }
 }

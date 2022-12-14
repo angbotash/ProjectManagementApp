@@ -56,15 +56,5 @@ namespace ProjectManagementApp.Persistence.Repositories
 
             return issue;
         }
-
-        public IEnumerable<Issue>? GetAllIssues()
-        {
-            var issues = _dbContext.Issues
-                .Include(i => i.Project)
-                .Include(i => i.Assignee)
-                .Include(i => i.Reporter);
-
-            return issues;
-        }
     }
 }

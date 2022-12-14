@@ -13,6 +13,19 @@ namespace ProjectManagementApp.Persistence.Configurations
             builder.HasOne(i => i.Project)
                 .WithMany(p => p.Issues)
                 .HasForeignKey(i => i.ProjectId);
+
+            builder.Property(i => i.Name)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            builder.Property(i => i.Comment)
+                .HasMaxLength(1000);
+
+            builder.Property(i => i.Status)
+                .IsRequired();
+
+            builder.Property(i => i.Priority)
+                .IsRequired();
         }
     }
 }

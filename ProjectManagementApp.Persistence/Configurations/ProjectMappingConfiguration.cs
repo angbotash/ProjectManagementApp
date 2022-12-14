@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProjectManagementApp.Domain.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace ProjectManagementApp.Persistence.Configurations
 {
@@ -21,6 +22,27 @@ namespace ProjectManagementApp.Persistence.Configurations
             builder.HasMany(p => p.Issues)
                 .WithOne(i => i.Project)
                 .HasForeignKey(i => i.ProjectId);
+
+            builder.Property(p => p.Name)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            builder.Property(p => p.ClientCompanyName)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            builder.Property(p => p.ExecutorCompanyName)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            builder.Property(p => p.StartDate)
+                .IsRequired();
+
+            builder.Property(p => p.EndDate)
+                .IsRequired();
+
+            builder.Property(p => p.Priority)
+                .IsRequired();
         }
     }
 }

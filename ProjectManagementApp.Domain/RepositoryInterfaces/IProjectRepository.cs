@@ -17,7 +17,5 @@ namespace ProjectManagementApp.Domain.RepositoryInterfaces
         IEnumerable<Project> GetManagerProjects(int managerId);
 
         IEnumerable<User> GetUsers(int id);
-
-        bool IsUserOnProject(int userId, int projectId);
     }
 }
