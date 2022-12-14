@@ -124,51 +124,37 @@ namespace ProjectManagementApp.Services
 
         public User? Get(int id)
         {
-            var user = _userRepository.Get(id);
-
-            return user;
+            return _userRepository.Get(id);
         }
 
         public IEnumerable<User> GetAll()
         {
-            var users = _userManager.Users;
-
-            return users;
+            return _userManager.Users;
         }
 
         public IEnumerable<Project> GetProjects(int id)
         {
-            var projects = _userRepository.GetProjects(id);
-
-            return projects;
+            return _userRepository.GetProjects(id);
         }
 
         public IEnumerable<IdentityRole<int>> GetRoles()
         {
-            var roles = _userRepository.GetRoles();
-
-            return roles;
+            return _userRepository.GetRoles();
         }
 
         public async Task<User?> GetCurrentUser(ClaimsPrincipal currentUser)
         {
-            var user = await _userManager.GetUserAsync(currentUser);
-
-            return user;
+            return await _userManager.GetUserAsync(currentUser);
         }
 
         public async Task<IEnumerable<User>> GetManagers()
         {
-            var managers = await _userManager.GetUsersInRoleAsync(Role.Manager.ToString());
-
-            return managers;
+            return await _userManager.GetUsersInRoleAsync(Role.Manager.ToString());
         }
 
         public async Task<IEnumerable<User>> GetEmployees()
         {
-            var employees = await _userManager.GetUsersInRoleAsync(Role.Employee.ToString());
-
-            return employees;
+            return await _userManager.GetUsersInRoleAsync(Role.Employee.ToString());
         }
 
         public async Task AddToProject(int projectId, int userId)

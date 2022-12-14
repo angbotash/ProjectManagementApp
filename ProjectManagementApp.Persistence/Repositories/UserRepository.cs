@@ -77,9 +77,7 @@ namespace ProjectManagementApp.Persistence.Repositories
 
         public IEnumerable<IdentityRole<int>> GetRoles()
         {
-            var roles = _dbContext.Roles;
-
-            return roles;
+            return _dbContext.Roles;
         }
 
         public async Task AddToProject(int projectId, int userId)

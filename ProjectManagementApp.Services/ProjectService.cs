@@ -44,30 +44,22 @@ namespace ProjectManagementApp.Services
 
         public Project? Get(int id)
         {
-            var project = _projectRepository.Get(id);
-
-            return project;
+            return _projectRepository.Get(id);
         }
 
         public IEnumerable<Project> GetAll()
         {
-            var projects = _projectRepository.GetAll();
-
-            return projects;
+            return _projectRepository.GetAll();
         }
 
         public IEnumerable<Project> GetManagerProjects(int managerId)
         {
-            var projects = _projectRepository.GetManagerProjects(managerId);
-
-            return projects;
+            return _projectRepository.GetManagerProjects(managerId);
         }
 
         public IEnumerable<User> GetUsers(int projectId)
         {
-            var users = _projectRepository.GetUsers(projectId);
-
-            return users;
+            return _projectRepository.GetUsers(projectId);
         }
     }
 }

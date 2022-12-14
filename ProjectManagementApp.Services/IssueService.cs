@@ -51,9 +51,7 @@ namespace ProjectManagementApp.Services
 
         public Issue? Get(int id)
         {
-            var issue = _issueRepository.Get(id);
-
-            return issue;
+            return _issueRepository.Get(id);
         }
     }
 }

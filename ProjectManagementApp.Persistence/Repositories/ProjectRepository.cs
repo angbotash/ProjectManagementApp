@@ -24,26 +24,8 @@ namespace ProjectManagementApp.Persistence.Repositories
 
         public async Task Update(Project updatedProject)
         {
-            //var project = _dbContext.Projects.FirstOrDefault(p => p.Id == updatedProject.Id);
-
-            //if (project is null)
-            //{
-            //    throw new KeyNotFoundException($"There is no Project with Id {updatedProject.Id}.");
-            //}
-
             this._dbContext.Projects.Update(updatedProject);
-
             await this._dbContext.SaveChangesAsync();
-
-            //project.Name = updatedProject.Name;
-            //project.ClientCompanyName = updatedProject.ClientCompanyName;
-            //project.ExecutorCompanyName = updatedProject.ExecutorCompanyName;
-            //project.StartDate = updatedProject.StartDate;
-            //project.EndDate = updatedProject.EndDate;
-            //project.Priority = updatedProject.Priority;
-            //project.ManagerId = updatedProject.ManagerId;
-
-            //await _dbContext.SaveChangesAsync();
         }
 
         public async Task Delete(int id)
