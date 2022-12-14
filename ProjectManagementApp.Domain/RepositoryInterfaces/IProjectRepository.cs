@@ -8,6 +8,8 @@ namespace ProjectManagementApp.Domain.RepositoryInterfaces
 
         Task Update(Project updatedProject);
 
+        Task Delete(int id);
+
         Project? Get(int id);
 
         IEnumerable<Project> GetAll();
@@ -15,8 +17,6 @@ namespace ProjectManagementApp.Domain.RepositoryInterfaces
         IEnumerable<Project> GetManagerProjects(int managerId);
 
         IEnumerable<User> GetUsers(int id);
-
-        Task Delete(int id);
 
         bool IsUserOnProject(int userId, int projectId);
     }

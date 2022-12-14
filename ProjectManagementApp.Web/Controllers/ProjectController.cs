@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -50,6 +49,66 @@ namespace ProjectManagementApp.Web.Controllers
             }
 
             return View(model);
+        }
+
+        [HttpGet("Edit")]
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id is null)
+            {
+                return BadRequest();
+            }
+
+            var project = this._projectService.Get((int)id);
+
+            if (project is null)
+            {
+                return NotFound();
+            }
+
+            var model = this._mapper.Map<Project, EditProjectViewModel>(project);
+            var managers = await this._userService.GetManagers();
+
+            var selectList = managers.Select(x => new SelectListItem(x.Email, x.Id.ToString())).ToList();
+            model.Managers = selectList;
+
+            return View(model);
+        }
+
+        [HttpPost("Edit")]
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> Edit(EditProjectViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var updatedProject = this._mapper.Map<EditProjectViewModel, Project>(model);
+
+                await this._projectService.Edit(updatedProject);
+            }
+
+            return RedirectToAction("ViewProject", new { id = model.Id });
+        }
+
+        [HttpPost("Delete")]
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id is null)
+            {
+                return BadRequest();
+            }
+
+            var project = this._projectService.Get((int)id);
+
+            if (project is null)
+            {
+                return NotFound();
+            }
+
+            await this._projectService.Delete((int)id);
+
+            return RedirectToAction("GetAllProjects");
         }
 
         [HttpGet("GetAllProjects")]
@@ -171,66 +230,6 @@ namespace ProjectManagementApp.Web.Controllers
             }
 
             return View(result);
-        }
-
-        [HttpPost("Delete")]
-        [Authorize(Roles = "Supervisor")]
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id is null)
-            {
-                return BadRequest();
-            }
-
-            var project = this._projectService.Get((int)id);
-
-            if (project is null)
-            {
-                return NotFound();
-            }
-
-            await this._projectService.Delete((int) id);
-
-            return RedirectToAction("GetAllProjects");
-        }
-
-        [HttpGet("Edit")]
-        [Authorize(Roles = "Supervisor")]
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id is null)
-            {
-                return BadRequest();
-            }
-
-            var project = this._projectService.Get((int)id);
-
-            if (project is null)
-            {
-                return NotFound();
-            }
-
-            var model = this._mapper.Map<Project, EditProjectViewModel>(project);
-            var managers = await this._userService.GetManagers();
-
-            var selectList = managers.Select(x => new SelectListItem(x.Email, x.Id.ToString())).ToList();
-            model.Managers = selectList;
-
-            return View(model);
-        }
-
-        [HttpPost("Edit")]
-        [Authorize(Roles = "Supervisor")]
-        public async Task<IActionResult> Edit(EditProjectViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var updatedProject = this._mapper.Map<EditProjectViewModel, Project>(model);
-
-                await this._projectService.Edit(updatedProject);
-            }
-
-            return RedirectToAction("ViewProject", new { id = model.Id });
         }
 
         [HttpGet("EditProjectEmployees")]

@@ -8,6 +8,8 @@ namespace ProjectManagementApp.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Issue> builder)
         {
+            builder.HasKey(k => k.Id);
+
             builder.HasOne(t => t.Project)
                 .WithMany(r => r.Issues)
                 .HasForeignKey(t => t.ProjectId);

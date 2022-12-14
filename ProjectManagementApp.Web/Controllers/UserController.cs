@@ -57,79 +57,6 @@ namespace ProjectManagementApp.Web.Controllers
             return View(model);
         }
 
-        [HttpGet("GetAllUsers")]
-        [Authorize(Roles = "Supervisor")]
-        public async Task<IActionResult> GetAllUsers()
-        {
-            var currentUser = await _userService.GetCurrentUser(User);
-
-            if (currentUser is null)
-            {
-                return BadRequest();
-            }
-
-            var users = this._userService.GetAll().Where(x => x.Id != currentUser.Id);
-            var result = new List<UserViewModel>();
-
-            foreach (var empl in users)
-            {
-                var tempUser = this._mapper.Map<User, UserViewModel>(empl);
-
-                result.Add(tempUser);
-            }
-
-            return View(result);
-        }
-
-        [HttpGet("ViewUser")]
-        public IActionResult ViewUser(int? id)
-        {
-            if (id is null)
-            {
-                return BadRequest();
-            }
-
-            var user = this._userService.Get((int)id);
-
-            if (user is null)
-            {
-                return NotFound();
-            }
-
-            var result = this._mapper.Map<User, UserViewModel>(user);
-            var projects = this._userService.GetProjects((int)id);
-
-            foreach (var proj in projects)
-            {
-                var tempProject = this._mapper.Map<Project, ProjectViewModel>(proj);
-
-                result.Projects.Add(tempProject);
-            }
-
-            return View(result);
-        }
-
-        [HttpPost("Delete")]
-        [Authorize(Roles = "Supervisor")]
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id is null)
-            {
-                return BadRequest();
-            }
-
-            var user = this._userService.Get((int)id);
-
-            if (user is null)
-            {
-                return NotFound();
-            }
-
-            await this._userService.Delete((int)id);
-
-            return RedirectToAction("GetAllUsers");
-        }
-
         [HttpGet("Edit")]
         [Authorize(Roles = "Supervisor")]
         public IActionResult Edit(int? id)
@@ -175,6 +102,51 @@ namespace ProjectManagementApp.Web.Controllers
             return RedirectToAction("ViewUser", new { id = model.Id });
         }
 
+        [HttpPost("Delete")]
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id is null)
+            {
+                return BadRequest();
+            }
+
+            var user = this._userService.Get((int)id);
+
+            if (user is null)
+            {
+                return NotFound();
+            }
+
+            await this._userService.Delete((int)id);
+
+            return RedirectToAction("GetAllUsers");
+        }
+
+        [HttpGet("GetAllUsers")]
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var currentUser = await _userService.GetCurrentUser(User);
+
+            if (currentUser is null)
+            {
+                return BadRequest();
+            }
+
+            var users = this._userService.GetAll().Where(x => x.Id != currentUser.Id);
+            var result = new List<UserViewModel>();
+
+            foreach (var empl in users)
+            {
+                var tempUser = this._mapper.Map<User, UserViewModel>(empl);
+
+                result.Add(tempUser);
+            }
+
+            return View(result);
+        }
+
         [HttpPost("AddToProject")]
         [Authorize(Roles = "Supervisor, Manager")]
         public async Task<IActionResult> AddToProject(int? projectId, int? userId)
@@ -196,7 +168,7 @@ namespace ProjectManagementApp.Web.Controllers
 
             await this._userService.AddToProject((int)projectId, (int)userId);
 
-            return RedirectToAction("EditProjectEmployees", "Project" , new { id = projectId });
+            return RedirectToAction("EditProjectEmployees", "Project", new { id = projectId });
         }
 
         [HttpPost("RemoveFromProject")]
@@ -221,6 +193,34 @@ namespace ProjectManagementApp.Web.Controllers
             await this._userService.RemoveFromProject((int)projectId, (int)userId);
 
             return RedirectToAction("EditProjectEmployees", "Project", new { id = projectId });
+        }
+
+        [HttpGet("ViewUser")]
+        public IActionResult ViewUser(int? id)
+        {
+            if (id is null)
+            {
+                return BadRequest();
+            }
+
+            var user = this._userService.Get((int)id);
+
+            if (user is null)
+            {
+                return NotFound();
+            }
+
+            var result = this._mapper.Map<User, UserViewModel>(user);
+            var projects = this._userService.GetProjects((int)id);
+
+            foreach (var proj in projects)
+            {
+                var tempProject = this._mapper.Map<Project, ProjectViewModel>(proj);
+
+                result.Projects.Add(tempProject);
+            }
+
+            return View(result);
         }
     }
 }

@@ -33,6 +33,16 @@ namespace ProjectManagementApp.Services
             }
         }
 
+        public async Task Delete(int id)
+        {
+            var project = this._projectRepository.Get(id);
+
+            if (project != null)
+            {
+                await this._projectRepository.Delete(id);
+            }
+        }
+
         public Project? Get(int id)
         {
             var project = this._projectRepository.Get(id);
@@ -59,16 +69,6 @@ namespace ProjectManagementApp.Services
             var users = this._projectRepository.GetUsers(projectId);
 
             return users;
-        }
-
-        public async Task Delete(int id)
-        {
-            var project = this._projectRepository.Get(id);
-
-            if (project != null)
-            {
-                await this._projectRepository.Delete(id);
-            }
         }
     }
 }

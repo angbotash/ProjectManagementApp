@@ -33,6 +33,16 @@ namespace ProjectManagementApp.Services
             }
         }
 
+        public async Task Delete(int id)
+        {
+            var issue = this._issueRepository.Get(id);
+
+            if (issue != null)
+            {
+                await this._issueRepository.Delete(id);
+            }
+        }
+
         public Issue? Get(int id)
         {
             var issue = this._issueRepository.Get(id);
@@ -45,16 +55,6 @@ namespace ProjectManagementApp.Services
             var issues = this._issueRepository.GetAllIssues();
 
             return issues;
-        }
-
-        public async Task Delete(int id)
-        {
-            var issue = this._issueRepository.Get(id);
-
-            if (issue != null)
-            {
-                await this._issueRepository.Delete(id);
-            }
         }
     }
 }

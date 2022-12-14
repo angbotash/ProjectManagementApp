@@ -76,6 +76,73 @@ namespace ProjectManagementApp.Web.Controllers
             return View(model);
         }
 
+        [HttpGet("Edit")]
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id is null)
+            {
+                return BadRequest();
+            }
+
+            var issue = this._issueService.Get((int)id);
+
+            if (issue is null)
+            {
+                return NotFound();
+            }
+
+            var model = this._mapper.Map<Issue, EditIssueViewModel>(issue);
+            var allEmployees = await this._userService.GetEmployees();
+
+            model.Employees = allEmployees.Select(x => new SelectListItem(x.Email, x.Id.ToString())).ToList();
+            model.Statuses = new List<SelectListItem>()
+            {
+                new SelectListItem(IssueStatus.ToDo.ToString(), IssueStatus.ToDo.ToString()),
+                new SelectListItem(IssueStatus.InProgress.ToString(), IssueStatus.InProgress.ToString()),
+                new SelectListItem(IssueStatus.Done.ToString(), IssueStatus.Done.ToString())
+            };
+
+            return View(model);
+        }
+
+        [HttpPost("Edit")]
+        public async Task<IActionResult> Edit(EditIssueViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var updatedIssue = this._mapper.Map<EditIssueViewModel, Issue>(model);
+
+                await this._issueService.Edit(updatedIssue);
+
+                return RedirectToAction("ViewIssue", new { id = model.Id });
+            }
+
+            return View(model);
+        }
+
+        [HttpPost("Delete")]
+        [Authorize(Roles = "Supervisor, Manager")]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id is null)
+            {
+                return BadRequest();
+            }
+
+            var issue = this._issueService.Get((int)id);
+
+            if (issue is null)
+            {
+                return NotFound();
+            }
+
+            var projectId = issue.ProjectId;
+
+            await this._issueService.Delete((int)id);
+
+            return RedirectToAction("ViewProject", "Project", new { id = projectId });
+        }
+
         [HttpGet("ViewIssue")]
         public IActionResult ViewIssue(int? id)
         {
@@ -207,73 +274,6 @@ namespace ProjectManagementApp.Web.Controllers
             var issues = tempProject.Issues;
 
             return View(issues);
-        }
-
-        [HttpGet("Edit")]
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id is null)
-            {
-                return BadRequest();
-            }
-
-            var issue = this._issueService.Get((int)id);
-
-            if (issue is null)
-            {
-                return NotFound();
-            }
-
-            var model = this._mapper.Map<Issue, EditIssueViewModel>(issue);
-            var allEmployees = await this._userService.GetEmployees();
-            
-            model.Employees = allEmployees.Select(x => new SelectListItem(x.Email, x.Id.ToString())).ToList();
-            model.Statuses = new List<SelectListItem>()
-            {
-                new SelectListItem(IssueStatus.ToDo.ToString(), IssueStatus.ToDo.ToString()),
-                new SelectListItem(IssueStatus.InProgress.ToString(), IssueStatus.InProgress.ToString()),
-                new SelectListItem(IssueStatus.Done.ToString(), IssueStatus.Done.ToString())
-            };
-
-            return View(model);
-        }
-
-        [HttpPost("Edit")]
-        public async Task<IActionResult> Edit(EditIssueViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var updatedIssue = this._mapper.Map<EditIssueViewModel, Issue>(model);
-
-                await this._issueService.Edit(updatedIssue);
-
-                return RedirectToAction("ViewIssue", new { id = model.Id });
-            }
-
-            return View(model);
-        }
-
-        [HttpPost("Delete")]
-        [Authorize(Roles = "Supervisor, Manager")]
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id is null)
-            {
-                return BadRequest();
-            }
-
-            var issue = this._issueService.Get((int)id);
-
-            if (issue is null)
-            {
-                return NotFound();
-            }
-
-            var projectId = issue.ProjectId;
-
-            await this._issueService.Delete((int)id);
-
-            return RedirectToAction("ViewProject", "Project", new { id = projectId });
         }
     }
 }

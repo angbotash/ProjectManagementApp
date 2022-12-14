@@ -35,6 +35,17 @@ namespace ProjectManagementApp.Persistence.Repositories
             }
         }
 
+        public async Task Delete(int id)
+        {
+            var user = this._dbContext.Users.FirstOrDefault(e => e.Id == id);
+
+            if (user != null)
+            {
+                this._dbContext.Remove(user);
+                await this._dbContext.SaveChangesAsync();
+            }
+        }
+
         public User? Get(int id)
         {
             var user = this._dbContext.Users
@@ -84,6 +95,13 @@ namespace ProjectManagementApp.Persistence.Repositories
             return result;
         }
 
+        public IEnumerable<IdentityRole<int>> GetRoles()
+        {
+            var roles = this._dbContext.Roles;
+
+            return roles;
+        }
+
         public async Task AddToProject(int projectId, int userId)
         {
             var project = this._dbContext.Projects.FirstOrDefault(p => p.Id == projectId);
@@ -123,24 +141,6 @@ namespace ProjectManagementApp.Persistence.Repositories
             if (userProject != null)
             {
                 this._dbContext.UserProject.Remove(userProject);
-                await this._dbContext.SaveChangesAsync();
-            }
-        }
-
-        public IEnumerable<IdentityRole<int>> GetRoles()
-        {
-            var roles = this._dbContext.Roles;
-
-            return roles;
-        }
-
-        public async Task Delete(int id)
-        {
-            var user = this._dbContext.Users.FirstOrDefault(e => e.Id == id);
-
-            if (user != null)
-            {
-                this._dbContext.Remove(user);
                 await this._dbContext.SaveChangesAsync();
             }
         }

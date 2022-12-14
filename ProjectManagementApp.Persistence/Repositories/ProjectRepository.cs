@@ -23,16 +23,19 @@ namespace ProjectManagementApp.Persistence.Repositories
 
             if (newProject.ManagerId != null)
             {
-                var project = this._dbContext.Projects.FirstOrDefault(x =>
-                    x.Name == newProject.Name && x.ManagerId == newProject.ManagerId);
+                var project = this._dbContext.Projects
+                    .FirstOrDefault(x => x.Name == newProject.Name && x.ManagerId == newProject.ManagerId);
 
                 if (project is null)
                 {
                     return;
                 }
 
-                var newUserProject = new UserProject()
-                    {UserId = (int)newProject.ManagerId, ProjectId = project.Id};
+                var newUserProject = new UserProject
+                {
+                    UserId = (int)newProject.ManagerId,
+                    ProjectId = project.Id
+                };
 
                 await this._dbContext.UserProject.AddAsync(newUserProject);
                 await this._dbContext.SaveChangesAsync();
@@ -41,6 +44,10 @@ namespace ProjectManagementApp.Persistence.Repositories
 
         public async Task Update(Project updatedProject)
         {
+            //this._dbContext.Projects.Update(updatedProject);
+
+            //await this._dbContext.SaveChangesAsync();
+
             var project = this._dbContext.Projects.FirstOrDefault(p => p.Id == updatedProject.Id);
 
             if (project != null)
@@ -52,14 +59,26 @@ namespace ProjectManagementApp.Persistence.Repositories
                 project.EndDate = updatedProject.EndDate;
                 project.Priority = updatedProject.Priority;
                 project.ManagerId = updatedProject.ManagerId;
+            }
 
+            await this._dbContext.SaveChangesAsync();
+        }
+
+        public async Task Delete(int id)
+        {
+            var project = this._dbContext.Projects.FirstOrDefault(p => p.Id == id);
+
+            if (project != null)
+            {
+                this._dbContext.Projects.Remove(project);
                 await this._dbContext.SaveChangesAsync();
             }
         }
 
         public Project? Get(int id)
         {
-            var project = this._dbContext.Projects.Include(x => x.Manager)
+            var project = this._dbContext.Projects
+                .Include(x => x.Manager)
                 .Include(x => x.Issues)
                     .ThenInclude(x => x.Assignee)
                 .Include(x => x.Issues)
@@ -112,29 +131,12 @@ namespace ProjectManagementApp.Persistence.Repositories
             return result;
         }
 
-        public async Task Delete(int id)
-        {
-            var project = this._dbContext.Projects.FirstOrDefault(p => p.Id == id);
-
-            if (project != null)
-            {
-                this._dbContext.Projects.Remove(project);
-                await this._dbContext.SaveChangesAsync();
-            }
-        }
-
         public bool IsUserOnProject(int userId, int projectId)
         {
-            var userProject =
-                this._dbContext.UserProject.FirstOrDefault(x =>
-                    x.UserId == userId && x.ProjectId == projectId);
+            var userProject = this._dbContext.UserProject
+                .FirstOrDefault(x => x.UserId == userId && x.ProjectId == projectId);
 
-            if (userProject is null)
-            {
-                return false;
-            }
-
-            return true;
+            return userProject != null;
         }
     }
 }

@@ -11,28 +11,28 @@ namespace ProjectManagementApp.Domain.ServiceInterfaces
 
         Task<OperationResult> Edit(User updatedUser);
 
-        User? Get(int id);
-
-        Task<User?> GetCurrentUser(ClaimsPrincipal currentUser);
-
-        IEnumerable<User> GetAll();
-
-        Task<IEnumerable<User>> GetManagers();
-
-        Task<IEnumerable<User>> GetEmployees();
-
-        IEnumerable<Project> GetProjects(int id);
-
-        Task AddToProject(int projectId, int userId);
-
-        Task RemoveFromProject(int projectId, int userId);
-
-        IEnumerable<IdentityRole<int>> GetRoles();
-
         Task Delete(int id);
 
         Task<OperationResult> Authenticate(string email, string password);
 
         Task Logout();
+
+        User? Get(int id);
+
+        IEnumerable<User> GetAll();
+
+        IEnumerable<Project> GetProjects(int id);
+
+        IEnumerable<IdentityRole<int>> GetRoles();
+
+        Task<User?> GetCurrentUser(ClaimsPrincipal currentUser);
+
+        Task<IEnumerable<User>> GetManagers();
+
+        Task<IEnumerable<User>> GetEmployees();
+
+        Task AddToProject(int projectId, int userId);
+
+        Task RemoveFromProject(int projectId, int userId);
     }
 }

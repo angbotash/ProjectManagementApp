@@ -35,25 +35,6 @@ namespace ProjectManagementApp.Persistence.Repositories
             }
         }
 
-        public Issue? Get(int id)
-        {
-            var issue = this._dbContext.Issues.Include(x => x.Project)
-                .Include(x => x.Assignee)
-                .Include(x => x.Reporter)
-                .FirstOrDefault(i => i.Id == id);
-
-            return issue;
-        }
-
-        public IEnumerable<Issue>? GetAllIssues()
-        {
-            var issues = this._dbContext.Issues.Include(x => x.Project)
-                .Include(x => x.Assignee)
-                .Include(x => x.Reporter);
-
-            return issues;
-        }
-
         public async Task Delete(int id)
         {
             var issue = this._dbContext.Issues.FirstOrDefault(i => i.Id == id);
@@ -63,6 +44,27 @@ namespace ProjectManagementApp.Persistence.Repositories
                 this._dbContext.Issues.Remove(issue);
                 await this._dbContext.SaveChangesAsync();
             }
+        }
+
+        public Issue? Get(int id)
+        {
+            var issue = this._dbContext.Issues
+                .Include(x => x.Project)
+                .Include(x => x.Assignee)
+                .Include(x => x.Reporter)
+                .FirstOrDefault(i => i.Id == id);
+
+            return issue;
+        }
+
+        public IEnumerable<Issue>? GetAllIssues()
+        {
+            var issues = this._dbContext.Issues
+                .Include(x => x.Project)
+                .Include(x => x.Assignee)
+                .Include(x => x.Reporter);
+
+            return issues;
         }
     }
 }

@@ -88,85 +88,6 @@ namespace ProjectManagementApp.Services
             return result;
         }
 
-        public User? Get(int id)
-        {
-            var user = this._userRepository.Get(id);
-
-            return user;
-        }
-
-        public async Task<User?> GetCurrentUser(ClaimsPrincipal currentUser)
-        {
-            var user = await this._userManager.GetUserAsync(currentUser);
-
-            return user;
-        }
-
-        public IEnumerable<User> GetAll()
-        {
-            var users = this._userRepository.GetAll();
-
-            return users;
-        }
-
-        public async Task<IEnumerable<User>> GetManagers()
-        {
-            var managers = await this._userManager.GetUsersInRoleAsync(Role.Manager.ToString());
-
-            return managers;
-        }
-
-        public async Task<IEnumerable<User>> GetEmployees()
-        {
-            var employees = await this._userManager.GetUsersInRoleAsync(Role.Employee.ToString());
-
-            return employees;
-        }
-
-        public IEnumerable<Project> GetProjects(int id)
-        {
-            var projects = this._userRepository.GetProjects(id);
-
-            return projects;
-        }
-
-        public async Task AddToProject(int projectId, int userId)
-        {
-            if (this._projectRepository.Get(projectId) == null)
-            {
-                return;
-            }
-
-            if (this._userRepository.Get(userId) == null)
-            {
-                return;
-            }
-
-            await this._userRepository.AddToProject(projectId, userId);
-        }
-
-        public async Task RemoveFromProject(int projectId, int userId)
-        {
-            if (this._projectRepository.Get(projectId) == null)
-            {
-                return;
-            }
-
-            if (this._userRepository.Get(userId) == null)
-            {
-                return;
-            }
-
-            await this._userRepository.RemoveFromProject(projectId, userId);
-        }
-
-        public IEnumerable<IdentityRole<int>> GetRoles()
-        {
-            var roles = this._userRepository.GetRoles();
-
-            return roles;
-        }
-
         public async Task Delete(int id)
         {
             var user = this._userRepository.Get(id);
@@ -200,6 +121,85 @@ namespace ProjectManagementApp.Services
         public async Task Logout()
         {
             await _signInManager.SignOutAsync();
+        }
+
+        public User? Get(int id)
+        {
+            var user = this._userRepository.Get(id);
+
+            return user;
+        }
+
+        public IEnumerable<User> GetAll()
+        {
+            var users = this._userRepository.GetAll();
+
+            return users;
+        }
+
+        public IEnumerable<Project> GetProjects(int id)
+        {
+            var projects = this._userRepository.GetProjects(id);
+
+            return projects;
+        }
+
+        public IEnumerable<IdentityRole<int>> GetRoles()
+        {
+            var roles = this._userRepository.GetRoles();
+
+            return roles;
+        }
+
+        public async Task<User?> GetCurrentUser(ClaimsPrincipal currentUser)
+        {
+            var user = await this._userManager.GetUserAsync(currentUser);
+
+            return user;
+        }
+
+        public async Task<IEnumerable<User>> GetManagers()
+        {
+            var managers = await this._userManager.GetUsersInRoleAsync(Role.Manager.ToString());
+
+            return managers;
+        }
+
+        public async Task<IEnumerable<User>> GetEmployees()
+        {
+            var employees = await this._userManager.GetUsersInRoleAsync(Role.Employee.ToString());
+
+            return employees;
+        }
+
+        public async Task AddToProject(int projectId, int userId)
+        {
+            if (this._projectRepository.Get(projectId) == null)
+            {
+                return;
+            }
+
+            if (this._userRepository.Get(userId) == null)
+            {
+                return;
+            }
+
+            await this._userRepository.AddToProject(projectId, userId);
+        }
+
+        public async Task RemoveFromProject(int projectId, int userId)
+        {
+            if (this._projectRepository.Get(projectId) == null)
+            {
+                return;
+            }
+
+            if (this._userRepository.Get(userId) == null)
+            {
+                return;
+            }
+
+            await this._userRepository.RemoveFromProject(projectId, userId);
         }
     }
 }
