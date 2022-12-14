@@ -10,12 +10,14 @@
             <b>@Html.LabelFor(m => m.Email)</b>
             <br />
             @Html.TextBoxFor(m => m.Email, new { placeholder = "Enter email" })
+            @Html.ValidationMessageFor(m => m.Email)
         </div>
 
         <div>
             <b>@Html.LabelFor(m => m.Password)</b>
             <br />
             @Html.TextBoxFor(m => m.Password, new { placeholder = "Enter password" })
+            @Html.ValidationMessageFor(m => m.Password)
         </div>
         <hr>
 
@@ -28,4 +30,8 @@
         @Html.ActionLink("Register", "Register", "Account")
         </div>
     </div>
+}
+
+@section scripts{
+    <partial name="_ValidationScriptsPartial" />
 }

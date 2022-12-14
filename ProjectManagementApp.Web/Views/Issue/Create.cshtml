@@ -11,6 +11,7 @@
             <b>@Html.LabelFor(m => m.Name)</b>
             <br />
             @Html.TextBoxFor(m => m.Name, new { placeholder = "Enter issue name" })
+            @Html.ValidationMessageFor(m => m.Name)
         </div>
 
         <div>
@@ -18,6 +19,7 @@
             <br />
             @Html.DropDownListFor(m => m.ReporterId, @Model.Users, "Select reporter")
             @Html.HiddenFor(m => m.Users)
+            @Html.ValidationMessageFor(m => m.ReporterId)
         </div>
         
         <div>
@@ -25,6 +27,7 @@
             <br />
             @Html.DropDownListFor(m => m.AssigneeId, @Model.Users, "Select assignee")
             @Html.HiddenFor(m => m.Users)
+            @Html.ValidationMessageFor(m => m.AssigneeId)
         </div>
 
         @Html.HiddenFor(m => m.ProjectId)
@@ -40,12 +43,15 @@
             <br />
             @Html.DropDownListFor(m => m.Status, @Model.Statuses, "Select status")
             @Html.HiddenFor(m => m.Statuses)
+            @Html.ValidationMessageFor(m => m.Status)
         </div>
 
         <div>
             <b>@Html.LabelFor(m => m.Priority)</b>
             <br />
-            @Html.TextBoxFor(m => m.Priority, new { @type="number", min="1", max="10", placeholder = "Enter executor company name" })
+            @Html.TextBoxFor(m => m.Priority,
+                new { @type="number", min="1", max="10", placeholder = "Enter executor company name" })
+            @Html.ValidationMessageFor(m => m.Priority)
         </div>
         <hr>
 
@@ -54,4 +60,8 @@
             <input type="submit" value="Create" />
         }
     </div>
+}
+
+@section scripts{
+    <partial name="_ValidationScriptsPartial" />
 }

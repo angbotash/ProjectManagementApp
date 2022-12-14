@@ -12,12 +12,14 @@
             <b>@Html.LabelFor(m => m.FirstName)</b>
             <br />
             @Html.TextBoxFor(m => m.FirstName, new { placeholder = "Enter first name" })
+            @Html.ValidationMessageFor(m => m.FirstName)
         </div>
 
         <div>
             <b>@Html.LabelFor(m => m.LastName)</b>
             <br />
             @Html.TextBoxFor(m => m.LastName, new { placeholder = "Enter last name" })
+            @Html.ValidationMessageFor(m => m.LastName)
         </div>
 
         <div>
@@ -30,6 +32,7 @@
             <b>@Html.LabelFor(m => m.Email)</b>
             <br />
             @Html.TextBoxFor(m => m.Email, new { placeholder = "Enter email" })
+            @Html.ValidationMessageFor(m => m.Email)
         </div>
         <hr>
 
@@ -38,4 +41,8 @@
             <input type="submit" value="Save" />
         }
     </div>
+}
+
+@section scripts{
+    <partial name="_ValidationScriptsPartial" />
 }

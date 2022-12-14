@@ -39,6 +39,8 @@ namespace ProjectManagementApp.Services
 
             if (createResult.Succeeded)
             {
+                role = role == string.Empty ? "Employee" : role;
+
                 await this._userManager.AddToRoleAsync(newUser, role);
 
                 return new OperationResult(true);

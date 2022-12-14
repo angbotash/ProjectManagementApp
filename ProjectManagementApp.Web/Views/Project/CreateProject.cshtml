@@ -12,18 +12,21 @@
             <b>@Html.LabelFor(m => m.Name)</b>
             <br />
             @Html.TextBoxFor(m => m.Name, new { placeholder = "Enter project name" })
+            @Html.ValidationMessageFor(m => m.Name)
         </div>
 
         <div>
             <b>@Html.LabelFor(m => m.ClientCompanyName)</b>
             <br />
             @Html.TextBoxFor(m => m.ClientCompanyName,new { placeholder = "Enter client company name" })
+            @Html.ValidationMessageFor(m => m.ClientCompanyName)
         </div>
 
         <div>
             <b>@Html.LabelFor(m => m.ExecutorCompanyName)</b>
             <br />
             @Html.TextBoxFor(m => m.ExecutorCompanyName, new { placeholder = "Enter executor company name" })
+            @Html.ValidationMessageFor(m => m.ExecutorCompanyName)
         </div>
 
         <div>
@@ -36,19 +39,25 @@
         <div>
             <b>@Html.LabelFor(m => m.StartDate)</b>
             <br />
-            @Html.TextBoxFor(m => m.StartDate, new { @type="date", @Value = Model.StartDate.ToString("dd/MM/yyyy"), placeholder = "Enter start date" })
+            @Html.TextBoxFor(m => m.StartDate, 
+                new { @type="date", @Value = Model.StartDate.ToString("dd/MM/yyyy"), placeholder = "Enter start date" })
+            @Html.ValidationMessageFor(m => m.StartDate)
         </div>
 
         <div>
             <b>@Html.LabelFor(m => m.EndDate)</b>
             <br />
-            @Html.TextBoxFor(m => m.EndDate, new { @type="date", @Value = Model.EndDate.ToString("dd/MM/yyyy"), placeholder = "Enter end date" })
+            @Html.TextBoxFor(m => m.EndDate, 
+                new { @type="date", @Value = Model.EndDate.ToString("dd/MM/yyyy"), placeholder = "Enter end date" })
+            @Html.ValidationMessageFor(m => m.EndDate)
         </div>
 
         <div>
             <b>@Html.LabelFor(m => m.Priority)</b>
             <br />
-            @Html.TextBoxFor(m => m.Priority, new { @type="number", min="1", max="10", placeholder = "Enter executor company name" })
+            @Html.TextBoxFor(m => m.Priority,
+                new { @type="number", min="1", max="10", placeholder = "Enter executor company name" })
+            @Html.ValidationMessageFor(m => m.Priority)
         </div>
         <hr>
         
@@ -57,4 +66,8 @@
             <input type="submit" value="Create" />
         }
     </div>
+}
+
+@section scripts{
+    <partial name="_ValidationScriptsPartial" />
 }

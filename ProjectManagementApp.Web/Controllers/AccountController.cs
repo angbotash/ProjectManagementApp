@@ -41,7 +41,7 @@ namespace ProjectManagementApp.Web.Controllers
 
                 if (result.Success)
                 {
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Login", "Account");
                 }
 
                 foreach (var error in result.Errors)
