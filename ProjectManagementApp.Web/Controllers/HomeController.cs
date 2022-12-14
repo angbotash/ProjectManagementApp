@@ -1,26 +1,38 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProjectManagementApp.Web.Models;
 using System.Diagnostics;
+using AutoMapper;
+using ProjectManagementApp.Domain.Entities;
 using ProjectManagementApp.Domain.ServiceInterfaces;
+using ProjectManagementApp.Web.ViewModels;
 
 namespace ProjectManagementApp.Web.Controllers
 {
     public class HomeController : Controller
     {
         private readonly IUserService _userService;
+        private readonly IMapper _mapper;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(IUserService userService, ILogger<HomeController> logger)
+        public HomeController(IUserService userService, IMapper mapper, ILogger<HomeController> logger)
         {
             this._userService = userService;
+            this._mapper = mapper;
             this._logger = logger;
         }
 
         public async Task<IActionResult> Index()
         {
-            var currentUserId = await _userService.GetCurrentUserId(User);
+            var currentUser = await _userService.GetCurrentUser(User);
 
-            return View(currentUserId);
+            if (currentUser is null)
+            {
+                return View(null);
+            }
+            
+            var userModel = this._mapper.Map<User, UserViewModel>(currentUser);
+
+            return View(userModel);
         }
 
         public IActionResult Privacy()

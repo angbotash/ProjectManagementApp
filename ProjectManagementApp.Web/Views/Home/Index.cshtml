@@ -1,5 +1,5 @@
 ﻿@using ProjectManagementApp.Domain.Entities
-@model Int32?
+@model ProjectManagementApp.Web.ViewModels.UserViewModel?
 
 ﻿@if (!User.Identity.IsAuthenticated)
 {
@@ -8,24 +8,30 @@
     <a class="btn btn-outline-dark" asp-controller="Account" asp-action="Login">Create project</a>
 </span>
 }
-@if (User.IsInRole(Role.Employee.ToString()))
+@if (User.IsInRole(Role.Employee.ToString()) && Model != null)
 {
+    <a asp-controller="User" asp-action="ViewUser" asp-route-id="@Model.Id">My profile</a>
+    <hr/>
     <span style="display: inline; float: left">
-        <a class="btn btn-outline-dark" asp-controller="Project" asp-action="GetEmployeeProjects" asp-route-employeeId="@Model">My projects</a>
-        <a class="btn btn-outline-dark" asp-controller="Issue" asp-action="ViewAssignedIssues" asp-route-userId="@Model">My issues</a>
+        <a class="btn btn-outline-dark" asp-controller="Project" asp-action="GetEmployeeProjects" asp-route-employeeId="@Model.Id">My projects</a>
+        <a class="btn btn-outline-dark" asp-controller="Issue" asp-action="ViewAssignedIssues" asp-route-userId="@Model.Id">My issues</a>
     </span>
 }
 
-@if (User.IsInRole(Role.Manager.ToString()))
+@if (User.IsInRole(Role.Manager.ToString()) && Model != null)
 {
+    <a asp-controller="User" asp-action="ViewUser" asp-route-id="@Model.Id">My profile</a>
+    <hr/>
     <span style="display: inline; float: left">
-        <a class="btn btn-outline-dark" asp-controller="Project" asp-action="GetManagerProjects" asp-route-managerId="@Model">My projects</a>
-        <a class="btn btn-outline-dark" asp-controller="Issue" asp-action="ViewReportedIssues" asp-route-userId="@Model">My issues</a>
+        <a class="btn btn-outline-dark" asp-controller="Project" asp-action="GetManagerProjects" asp-route-managerId="@Model.Id">My projects</a>
+        <a class="btn btn-outline-dark" asp-controller="Issue" asp-action="ViewReportedIssues" asp-route-userId="@Model.Id">My issues</a>
     </span>
 }
 
-@if (User.IsInRole(Role.Supervisor.ToString()))
+@if (User.IsInRole(Role.Supervisor.ToString()) && Model != null)
 {
+    <a asp-controller="User" asp-action="ViewUser" asp-route-id="@Model.Id">My profile</a>
+    <hr/>
     <span style="display: inline; float: left">
         <a class="btn btn-outline-dark" asp-controller="User" asp-action="CreateUser">Create employee</a>
         <a class="btn btn-outline-dark" asp-controller="Project" asp-action="CreateProject">Create project</a>

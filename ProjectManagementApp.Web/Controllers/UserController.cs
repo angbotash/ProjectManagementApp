@@ -59,9 +59,16 @@ namespace ProjectManagementApp.Web.Controllers
 
         [HttpGet("GetAllUsers")]
         [Authorize(Roles = "Supervisor")]
-        public IActionResult GetAllUsers()
+        public async Task<IActionResult> GetAllUsers()
         {
-            var users = this._userService.GetAll();
+            var currentUser = await _userService.GetCurrentUser(User);
+
+            if (currentUser is null)
+            {
+                return BadRequest();
+            }
+
+            var users = this._userService.GetAll().Where(x => x.Id != currentUser.Id);
             var result = new List<UserViewModel>();
 
             foreach (var empl in users)
@@ -124,6 +131,7 @@ namespace ProjectManagementApp.Web.Controllers
         }
 
         [HttpGet("Edit")]
+        [Authorize(Roles = "Supervisor")]
         public IActionResult Edit(int? id)
         {
             if (id is null)
@@ -144,6 +152,7 @@ namespace ProjectManagementApp.Web.Controllers
         }
 
         [HttpPost("Edit")]
+        [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> Edit(EditUserViewModel model)
         {
             if (ModelState.IsValid)
@@ -167,6 +176,7 @@ namespace ProjectManagementApp.Web.Controllers
         }
 
         [HttpPost("AddToProject")]
+        [Authorize(Roles = "Supervisor, Manager")]
         public async Task<IActionResult> AddToProject(int? projectId, int? userId)
         {
             if (projectId is null || userId is null)
@@ -190,6 +200,7 @@ namespace ProjectManagementApp.Web.Controllers
         }
 
         [HttpPost("RemoveFromProject")]
+        [Authorize(Roles = "Supervisor, Manager")]
         public async Task<IActionResult> RemoveFromProject(int? projectId, int? userId)
         {
             if (projectId is null || userId is null)

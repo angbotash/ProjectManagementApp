@@ -13,7 +13,7 @@ namespace ProjectManagementApp.Domain.ServiceInterfaces
 
         User? Get(int id);
 
-        Task<int?> GetCurrentUserId(ClaimsPrincipal currentUser);
+        Task<User?> GetCurrentUser(ClaimsPrincipal currentUser);
 
         IEnumerable<User> GetAll();
 

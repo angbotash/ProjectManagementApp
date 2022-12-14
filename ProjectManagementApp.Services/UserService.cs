@@ -95,18 +95,11 @@ namespace ProjectManagementApp.Services
             return user;
         }
 
-        public async Task<int?> GetCurrentUserId(ClaimsPrincipal currentUser)
+        public async Task<User?> GetCurrentUser(ClaimsPrincipal currentUser)
         {
             var user = await this._userManager.GetUserAsync(currentUser);
 
-            if (user != null)
-            {
-                var id = user.Id;
-
-                return id;
-            }
-
-            return null;
+            return user;
         }
 
         public IEnumerable<User> GetAll()
