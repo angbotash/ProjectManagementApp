@@ -6,6 +6,7 @@ namespace ProjectManagementApp.Web.ViewModels
     public class CreateIssueViewModel
     {
         [Required(ErrorMessage = "Issue name is required.")]
+        [StringLength(100, MinimumLength = 3)]
         [DataType(DataType.Text)]
         [Display(Name = "Issue name")]
         public string Name { get; set; } = null!;
@@ -21,15 +22,16 @@ namespace ProjectManagementApp.Web.ViewModels
         public int ProjectId { get; set; }
 
         [DataType(DataType.Text)]
+        [StringLength(1000)]
         [Display(Name = "Comment")]
         public string? Comment { get; set; }
 
         [Required(ErrorMessage = "Status is required.")]
-        [DataType(DataType.Text)]
         [Display(Name = "Project status")]
         public IssueStatus.IssueStatus Status { get; set; }
 
         [Required(ErrorMessage = "Priority is required.")]
+        [Range(1, 10)]
         [Display(Name = "Priority")]
         public int Priority { get; set; }
 
