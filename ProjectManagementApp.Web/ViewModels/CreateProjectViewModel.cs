@@ -6,17 +6,19 @@ namespace ProjectManagementApp.Web.ViewModels
     public class CreateProjectViewModel
     {
         [Required(ErrorMessage = "Project name is required.")]
+        [StringLength(100, MinimumLength = 3)]
         [DataType(DataType.Text)]
         [Display(Name = "Project name")]
         public string Name { get; set; } = null!;
 
         [Required(ErrorMessage = "Client company name is required.")]
+        [StringLength(50, MinimumLength = 3)]
         [DataType(DataType.Text)]
         [Display(Name = "Client company name")]
-
         public string ClientCompanyName { get; set; } = null!;
 
         [Required(ErrorMessage = "Executor company name is required.")]
+        [StringLength(50, MinimumLength = 3)]
         [DataType(DataType.Text)]
         [Display(Name = "Executor company name")]
         public string ExecutorCompanyName { get; set; } = null!;
@@ -35,9 +37,10 @@ namespace ProjectManagementApp.Web.ViewModels
         public DateTime EndDate { get; set; }
 
         [Required(ErrorMessage = "Priority 1-10 is required.")]
-        [Display(Name = "Start date")]
+        [Range(1, 10)]
+        [Display(Name = "Priority")]
         public int Priority { get; set; }
 
-        public IList<SelectListItem> Employees { get; set; } = null!;
+        public IList<SelectListItem> Managers { get; set; } = null!;
     }
 }

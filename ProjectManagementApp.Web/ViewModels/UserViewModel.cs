@@ -1,6 +1,6 @@
 ﻿namespace ProjectManagementApp.Web.ViewModels
 {
-    public class EmployeeViewModel
+    public class UserViewModel
     {
         public int Id { get; set; }
 

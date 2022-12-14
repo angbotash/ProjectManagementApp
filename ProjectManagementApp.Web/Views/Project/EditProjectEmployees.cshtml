@@ -23,14 +23,19 @@
             <tr>
                 <td>
                     @Html.ActionLink(
-                    @employee.Email,
-                        "ViewEmployee",
-                        "Employee",
+                        @employee.Email,
+                        "ViewUser",
+                        "User",
                         new { id = @employee.Id },
                         null)
+
+                    @if (Model.Project.Manager != null && Model.Project.Manager.Id == employee.Id)
+                    {
+                        <i> Manager</i>
+                    }
                 </td>
                 <td>
-                    @using (Html.BeginForm("RemoveFromProject", "Employee", new { projectId = Model.Project.Id, employeeId = employee.Id }, FormMethod.Post))
+                    @using (Html.BeginForm("RemoveFromProject", "User", new { projectId = Model.Project.Id, userId = employee.Id }, FormMethod.Post))
                     {
                         <input type="submit" value="Remove" />
                     }
@@ -55,18 +60,15 @@
         {
             <tr>
                 <td>
-                    @if (!Model.ProjectEmployees.Contains(employee))
-                    {
-                        @Html.ActionLink(
-                            @employee.Email,
-                            "ViewEmployee",
-                            "Employee",
-                            new { id = @employee.Id },
-                            null)
-                    }
+                    @Html.ActionLink(
+                        @employee.Email,
+                        "ViewUser",
+                        "User",
+                        new { id = @employee.Id },
+                        null)
                 </td>
                 <td>
-                    @using (Html.BeginForm("AddToProject", "Employee", new { projectId = Model.Project.Id, employeeId = employee.Id }, FormMethod.Post))
+                    @using (Html.BeginForm("AddToProject", "User", new { projectId = Model.Project.Id, userId = employee.Id }, FormMethod.Post))
                     {
                         <input type="submit" value="Add" />
                     }

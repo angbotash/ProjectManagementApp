@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ProjectManagementApp.Domain.Entities;
 using ProjectManagementApp.Domain.RepositoryInterfaces;
 using ProjectManagementApp.Domain.ServiceInterfaces;
 using ProjectManagementApp.Persistence;
@@ -11,14 +13,34 @@ var connection = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection));
 
-builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
-builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IIssueRepository, IssueRepository>();
 builder.Services.AddScoped<IIssueService, IssueService>();
 
 builder.Services.AddAutoMapper(typeof(Program));
+
+builder.Services.AddIdentity<User, IdentityRole<int>>()
+    .AddRoles<IdentityRole<int>>()
+    .AddEntityFrameworkStores<ApplicationContext>();
+
+builder.Services.Configure<IdentityOptions>(opts => {
+    opts.User.RequireUniqueEmail = true;
+    opts.Password.RequireNonAlphanumeric = false;
+    opts.Password.RequireLowercase = true;
+    opts.Password.RequireUppercase = false;
+    opts.Password.RequireDigit = false;
+    opts.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-._@+";
+});
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(Role.Supervisor.ToString(), policy => policy.RequireRole(Role.Supervisor.ToString()));
+    options.AddPolicy(Role.Manager.ToString(), policy => policy.RequireRole(Role.Manager.ToString()));
+    options.AddPolicy(Role.Employee.ToString(), policy => policy.RequireRole(Role.Employee.ToString()));
+});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -43,6 +65,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

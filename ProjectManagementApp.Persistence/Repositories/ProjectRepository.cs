@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using ProjectManagementApp.Domain.Entities;
 using ProjectManagementApp.Domain.RepositoryInterfaces;
 
@@ -7,60 +8,47 @@ namespace ProjectManagementApp.Persistence.Repositories
     public class ProjectRepository : IProjectRepository
     {
         private readonly ApplicationContext _dbContext;
+        private readonly UserManager<User> _userManager;
 
-        public ProjectRepository(ApplicationContext dbContext)
+        public ProjectRepository(ApplicationContext dbContext, UserManager<User> userManager)
         {
-            this._dbContext = dbContext;
+            _dbContext = dbContext;
+            _userManager = userManager;
         }
 
         public async Task Create(Project newProject)
         {
-            await this._dbContext.Projects.AddAsync(newProject);
-            await this._dbContext.SaveChangesAsync();
-
-            if (newProject.ManagerId != null)
-            {
-                var project = this._dbContext.Projects.FirstOrDefault(x =>
-                    x.Name == newProject.Name && x.ManagerId == newProject.ManagerId);
-
-                if (project is null)
-                {
-                    return;
-                }
-
-                var newEmployeeProject = new EmployeeProject()
-                    {EmployeeId = (int)newProject.ManagerId, ProjectId = project.Id};
-
-                await this._dbContext.EmployeeProject.AddAsync(newEmployeeProject);
-                await this._dbContext.SaveChangesAsync();
-            }
+            await _dbContext.Projects.AddAsync(newProject);
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task Update(Project updatedProject)
         {
-            var project = this._dbContext.Projects.FirstOrDefault(p => p.Id == updatedProject.Id);
+            this._dbContext.Projects.Update(updatedProject);
+            await this._dbContext.SaveChangesAsync();
+        }
 
-            if (project != null)
+        public async Task Delete(int id)
+        {
+            var project = _dbContext.Projects.FirstOrDefault(p => p.Id == id);
+
+            if (project is null)
             {
-                project.Name = updatedProject.Name;
-                project.ClientCompanyName = updatedProject.ClientCompanyName;
-                project.ExecutorCompanyName = updatedProject.ExecutorCompanyName;
-                project.StartDate = updatedProject.StartDate;
-                project.EndDate = updatedProject.EndDate;
-                project.Priority = updatedProject.Priority;
-                project.ManagerId = updatedProject.ManagerId;
-
-                await this._dbContext.SaveChangesAsync();
+                throw new KeyNotFoundException($"There is no Project with Id {id}.");
             }
+
+            _dbContext.Projects.Remove(project);
+            await _dbContext.SaveChangesAsync();
         }
 
         public Project? Get(int id)
         {
-            var project = this._dbContext.Projects.Include(x => x.Manager)
-                .Include(x => x.Issues)
-                    .ThenInclude(x => x.Assignee)
-                .Include(x => x.Issues)
-                    .ThenInclude(x => x.Reporter)
+            var project = _dbContext.Projects
+                .Include(p => p.Manager)
+                .Include(p => p.Issues)
+                    .ThenInclude(i => i.Assignee)
+                .Include(p => p.Issues)
+                    .ThenInclude(i => i.Reporter)
                 .FirstOrDefault(p => p.Id == id);
 
             return project;
@@ -68,57 +56,45 @@ namespace ProjectManagementApp.Persistence.Repositories
 
         public IEnumerable<Project> GetAll()
         {
-            var projects = this._dbContext.Projects
-                .Include(x => x.Manager)
-                .Include(x => x.Issues)
-                    .ThenInclude(x => x.Assignee)
-                .Include(x => x.Issues)
-                    .ThenInclude(x => x.Reporter);
+            var projects = _dbContext.Projects
+                .Include(p => p.Manager)
+                .Include(p => p.Issues)
+                    .ThenInclude(i => i.Assignee)
+                .Include(p => p.Issues)
+                    .ThenInclude(i => i.Reporter);
 
             return projects;
         }
 
-        public IEnumerable<Employee> GetEmployees(int id)
+        public IEnumerable<Project> GetManagerProjects(int managerId)
         {
-            var employees = this._dbContext.EmployeeProject.Where(e => e.ProjectId == id).ToList();
-            var result = new List<Employee>();
+            var managerProjects = _dbContext.Projects
+                .Where(p => p.ManagerId == managerId)
+                .Include(p => p.Manager)
+                .Include(p => p.Issues)
+                    .ThenInclude(i => i.Assignee)
+                .Include(p => p.Issues)
+                    .ThenInclude(i => i.Reporter);
 
-            foreach (var employee in employees)
+            return managerProjects;
+        }
+
+        public IEnumerable<User> GetUsers(int id)
+        {
+            var users = _dbContext.UserProject.Where(up => up.ProjectId == id).ToList();
+            var result = new List<User>();
+
+            foreach (var user in users)
             {
-                var tempEmployee = this._dbContext.Employees.FirstOrDefault(e => e.Id == employee.EmployeeId);
+                var tempUser = _userManager.Users.FirstOrDefault(u => u.Id == user.UserId);
 
-                if (tempEmployee != null)
+                if (tempUser != null)
                 {
-                    result.Add(tempEmployee);
+                    result.Add(tempUser);
                 }
             }
 
             return result;
-        }
-
-        public async Task Delete(int id)
-        {
-            var project = this._dbContext.Projects.FirstOrDefault(p => p.Id == id);
-
-            if (project != null)
-            {
-                this._dbContext.Projects.Remove(project);
-                await this._dbContext.SaveChangesAsync();
-            }
-        }
-
-        public bool IsEmployeeOnProject(int employeeId, int projectId)
-        {
-            var employeeProject =
-                this._dbContext.EmployeeProject.FirstOrDefault(x =>
-                    x.EmployeeId == employeeId && x.ProjectId == projectId);
-
-            if (employeeProject is null)
-            {
-                return false;
-            }
-
-            return true;
         }
     }
 }

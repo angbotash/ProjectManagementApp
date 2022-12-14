@@ -15,54 +15,50 @@ namespace ProjectManagementApp.Persistence.Repositories
 
         public async Task Create(Issue newTask)
         {
-            await this._dbContext.Issues.AddAsync(newTask);
-            await this._dbContext.SaveChangesAsync();
+            await _dbContext.Issues.AddAsync(newTask);
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task Update(Issue updatedTask)
         {
-            var task = this._dbContext.Issues.FirstOrDefault(p => p.Id == updatedTask.Id);
+            var issue = _dbContext.Issues.FirstOrDefault(i => i.Id == updatedTask.Id);
 
-            if (task != null)
+            if (issue is null)
             {
-                task.Name = updatedTask.Name;
-                task.AssigneeId = updatedTask.AssigneeId;
-                task.Comment = updatedTask.Comment;
-                task.Status = updatedTask.Status;
-                task.Priority = updatedTask.Priority;
-
-                await this._dbContext.SaveChangesAsync();
+                throw new KeyNotFoundException($"There is no Issue with Id {updatedTask.Id}.");
             }
-        }
 
-        public Issue? Get(int id)
-        {
-            var issue = this._dbContext.Issues.Include(x => x.Project)
-                .Include(x => x.Assignee)
-                .Include(x => x.Reporter)
-                .FirstOrDefault(i => i.Id == id);
+            issue.Name = updatedTask.Name;
+            issue.AssigneeId = updatedTask.AssigneeId;
+            issue.Comment = updatedTask.Comment;
+            issue.Status = updatedTask.Status;
+            issue.Priority = updatedTask.Priority;
 
-            return issue;
-        }
-
-        public IEnumerable<Issue>? GetAllIssues()
-        {
-            var issues = this._dbContext.Issues.Include(x => x.Project)
-                .Include(x => x.Assignee)
-                .Include(x => x.Reporter);
-
-            return issues;
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task Delete(int id)
         {
-            var issue = this._dbContext.Issues.FirstOrDefault(i => i.Id == id);
+            var issue = _dbContext.Issues.FirstOrDefault(i => i.Id == id);
 
-            if (issue != null)
+            if (issue is null)
             {
-                this._dbContext.Issues.Remove(issue);
-                await this._dbContext.SaveChangesAsync();
+                throw new KeyNotFoundException($"There is no Issue with Id {id}.");
             }
+
+            _dbContext.Issues.Remove(issue);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public Issue? Get(int id)
+        {
+            var issue = _dbContext.Issues
+                .Include(i => i.Project)
+                .Include(i => i.Assignee)
+                .Include(i => i.Reporter)
+                .FirstOrDefault(i => i.Id == id);
+
+            return issue;
         }
     }
 }

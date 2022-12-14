@@ -53,11 +53,10 @@
                     {
                         @Html.ActionLink(
                             @project.Manager.Email,
-                            "ViewEmployee",
-                            "Employee",
+                            "ViewUser",
+                            "User",
                             new { id = @project.Manager.Id },
                             null)
-
                     }
                 </td>
                 <td>

@@ -7,70 +7,59 @@ namespace ProjectManagementApp.Services
     public class ProjectService : IProjectService
     {
         private readonly IProjectRepository _projectRepository;
-        private readonly IEmployeeRepository _employeeRepository;
 
-        public ProjectService(IProjectRepository projectRepository, IEmployeeRepository employeeRepository)
+        public ProjectService(IProjectRepository projectRepository)
         {
-            this._projectRepository = projectRepository;
-            this._employeeRepository = employeeRepository;
+            _projectRepository = projectRepository;
         }
 
         public async Task Create(Project newProject)
         {
-            var project = this._projectRepository.Get(newProject.Id);
+            var project = _projectRepository.Get(newProject.Id);
 
-            if (project == null)
+            if (project is null)
             {
-                await this._projectRepository.Create(newProject);
+                throw new KeyNotFoundException($"There is no Project with Id {newProject.Id}.");
             }
+
+            await _projectRepository.Create(newProject);
         }
 
         public async Task Edit(Project updatedProject)
         {
-            var project = this._projectRepository.Get(updatedProject.Id);
-
-            if (project != null)
-            {
-                await this._projectRepository.Update(updatedProject);
-            }
-        }
-
-        public Project? Get(int id)
-        {
-            var project = this._projectRepository.Get(id);
-
-            return project;
-        }
-
-        public IEnumerable<Project> GetAll()
-        {
-            var projects = this._projectRepository.GetAll();
-
-            return projects;
-        }
-
-        public IEnumerable<Employee> GetEmployees(int id)
-        {
-            var employees = this._projectRepository.GetEmployees(id);
-
-            return employees;
-        }
-
-        public bool IsOnProject(int projectId, int employeeId)
-        {
-            var result = this._projectRepository.IsEmployeeOnProject(projectId, employeeId);
-
-            return result;
+            await _projectRepository.Update(updatedProject);
         }
 
         public async Task Delete(int id)
         {
-            var project = this._projectRepository.Get(id);
+            var project = _projectRepository.Get(id);
 
-            if (project != null)
+            if (project is null)
             {
-                await this._projectRepository.Delete(id);
+                throw new KeyNotFoundException($"There is no Project with Id {id}.");
             }
+
+            await _projectRepository.Delete(id);
+        }
+
+        public Project? Get(int id)
+        {
+            return _projectRepository.Get(id);
+        }
+
+        public IEnumerable<Project> GetAll()
+        {
+            return _projectRepository.GetAll();
+        }
+
+        public IEnumerable<Project> GetManagerProjects(int managerId)
+        {
+            return _projectRepository.GetManagerProjects(managerId);
+        }
+
+        public IEnumerable<User> GetUsers(int projectId)
+        {
+            return _projectRepository.GetUsers(projectId);
         }
     }
 }

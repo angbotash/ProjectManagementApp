@@ -1,4 +1,6 @@
-﻿@model ProjectManagementApp.Web.ViewModels.EditIssueViewModel
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using ProjectManagementApp.Domain.Entities
+@model ProjectManagementApp.Web.ViewModels.EditIssueViewModel
 
 @using (Html.BeginForm("Edit", "Issue", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
@@ -11,16 +13,42 @@
         @Html.HiddenFor(m => m.ProjectId)
 
         <div>
-            <b>@Html.LabelFor(m => m.Name)</b>
-            <br />
-            @Html.TextBoxFor(m => m.Name, new { placeholder = "Enter project name" })
+            @if (User.IsInRole(Role.Supervisor.ToString()))
+            {
+                <b>@Html.LabelFor(m => m.Name)</b>
+                <br/>
+                @Html.TextBoxFor(m => m.Name, new {placeholder = "Enter project name"})
+                @Html.ValidationMessageFor(m => m.Name)
+            }
+            else
+            {
+                <b>@Html.LabelFor(m => m.Name)</b>
+                <br/>
+                @Model.Name
+                @Html.HiddenFor(m => m.Name)
+            }
         </div>
 
         <div>
-            <b>@Html.LabelFor(m => m.AssigneeId)</b>
-            <br />
-            @Html.DropDownListFor(m => m.AssigneeId, @Model.Employees, "Select assignee")
-            @Html.HiddenFor(m => m.Employees)
+            @if (User.IsInRole(Role.Supervisor.ToString()) || User.IsInRole(Role.Manager.ToString()))
+            {
+                <b>@Html.LabelFor(m => m.AssigneeId)</b>
+                <br />
+                @Html.DropDownListFor(m => m.AssigneeId, @Model.Employees, "Select assignee")
+                @Html.HiddenFor(m => m.Employees)
+                @Html.ValidationMessageFor(m => m.AssigneeId)
+            }
+            else
+            {
+                @if (@Model.Assignee != null)
+                {
+                    <b>@Html.LabelFor(m => m.AssigneeId)</b>
+                    <br />
+                    @Model.Assignee.Email
+                    @Html.HiddenFor(m => m.AssigneeId)
+                    @Html.HiddenFor(m => m.Assignee)
+                }
+            }
         </div>
 
         <div>
@@ -28,6 +56,7 @@
             <br />
             @Html.DropDownListFor(m => m.Status, @Model.Statuses, "Select status")
             @Html.HiddenFor(m => m.Statuses)
+            @Html.ValidationMessageFor(m => m.Status)
         </div>
 
         <div>
@@ -37,18 +66,36 @@
         </div>
 
         <div>
-            <b>@Html.LabelFor(m => m.Priority)</b>
-            <br />
-            @Html.TextBoxFor(m => m.Priority, new { @type="number", min="1", max="10", placeholder = "Enter executor company name" })
+
+            
+            @if (User.IsInRole(Role.Supervisor.ToString()))
+            {
+                <b>@Html.LabelFor(m => m.Priority)</b>
+                <br />
+                @Html.TextBoxFor(m => m.Priority,
+                    new { @type="number", min="1", max="10", placeholder = "Enter executor company name" })
+                @Html.ValidationMessageFor(m => m.Priority)
+            }
+            else
+            {
+                <b>@Html.LabelFor(m => m.Priority)</b>
+                <br />
+                @Model.Priority
+                @Html.HiddenFor(m => m.Priority)
+            }
         </div>
 
         <div>
         </div>
         <hr>
 
-        @using (Html.BeginForm("Edit", "Project", FormMethod.Post))
+        @using (Html.BeginForm("Edit", "Issue", FormMethod.Post))
         {
             <input type="submit" value="Save" />
         }
     </div>
+}
+
+@section scripts{
+    <partial name="_ValidationScriptsPartial" />
 }

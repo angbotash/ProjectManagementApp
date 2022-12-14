@@ -1,21 +1,25 @@
-﻿@model ProjectManagementApp.Web.ViewModels.CreateEmployeeViewModel
+﻿@model ProjectManagementApp.Web.ViewModels.EditUserViewModel
 
-@using (Html.BeginForm("CreateEmployee", "Employee", FormMethod.Post, new {enctype = "multipart/form-data"}))
+@using (Html.BeginForm("Edit", "User", FormMethod.Post, new {enctype = "multipart/form-data"}))
 {
     <div asp-validation-summary="ModelOnly"></div>
     <div class="container">
-        <h1>Create a new employee</h1>
+        <h1>Edit employee @Model.Email</h1>
         <hr>
+        @Html.HiddenFor(m => m.Id)
+
         <div>
             <b>@Html.LabelFor(m => m.FirstName)</b>
             <br />
             @Html.TextBoxFor(m => m.FirstName, new { placeholder = "Enter first name" })
+            @Html.ValidationMessageFor(m => m.FirstName)
         </div>
 
         <div>
             <b>@Html.LabelFor(m => m.LastName)</b>
             <br />
             @Html.TextBoxFor(m => m.LastName, new { placeholder = "Enter last name" })
+            @Html.ValidationMessageFor(m => m.LastName)
         </div>
 
         <div>
@@ -28,12 +32,17 @@
             <b>@Html.LabelFor(m => m.Email)</b>
             <br />
             @Html.TextBoxFor(m => m.Email, new { placeholder = "Enter email" })
+            @Html.ValidationMessageFor(m => m.Email)
         </div>
         <hr>
-        
-        @using (Html.BeginForm("CreateEmployee", "Employee", FormMethod.Post))
+
+        @using (Html.BeginForm("Edit", "User", FormMethod.Post))
         {
-            <input type="submit" value="Create" />
+            <input type="submit" value="Save" />
         }
     </div>
+}
+
+@section scripts{
+    <partial name="_ValidationScriptsPartial" />
 }

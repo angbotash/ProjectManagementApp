@@ -1,4 +1,6 @@
-﻿namespace ProjectManagementApp.Domain.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ProjectManagementApp.Domain.Entities
 {
     public class Project
     {
@@ -10,9 +12,9 @@
 
         public string ExecutorCompanyName { get; set; } = null!;
 
-        public IList<EmployeeProject> EmployeeProject { get; set; } = null!;
+        public IList<UserProject> UserProject { get; set; } = null!;
 
-        public Employee? Manager { get; set; }
+        public User? Manager { get; set; }
 
         public int? ManagerId { get; set; }
 
@@ -20,6 +22,7 @@
 
         public DateTime EndDate { get; set; }
 
+        [Range(1, 10)]
         public int Priority { get; set; }
 
         public IList<Issue> Issues { get; set; } = null!;
