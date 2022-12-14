@@ -28,8 +28,8 @@ namespace ProjectManagementApp.Domain.Infrastructure
 
             if (item is OperationResult results)
             {
-                result = this.Success == results.Success;
-                result = this.Errors.SequenceEqual(results.Errors);
+                result = Success == results.Success;
+                result = Errors.SequenceEqual(results.Errors);
             }
 
             return result;

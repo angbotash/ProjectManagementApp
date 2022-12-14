@@ -18,18 +18,21 @@ namespace ProjectManagementApp.Web.Controllers
 
         public UserController(IUserService userService, IProjectService projectService, IMapper mapper)
         {
-            this._userService = userService;
-            this._projectService = projectService;
-            this._mapper = mapper;
+            _userService = userService;
+            _projectService = projectService;
+            _mapper = mapper;
         }
 
         [HttpGet("CreateUser")]
         [Authorize(Roles = "Supervisor")]
         public IActionResult CreateUser()
         {
-            var roles = this._userService.GetRoles();
+            var roles = _userService.GetRoles();
             var selectList = roles.Select(x => new SelectListItem(x.Name, x.Name.ToString())).ToList();
-            var model = new CreateUserViewModel() { Roles = selectList };
+            var model = new CreateUserViewModel()
+            {
+                Roles = selectList
+            };
 
             return View(model);
         }
@@ -40,8 +43,8 @@ namespace ProjectManagementApp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = this._mapper.Map<CreateUserViewModel, User>(model);
-                var result = await this._userService.Create(user, model.Password, model.Role);
+                var user = _mapper.Map<CreateUserViewModel, User>(model);
+                var result = await _userService.Create(user, model.Password, model.Role);
 
                 if (result.Success)
                 {
@@ -66,14 +69,14 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            var user = this._userService.Get((int)id);
+            var user = _userService.Get((int)id);
 
             if (user is null)
             {
                 return NotFound();
             }
 
-            var result = this._mapper.Map<User, EditUserViewModel>(user);
+            var result = _mapper.Map<User, EditUserViewModel>(user);
 
             return View(result);
         }
@@ -84,9 +87,9 @@ namespace ProjectManagementApp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var updatedUser = this._mapper.Map<EditUserViewModel, User>(model);
+                var updatedUser = _mapper.Map<EditUserViewModel, User>(model);
 
-                var result = await this._userService.Edit(updatedUser);
+                var result = await _userService.Edit(updatedUser);
 
                 if (result.Success)
                 {
@@ -111,14 +114,14 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            var user = this._userService.Get((int)id);
+            var user = _userService.Get((int)id);
 
             if (user is null)
             {
                 return NotFound();
             }
 
-            await this._userService.Delete((int)id);
+            await _userService.Delete((int)id);
 
             return RedirectToAction("GetAllUsers");
         }
@@ -134,12 +137,12 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            var users = this._userService.GetAll().Where(x => x.Id != currentUser.Id);
+            var users = _userService.GetAll().Where(u => u.Id != currentUser.Id);
             var result = new List<UserViewModel>();
 
-            foreach (var empl in users)
+            foreach (var user in users)
             {
-                var tempUser = this._mapper.Map<User, UserViewModel>(empl);
+                var tempUser = _mapper.Map<User, UserViewModel>(user);
 
                 result.Add(tempUser);
             }
@@ -156,17 +159,17 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            if (this._projectService.Get((int)projectId) is null)
+            if (_projectService.Get((int)projectId) is null)
             {
                 return NotFound();
             }
 
-            if (this._userService.Get((int)userId) is null)
+            if (_userService.Get((int)userId) is null)
             {
                 return NotFound();
             }
 
-            await this._userService.AddToProject((int)projectId, (int)userId);
+            await _userService.AddToProject((int)projectId, (int)userId);
 
             return RedirectToAction("EditProjectEmployees", "Project", new { id = projectId });
         }
@@ -180,17 +183,17 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            if (this._projectService.Get((int)projectId) is null)
+            if (_projectService.Get((int)projectId) is null)
             {
                 return NotFound();
             }
 
-            if (this._userService.Get((int)userId) is null)
+            if (_userService.Get((int)userId) is null)
             {
                 return NotFound();
             }
 
-            await this._userService.RemoveFromProject((int)projectId, (int)userId);
+            await _userService.RemoveFromProject((int)projectId, (int)userId);
 
             return RedirectToAction("EditProjectEmployees", "Project", new { id = projectId });
         }
@@ -203,19 +206,19 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            var user = this._userService.Get((int)id);
+            var user = _userService.Get((int)id);
 
             if (user is null)
             {
                 return NotFound();
             }
 
-            var result = this._mapper.Map<User, UserViewModel>(user);
-            var projects = this._userService.GetProjects((int)id);
+            var result = _mapper.Map<User, UserViewModel>(user);
+            var projects = _userService.GetProjects((int)id);
 
             foreach (var proj in projects)
             {
-                var tempProject = this._mapper.Map<Project, ProjectViewModel>(proj);
+                var tempProject = _mapper.Map<Project, ProjectViewModel>(proj);
 
                 result.Projects.Add(tempProject);
             }

@@ -16,9 +16,9 @@ namespace ProjectManagementApp.Web.Controllers
 
         public HomeController(IUserService userService, IMapper mapper, ILogger<HomeController> logger)
         {
-            this._userService = userService;
-            this._mapper = mapper;
-            this._logger = logger;
+            _userService = userService;
+            _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<IActionResult> Index()
@@ -30,7 +30,7 @@ namespace ProjectManagementApp.Web.Controllers
                 return View(null);
             }
             
-            var userModel = this._mapper.Map<User, UserViewModel>(currentUser);
+            var userModel = _mapper.Map<User, UserViewModel>(currentUser);
 
             return View(userModel);
         }

@@ -10,51 +10,44 @@ namespace ProjectManagementApp.Services
 
         public IssueService(IIssueRepository issueRepository)
         {
-            this._issueRepository = issueRepository;
+            _issueRepository = issueRepository;
         }
 
         public async Task Create(Issue newIssue)
         {
-            var issue = this._issueRepository.Get(newIssue.Id);
+            var issue = _issueRepository.Get(newIssue.Id);
 
             if (issue == null)
             {
-                await this._issueRepository.Create(newIssue);
+                await _issueRepository.Create(newIssue);
             }
         }
 
         public async Task Edit(Issue updatedIssue)
         {
-            var issue = this._issueRepository.Get(updatedIssue.Id);
+            var issue = _issueRepository.Get(updatedIssue.Id);
 
             if (issue != null)
             {
-                await this._issueRepository.Update(updatedIssue);
+                await _issueRepository.Update(updatedIssue);
             }
         }
 
         public async Task Delete(int id)
         {
-            var issue = this._issueRepository.Get(id);
+            var issue = _issueRepository.Get(id);
 
             if (issue != null)
             {
-                await this._issueRepository.Delete(id);
+                await _issueRepository.Delete(id);
             }
         }
 
         public Issue? Get(int id)
         {
-            var issue = this._issueRepository.Get(id);
+            var issue = _issueRepository.Get(id);
 
             return issue;
-        }
-
-        public IEnumerable<Issue>? GetAllIssues()
-        {
-            var issues = this._issueRepository.GetAllIssues();
-
-            return issues;
         }
     }
 }

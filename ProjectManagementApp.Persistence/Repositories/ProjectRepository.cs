@@ -130,12 +130,5 @@ namespace ProjectManagementApp.Persistence.Repositories
 
             return result;
         }
-
-        public bool IsUserOnProject(int userId, int projectId)
-        {
-            var userProject = _dbContext.UserProject.FirstOrDefault(up => up.UserId == userId && up.ProjectId == projectId);
-
-            return userProject != null;
-        }
     }
 }
