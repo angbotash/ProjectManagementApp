@@ -140,7 +140,7 @@ namespace ProjectManagementApp.Web.Controllers
                     sortedProjects = sortedProjects.OrderByDescending(s => s.StartDate);
                     break;
                 case "end_date_desc":
-                    sortedProjects = sortedProjects.OrderByDescending(s => s.StartDate);
+                    sortedProjects = sortedProjects.OrderByDescending(s => s.EndDate);
                     break;
                 case "Priority":
                     sortedProjects = sortedProjects.OrderBy(s => s.Priority);

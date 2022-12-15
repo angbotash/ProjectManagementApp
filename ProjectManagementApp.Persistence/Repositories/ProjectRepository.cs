@@ -2,20 +2,16 @@
 using Microsoft.EntityFrameworkCore;
 using ProjectManagementApp.Domain.Entities;
 using ProjectManagementApp.Domain.RepositoryInterfaces;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using System.ComponentModel;
 
 namespace ProjectManagementApp.Persistence.Repositories
 {
     public class ProjectRepository : IProjectRepository
     {
         private readonly ApplicationContext _dbContext;
-        private readonly UserManager<User> _userManager;
 
-        public ProjectRepository(ApplicationContext dbContext, UserManager<User> userManager)
+        public ProjectRepository(ApplicationContext dbContext)
         {
             _dbContext = dbContext;
-            _userManager = userManager;
         }
 
         public async Task Create(Project newProject)
