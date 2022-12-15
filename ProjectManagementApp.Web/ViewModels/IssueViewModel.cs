@@ -1,6 +1,4 @@
-﻿using ProjectManagementApp.Domain.Entities;
-
-namespace ProjectManagementApp.Web.ViewModels
+﻿namespace ProjectManagementApp.Web.ViewModels
 {
     public class IssueViewModel
     {

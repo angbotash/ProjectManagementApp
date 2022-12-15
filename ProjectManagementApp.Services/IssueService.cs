@@ -1,4 +1,5 @@
 ﻿using ProjectManagementApp.Domain.Entities;
+using ProjectManagementApp.Domain.QueryOrder;
 using ProjectManagementApp.Domain.RepositoryInterfaces;
 using ProjectManagementApp.Domain.ServiceInterfaces;
 
@@ -20,7 +21,7 @@ namespace ProjectManagementApp.Services
 
         public async Task EditAsync(Issue updatedIssue)
         {
-            var issue = _issueRepository.GetByIdAsync(updatedIssue.Id);
+            var issue = await _issueRepository.GetByIdAsync(updatedIssue.Id);
 
             if (issue is null)
             {
@@ -32,7 +33,7 @@ namespace ProjectManagementApp.Services
 
         public async Task DeleteAsync(int id)
         {
-            var issue = _issueRepository.GetByIdAsync(id);
+            var issue = await _issueRepository.GetByIdAsync(id);
 
             if (issue is null)
             {
@@ -44,8 +45,25 @@ namespace ProjectManagementApp.Services
 
         public async Task<Issue?> GetByIdAsync(int id)
         {
-            var a = await _issueRepository.GetByIdAsync(id);
-            return a;
+            return await _issueRepository.GetByIdAsync(id);
+        }
+
+        public async Task<IEnumerable<Issue>> GetReportedIssuesAsync(int userId, SortDirection direction = SortDirection.Ascending, string? order = null,
+            string? filter = null)
+        {
+            return await _issueRepository.GetReportedIssuesAsync(userId, direction, order, filter);
+        }
+
+        public async Task<IEnumerable<Issue>> GetAssignedIssuesAsync(int userId, SortDirection direction = SortDirection.Ascending, string? order = null,
+            string? filter = null)
+        {
+            return await _issueRepository.GetAssignedIssuesAsync(userId, direction, order, filter);
+        }
+
+        public async Task<IEnumerable<Issue>> GetProjectIssuesAsync(int projectId, SortDirection direction = SortDirection.Ascending, string? order = null,
+            string? filter = null)
+        {
+            return await _issueRepository.GetProjectIssuesAsync(projectId, direction, order, filter);
         }
     }
 }

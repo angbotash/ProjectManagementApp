@@ -1,37 +1,45 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
-@model List<ProjectManagementApp.Web.ViewModels.ProjectViewModel>
+@using ProjectManagementApp.Domain.QueryOrder
+@model ProjectsViewModel
 
 <h2>Projects<a class="btn btn-outline-dark" asp-controller="Project" asp-action="CreateProject" style="float: right">Create a new project</a></h2>
 
-@if (Model.Any())
+<hr/>
+<form asp-controller="Project" asp-action="GetAllProjects" asp-route-filter="" method="get">
+    Name: <input type="search" name="Name" asp-for="Filter" />
+    <input type="submit" value="Filter" />
+</form> 
+<hr/>
+
+@if (Model.Projects.Any())
 {
     <table class="table">
         <thead>
         <tr>
             <th>
-                <a asp-action="GetAllProjects" asp-route-sortOrder="@ViewData["NameSortParam"]">Project name</a>
+                <a asp-action="GetAllProjects" asp-route-order="Name" asp-route-direction="@Model.GetNextSortDirection("Name", SortDirection.Ascending)">Project name</a>
             </th>
             <th>
-                Customer
+                <a asp-action="GetAllProjects" asp-route-order="ClientCompanyName" asp-route-direction="@Model.GetNextSortDirection("ClientCompanyName", SortDirection.Ascending)">Client company</a>
             </th>
             <th>
-                Executor
+                <a asp-action="GetAllProjects" asp-route-order="ExecutorCompanyName" asp-route-direction="@Model.GetNextSortDirection("ExecutorCompanyName", SortDirection.Ascending)">Executor company</a>
             </th>
             <th>
-                Manager
+                <a asp-action="GetAllProjects" asp-route-order="Manager" asp-route-direction="@Model.GetNextSortDirection("Manager", SortDirection.Ascending)">Manager</a>
             </th>
             <th>
-                <a asp-action="GetAllProjects" asp-route-sortOrder="@ViewData["StartDateSortParam"]">Start date</a>
+                <a asp-action="GetAllProjects" asp-route-order="StartDate" asp-route-direction="@Model.GetNextSortDirection("StartDate", SortDirection.Ascending)">Start date</a>
             </th>
             <th>
-                <a asp-action="GetAllProjects" asp-route-sortOrder="@ViewData["EndDateSortParam"]">End date</a>
+                <a asp-action="GetAllProjects" asp-route-order="EndDate" asp-route-direction="@Model.GetNextSortDirection("EndDate", SortDirection.Ascending)">End date</a>
             </th>
             <th>
-                <a asp-action="GetAllProjects" asp-route-sortOrder="@ViewData["PrioritySortParam"]">Priority</a>
+                <a asp-action="GetAllProjects" asp-route-order="Priority" asp-route-direction="@Model.GetNextSortDirection("Priority", SortDirection.Ascending)">Priority</a>
             </th>
         </tr>
         </thead>
-        @foreach (var project in Model)
+        @foreach (var project in Model.Projects)
         {
             <tr>
                 <td>
@@ -49,7 +57,7 @@
                     @project.ExecutorCompanyName
                 </td>
                 <td>
-                    @if (project.Manager.Email != null)
+                    @if (project.Manager?.Email != null)
                     {
                         @Html.ActionLink(
                             @project.Manager.Email,

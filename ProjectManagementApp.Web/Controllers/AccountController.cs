@@ -76,7 +76,7 @@ namespace ProjectManagementApp.Web.Controllers
             return View(model);
         }
 
-        [HttpPost("LogoutAsync")]
+        [HttpPost("Logout")]
         public IActionResult Logout()
         {
             _userService.LogoutAsync();

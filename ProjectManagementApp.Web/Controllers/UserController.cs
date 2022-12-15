@@ -60,7 +60,7 @@ namespace ProjectManagementApp.Web.Controllers
             return View(model);
         }
 
-        [HttpGet("EditAsync")]
+        [HttpGet("Edit")]
         [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> EditAsync(int? id)
         {
@@ -81,7 +81,7 @@ namespace ProjectManagementApp.Web.Controllers
             return View(result);
         }
 
-        [HttpPost("EditAsync")]
+        [HttpPost("Edit")]
         [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> Edit(EditUserViewModel model)
         {
@@ -95,7 +95,7 @@ namespace ProjectManagementApp.Web.Controllers
             return RedirectToAction("ViewUser", new { id = model.Id });
         }
 
-        [HttpPost("DeleteAsync")]
+        [HttpPost("Delete")]
         [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -128,24 +128,13 @@ namespace ProjectManagementApp.Web.Controllers
             }
 
             var users = await _userService.GetAllAsync();
-            var result = new List<UserViewModel>();
+            var model = _mapper.Map<IList<UserViewModel>>(users);
+            model = model.Where(u => u.Id != currentUser.Id).ToList();
 
-            foreach (var user in users)
-            {
-                var tempUser = _mapper.Map<User, UserViewModel>(user);
-
-                if (tempUser.Id == currentUser.Id)
-                {
-                    continue;
-                }
-
-                result.Add(tempUser);
-            }
-
-            return View(result);
+            return View(model);
         }
 
-        [HttpPost("AddToProjectAsync")]
+        [HttpPost("AddToProject")]
         [Authorize(Roles = "Supervisor, Manager")]
         public async Task<IActionResult> AddToProject(int? projectId, int? userId)
         {
@@ -169,7 +158,7 @@ namespace ProjectManagementApp.Web.Controllers
             return RedirectToAction("EditProjectEmployees", "Project", new { id = projectId });
         }
 
-        [HttpPost("RemoveFromProjectAsync")]
+        [HttpPost("RemoveFromProject")]
         [Authorize(Roles = "Supervisor, Manager")]
         public async Task<IActionResult> RemoveFromProject(int? projectId, int? userId)
         {
@@ -208,16 +197,11 @@ namespace ProjectManagementApp.Web.Controllers
                 return NotFound();
             }
 
-            var result = _mapper.Map<User, UserViewModel>(user);
+            var model = _mapper.Map<User, UserViewModel>(user);
+            var projects = user.UserProjects.Select(x => x.Project).ToList();
+            model.Projects = _mapper.Map<IList<ProjectViewModel>>(projects);
 
-            foreach (var proj in user.UserProjects)
-            {
-                var tempProject = _mapper.Map<Project, ProjectViewModel>(proj.Project);
-
-                result.Projects.Add(tempProject);
-            }
-
-            return View(result);
+            return View(model);
         }
     }
 }

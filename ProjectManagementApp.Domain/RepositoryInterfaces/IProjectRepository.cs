@@ -1,4 +1,5 @@
 ﻿using ProjectManagementApp.Domain.Entities;
+using ProjectManagementApp.Domain.QueryOrder;
 
 namespace ProjectManagementApp.Domain.RepositoryInterfaces
 {
@@ -12,8 +13,9 @@ namespace ProjectManagementApp.Domain.RepositoryInterfaces
 
         Task<Project?> GetByIdAsync(int id);
 
-        Task<IList<Project>> GetAllAsync();
-
         Task<IList<Project>> GetManagerProjectsAsync(int managerId);
+
+        Task<IList<Project>> GetOrderedListAsync(SortDirection direction = SortDirection.Ascending,
+            string? order = null, string? filter = null);
     }
 }

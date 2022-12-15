@@ -29,7 +29,7 @@ namespace ProjectManagementApp.Persistence
             SeedSupervisor(modelBuilder);
         }
 
-        private void SeedRoles(ModelBuilder modelBuilder)
+        private static void SeedRoles(ModelBuilder modelBuilder)
         {
             // Seed roles
             modelBuilder.Entity<IdentityRole<int>>().HasData(
@@ -56,7 +56,7 @@ namespace ProjectManagementApp.Persistence
                 });
         }
 
-        private void SeedSupervisor(ModelBuilder modelBuilder)
+        private static void SeedSupervisor(ModelBuilder modelBuilder)
         {
             // Add supervisor
             var supervisor = new User()

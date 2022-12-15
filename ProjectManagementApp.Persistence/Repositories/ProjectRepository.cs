@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Linq.Dynamic.Core;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagementApp.Domain.Entities;
+using ProjectManagementApp.Domain.QueryOrder;
 using ProjectManagementApp.Domain.RepositoryInterfaces;
 
 namespace ProjectManagementApp.Persistence.Repositories
@@ -52,16 +53,27 @@ namespace ProjectManagementApp.Persistence.Repositories
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public async Task<IList<Project>> GetAllAsync()
+        public async Task<IList<Project>> GetOrderedListAsync(SortDirection direction = SortDirection.Ascending, string? order = null, string? filter = null)
         {
-            var projects = _dbContext.Projects
+            var query = _dbContext.Projects
                 .Include(p => p.Manager)
                 .Include(p => p.Issues)
                     .ThenInclude(i => i.Assignee)
                 .Include(p => p.Issues)
-                    .ThenInclude(i => i.Reporter);
+                    .ThenInclude(i => i.Reporter)
+                .AsQueryable();
 
-            return await projects.ToListAsync();
+            if (filter != null)
+            {
+                query = query.Where(p => p.Name == filter);
+            }
+
+            if (order != null)
+            {
+                query = query.OrderBy($"{order} {direction}");
+            }
+
+            return await query.ToListAsync();
         }
 
         public async Task<IList<Project>> GetManagerProjectsAsync(int managerId)

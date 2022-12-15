@@ -1,4 +1,5 @@
 ﻿using ProjectManagementApp.Domain.Entities;
+using ProjectManagementApp.Domain.QueryOrder;
 using ProjectManagementApp.Domain.RepositoryInterfaces;
 using ProjectManagementApp.Domain.ServiceInterfaces;
 
@@ -40,9 +41,9 @@ namespace ProjectManagementApp.Services
             return await _projectRepository.GetByIdAsync(id);
         }
 
-        public async Task<IEnumerable<Project>> GetAllAsync()
+        public async Task<IEnumerable<Project>> GetOrderedListAsync(SortDirection direction = SortDirection.Ascending, string? order = null, string? filter = null)
         {
-            return await _projectRepository.GetAllAsync();
+            return await _projectRepository.GetOrderedListAsync(direction, order, filter);
         }
 
         public  async Task<IEnumerable<Project>> GetManagerProjectsAsync(int managerId)

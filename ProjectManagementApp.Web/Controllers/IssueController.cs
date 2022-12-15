@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ProjectManagementApp.Domain.Entities;
+using ProjectManagementApp.Domain.QueryOrder;
 using ProjectManagementApp.Domain.ServiceInterfaces;
 using ProjectManagementApp.Web.ViewModels;
 using IssueStatus = ProjectManagementApp.Web.ViewModels.IssueStatus;
@@ -15,29 +16,22 @@ namespace ProjectManagementApp.Web.Controllers
     {
         private readonly IIssueService _issueService;
         private readonly IUserService _userService;
-        private readonly IProjectService _projectService;
         private readonly IMapper _mapper;
 
-        public IssueController(IIssueService issueService, IUserService userService, IProjectService projectService, IMapper mapper)
+        public IssueController(IIssueService issueService, IUserService userService, IMapper mapper)
         {
             _issueService = issueService;
             _userService = userService;
-            _projectService = projectService;
             _mapper = mapper;
         }
 
-        [HttpGet("CreateAsync")]
+        [HttpGet("Create")]
         [Authorize(Roles = "Supervisor, Manager")]
         public async Task<ActionResult> Create(int? projectId)
         {
             if (projectId is null)
             {
                 return BadRequest();
-            }
-
-            if (_projectService.GetByIdAsync((int)projectId) == null)
-            {
-                return NotFound();
             }
 
             var allEmployees = await _userService.GetEmployeesAsync();
@@ -67,7 +61,7 @@ namespace ProjectManagementApp.Web.Controllers
             return View(model);
         }
 
-        [HttpPost("CreateAsync")]
+        [HttpPost("Create")]
         [Authorize(Roles = "Supervisor, Manager")]
         public async Task<ActionResult> Create(CreateIssueViewModel model)
         {
@@ -83,7 +77,7 @@ namespace ProjectManagementApp.Web.Controllers
             return View(model);
         }
 
-        [HttpGet("EditAsync")]
+        [HttpGet("Edit")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id is null)
@@ -118,7 +112,7 @@ namespace ProjectManagementApp.Web.Controllers
             return View(model);
         }
 
-        [HttpPost("EditAsync")]
+        [HttpPost("Edit")]
         public async Task<IActionResult> Edit(EditIssueViewModel model)
         {
             if (ModelState.IsValid)
@@ -133,7 +127,7 @@ namespace ProjectManagementApp.Web.Controllers
             return View(model);
         }
 
-        [HttpPost("DeleteAsync")]
+        [HttpPost("Delete")]
         [Authorize(Roles = "Supervisor, Manager")]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -176,117 +170,70 @@ namespace ProjectManagementApp.Web.Controllers
             return View(result);
         }
 
-        //[HttpGet("ViewAllIssues")]
-        //public IActionResult ViewAllIssues(int? userId, string sortOrder, string issueKind = "")
-        //{
-        //    if (userId is null)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    var employee = this._userService.GetByIdAsync((int) userId);
-
-        //    if (employee is null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var tempEmployee = this._mapper.Map<User, UserViewModel>(employee);
-
-        //    ViewData["NameSortParam"] = string.IsNullOrEmpty(sortOrder) ? "name_desc" : string.Empty;
-        //    ViewData["StatusSortParam"] = sortOrder == "Status" ? "status_desc" : "Status";
-        //    ViewData["PrioritySortParam"] = sortOrder == "Priority" ? "priority_desc" : "Priority";
-
-        //    IEnumerable<IssueViewModel> sortedIssues = issueKind == "assignee"
-        //        ? tempEmployee.AssignedIssues
-        //        : tempEmployee.ReportedIssues;
-
-        //    switch (sortOrder)
-        //    {
-        //        case "name_desc":
-        //            sortedIssues = sortedIssues.OrderByDescending(s => s.Name);
-        //            break;
-        //        case "Status":
-        //            sortedIssues = sortedIssues.OrderBy(s => s.Status);
-        //            break;
-        //        case "status_desc":
-        //            sortedIssues = sortedIssues.OrderByDescending(s => s.Status);
-        //            break;
-        //        case "Priority":
-        //            sortedIssues = sortedIssues.OrderBy(s => s.Priority);
-        //            break;
-        //        case "priority_desc":
-        //            sortedIssues = sortedIssues.OrderByDescending(s => s.Priority);
-        //            break;
-        //        default:
-        //            sortedIssues = sortedIssues.OrderBy(s => s.Name);
-        //            break;
-        //    }
-
-        //    return View(sortedIssues.ToList());
-        //}
-
-        [HttpGet("ViewAssignedIssues")]
-        public async Task<IActionResult> ViewAssignedIssuesAsync(int? userId)
+        [HttpGet("ViewReportedIssues")]
+        public async Task<IActionResult> ViewReportedIssues(int? userId, SortDirection direction = SortDirection.Ascending, string? order = null, string? filter = null)
         {
             if (userId is null)
             {
                 return BadRequest();
             }
 
-            var user = await _userService.GetByIdAsync((int)userId);
+            var issues = await _issueService.GetReportedIssuesAsync((int)userId, direction, order, filter);
 
-            if (user is null)
+            var model = new IssuesViewModel()
             {
-                return NotFound();
-            }
+                Issues = _mapper.Map<IList<IssueViewModel>>(issues),
+                ReporterId = (int)userId,
+                Direction = direction,
+                Order = order,
+                Filter = filter
+            };
 
-            var tempUser = _mapper.Map<User, UserViewModel>(user);
-            var issues = tempUser.AssignedIssues;
-
-            return View(issues);
+            return View(model);
         }
 
-        [HttpGet("ViewReportedIssues")]
-        public async Task<IActionResult> ViewReportedIssues(int? userId)
+        [HttpGet("ViewAssignedIssues")]
+        public async Task<IActionResult> ViewAssignedIssuesAsync(int? userId, SortDirection direction = SortDirection.Ascending, string? order = null, string? filter = null)
         {
             if (userId is null)
             {
                 return BadRequest();
             }
 
-            var user = await _userService.GetByIdAsync((int)userId);
+            var issues = await _issueService.GetAssignedIssuesAsync((int)userId, direction, order, filter);
 
-            if (user is null)
+            var model = new IssuesViewModel()
             {
-                return NotFound();
-            }
+                Issues = _mapper.Map<IList<IssueViewModel>>(issues),
+                AsigneeId = (int)userId,
+                Direction = direction,
+                Order = order,
+                Filter = filter
+            };
 
-            var tempUser = _mapper.Map<User, UserViewModel>(user);
-            var issues = tempUser.ReportedIssues;
-
-            return View(issues);
+            return View(model);
         }
 
         [HttpGet("ViewProjectIssues")]
-        public async Task<IActionResult> ViewProjectIssues(int? projectId)
+        public async Task<IActionResult> ViewProjectIssues(int? projectId, SortDirection direction = SortDirection.Ascending, string? order = null, string? filter = null)
         {
             if (projectId is null)
             {
                 return BadRequest();
             }
 
-            var project = await _projectService.GetByIdAsync((int)projectId);
+            var issues = await _issueService.GetProjectIssuesAsync((int)projectId, direction, order, filter);
 
-            if (project is null)
+            var model = new IssuesViewModel()
             {
-                return NotFound();
-            }
+                Issues = _mapper.Map<IList<IssueViewModel>>(issues),
+                ProjectId = (int)projectId,
+                Direction = direction,
+                Order = order,
+                Filter = filter
+            };
 
-            var tempProject = _mapper.Map<Project, ProjectViewModel>(project);
-            var issues = tempProject.Issues;
-
-            return View(issues);
+            return View(model);
         }
     }
 }

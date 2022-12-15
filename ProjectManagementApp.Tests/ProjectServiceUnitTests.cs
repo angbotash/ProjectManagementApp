@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Moq;
+﻿using Moq;
 using ProjectManagementApp.Domain.Entities;
 using ProjectManagementApp.Domain.RepositoryInterfaces;
-using ProjectManagementApp.Domain.ServiceInterfaces;
 using ProjectManagementApp.Services;
 using Xunit;
 
@@ -24,20 +22,10 @@ namespace ProjectManagementApp.Tests
         public async Task CreateAsync_Creates_Project()
         {
             // Arrange
-            var newProject = new Project
-            {
-                Name = "New Project Name",
-                ClientCompanyName = "Client",
-                ExecutorCompanyName = "Executor",
-                StartDate = new DateTime(2022, 12, 12),
-                EndDate = new DateTime(2023, 9, 15),
-                Priority = 1
-            };
-
-            _projectRepositoryMock.Setup(m => m.CreateAsync(newProject));
+            _projectRepositoryMock.Setup(m => m.CreateAsync(It.IsAny<Project>()));
 
             // Act
-            await _projectService.CreateAsync(newProject);
+            await _projectService.CreateAsync(It.IsAny<Project>());
 
             // Assert
             _projectRepositoryMock.Verify(m => m.CreateAsync(It.IsAny<Project>()), Times.Once);
@@ -47,20 +35,10 @@ namespace ProjectManagementApp.Tests
         public async Task EditAsync_Edits_Project()
         {
             // Arrange
-            var editedProject = new Project()
-            {
-                Name = "Edited Project Name",
-                ClientCompanyName = "Client Edited",
-                ExecutorCompanyName = "Executor Edited",
-                StartDate = new DateTime(2022, 12, 12),
-                EndDate = new DateTime(2023, 11, 11),
-                Priority = 4
-            };
-            
-            _projectRepositoryMock.Setup(m => m.UpdateAsync(editedProject));
+            _projectRepositoryMock.Setup(m => m.UpdateAsync(It.IsAny<Project>()));
 
             // Act
-            await _projectService.EditAsync(editedProject);
+            await _projectService.EditAsync(It.IsAny<Project>());
 
             // Assert
             _projectRepositoryMock.Verify(m => m.UpdateAsync(It.IsAny<Project>()), Times.Once);
@@ -122,19 +100,19 @@ namespace ProjectManagementApp.Tests
             _projectRepositoryMock.Verify(m => m.GetByIdAsync(It.IsAny<int>()), Times.Once());
         }
 
-        [Fact]
-        public async Task GetAllAsync_Returns_Collection_Of_Projects()
-        {
-            // Arrange
-            _projectRepositoryMock.Setup(m => m.GetAllAsync()).ReturnsAsync(new List<Project>());
+        //[Fact]
+        //public async Task GetAllAsync_Returns_Collection_Of_Projects()
+        //{
+        //    // Arrange
+        //    _projectRepositoryMock.Setup(m => m.GetAllAsync()).ReturnsAsync(new List<Project>());
 
-            // Act
-            var result = await _projectService.GetAllAsync();
+        //    // Act
+        //    var result = await _projectService.GetAllAsync();
 
-            // Assert
-            Assert.IsType<List<Project>>(result);
-            _projectRepositoryMock.Verify(m => m.GetAllAsync(), Times.Once());
-        }
+        //    // Assert
+        //    Assert.IsType<List<Project>>(result);
+        //    _projectRepositoryMock.Verify(m => m.GetAllAsync(), Times.Once());
+        //}
 
         [Fact]
         public async Task GetManagerProjectsAsync_Returns__Projects_Of_Manager()

@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProjectManagementApp.Domain.Entities;
-using System.ComponentModel.DataAnnotations;
 
 namespace ProjectManagementApp.Persistence.Configurations
 {

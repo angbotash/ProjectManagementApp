@@ -1,7 +1,6 @@
 ﻿using Moq;
 using ProjectManagementApp.Domain.Entities;
 using ProjectManagementApp.Domain.RepositoryInterfaces;
-using ProjectManagementApp.Domain.ServiceInterfaces;
 using ProjectManagementApp.Services;
 using Xunit;
 
@@ -84,12 +83,10 @@ namespace ProjectManagementApp.Tests
             };
 
             _issueRepositoryMock.Setup(m => m.GetByIdAsync(editedIssue.Id)).ReturnsAsync((Issue?)null);
-
-            // Act
-            await _issueService.EditAsync(editedIssue);
+            _issueRepositoryMock.Setup(m => m.UpdateAsync(It.IsAny<Issue>()));
 
             // Assert
-            //await Assert.ThrowsAsync<KeyNotFoundException>(() => _issueService.EditAsync(editedIssue));
+            await Assert.ThrowsAsync<KeyNotFoundException>(() => _issueService.EditAsync(editedIssue));
             _issueRepositoryMock.Verify(m => m.GetByIdAsync(It.IsAny<int>()), Times.Once);
             _issueRepositoryMock.Verify(m => m.UpdateAsync(It.IsAny<Issue>()), Times.Never);
         }

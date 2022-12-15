@@ -1,35 +1,44 @@
 ﻿@using ProjectManagementApp.Domain.Entities
-@model IList<ProjectManagementApp.Web.ViewModels.IssueViewModel>
+@using ProjectManagementApp.Domain.QueryOrder
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model IssuesViewModel
 
 <h4>Issues</h4>
 
+<hr />
+<form>
+    Name: <input type="text" />
+    <input type="submit" value="Filter" />
+</form>
+<hr />
+
 <table class="table">
     <thead>
-    <tr>
-        <th>
-            Name
-        </th>
-        <th>
-            Reporter
-        </th>
-        <th>
-            Assignee
-        </th>
-        <th>
-            Project
-        </th>
-        <th>
-            Comment
-        </th>
-        <th>
-            Status
-        </th>
-        <th>
-            Priority
-        </th>
-    </tr>
+        <tr>
+            <th>
+                <a asp-action="ViewAssignedIssues" asp-route-userId="@Model.AsigneeId" asp-route-order="Name" asp-route-direction="@Model.GetNextSortDirection("Name", SortDirection.Ascending)">Issue name</a>
+            </th>
+            <th>
+                <a asp-action="ViewAssignedIssues" asp-route-userId="@Model.AsigneeId" asp-route-order="Reporter" asp-route-direction="@Model.GetNextSortDirection("Reporter", SortDirection.Ascending)">Reporter</a>
+            </th>
+            <th>
+                <a asp-action="ViewAssignedIssues" asp-route-userId="@Model.AsigneeId" asp-route-order="Assignee" asp-route-direction="@Model.GetNextSortDirection("Assignee", SortDirection.Ascending)">Assignee</a>
+            </th>
+            <th>
+                <a asp-action="ViewAssignedIssues" asp-route-userId="@Model.AsigneeId" asp-route-order="Project" asp-route-direction="@Model.GetNextSortDirection("Project", SortDirection.Ascending)">Project</a>
+            </th>
+            <th>
+                Comment
+            </th>
+            <th>
+                <a asp-action="ViewAssignedIssues" asp-route-userId="@Model.AsigneeId" asp-route-order="Status" asp-route-direction="@Model.GetNextSortDirection("Status", SortDirection.Ascending)">Status</a>
+            </th>
+            <th>
+                <a asp-action="ViewAssignedIssues" asp-route-userId="@Model.AsigneeId" asp-route-order="Priority" asp-route-direction="@Model.GetNextSortDirection("Priority", SortDirection.Ascending)">Priority</a>
+            </th>
+        </tr>
     </thead>
-    @foreach (var issue in Model)
+    @foreach (var issue in Model.Issues)
     {
         <tr>
             <td>
@@ -48,11 +57,11 @@
                 else
                 {
                     @Html.ActionLink(
-                        @issue.Reporter.Email,
-                        "ViewUser",
-                        "User",
-                        new {id = @issue.Reporter.Id},
-                        null) 
+            @issue.Reporter.Email,
+            "ViewUser",
+            "User",
+            new {id = @issue.Reporter.Id},
+            null)
                 }
             </td>
             <td>
@@ -63,11 +72,11 @@
                 else
                 {
                     @Html.ActionLink(
-                        @issue.Assignee.Email,
-                        "ViewUser",
-                        "User",
-                        new {id = @issue.Assignee.Id},
-                        null) 
+            @issue.Assignee.Email,
+            "ViewUser",
+            "User",
+            new {id = @issue.Assignee.Id},
+            null)
                 }
             </td>
             <td>

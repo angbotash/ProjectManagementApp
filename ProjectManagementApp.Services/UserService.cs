@@ -41,7 +41,7 @@ namespace ProjectManagementApp.Services
 
             if (createResult.Succeeded)
             {
-                role = role == string.Empty ? "Employee" : role;
+                role = role == string.Empty ? Role.Employee.ToString() : role;
 
                 await _userManager.AddToRoleAsync(newUser, role);
 
@@ -63,13 +63,16 @@ namespace ProjectManagementApp.Services
 
             if (user is null)
             {
-                throw new KeyNotFoundException($"There is no User with Id {updatedUser.Id}.");
+                result.AddError($"There is no User with Id {updatedUser.Id}.");
+
+                return result;
             }
 
             user.FirstName = updatedUser.FirstName;
             user.LastName = updatedUser.LastName;
             user.Patronymic = updatedUser.Patronymic;
             user.Email = updatedUser.Email;
+            user.UserName = updatedUser.Email;
 
             var updateResult = await _userManager.UpdateAsync(user);
 
@@ -88,7 +91,7 @@ namespace ProjectManagementApp.Services
 
         public async Task DeleteAsync(int id)
         {
-            var user = _userRepository.GetByIdAsync(id);
+            var user = await _userRepository.GetByIdAsync(id);
 
             if (user is null)
             {
@@ -102,8 +105,9 @@ namespace ProjectManagementApp.Services
         {
             var existingUser = await _userManager.FindByEmailAsync(email);
             var result = new OperationResult(false);
+            var correctPassword = await _userManager.CheckPasswordAsync(existingUser, password);
 
-            if (existingUser != null && await _userManager.CheckPasswordAsync(existingUser, password))
+            if (existingUser != null && correctPassword)
             {
                 var resultLogin = await _signInManager.PasswordSignInAsync(existingUser, password, true, false);
 

@@ -1,4 +1,5 @@
 ﻿using ProjectManagementApp.Domain.Entities;
+using ProjectManagementApp.Domain.QueryOrder;
 
 namespace ProjectManagementApp.Domain.ServiceInterfaces
 {
@@ -12,7 +13,8 @@ namespace ProjectManagementApp.Domain.ServiceInterfaces
 
         Task<Project?> GetByIdAsync(int id);
 
-        Task<IEnumerable<Project>> GetAllAsync();
+        Task<IEnumerable<Project>> GetOrderedListAsync(SortDirection direction = SortDirection.Ascending,
+            string? order = null, string? filter = null);
 
         Task<IEnumerable<Project>> GetManagerProjectsAsync(int managerId);
     }
