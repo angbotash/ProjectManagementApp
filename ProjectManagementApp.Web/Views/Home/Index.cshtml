@@ -4,8 +4,8 @@
 ﻿@if (!User.Identity.IsAuthenticated)
 {
 <span style="display: inline; float: left">
-    <a class="btn btn-outline-dark" asp-controller="Account" asp-action="Login">Create employee</a>
-    <a class="btn btn-outline-dark" asp-controller="Account" asp-action="Login">Create project</a>
+    <a class="btn btn-outline-dark" asp-controller="Account" asp-action="Login">CreateAsync employee</a>
+    <a class="btn btn-outline-dark" asp-controller="Account" asp-action="Login">CreateAsync project</a>
 </span>
 }
 @if (User.IsInRole(Role.Employee.ToString()) && Model != null)
@@ -33,8 +33,8 @@
     <a asp-controller="User" asp-action="ViewUser" asp-route-id="@Model.Id">My profile</a>
     <hr/>
     <span style="display: inline; float: left">
-        <a class="btn btn-outline-dark" asp-controller="User" asp-action="CreateUser">Create employee</a>
-        <a class="btn btn-outline-dark" asp-controller="Project" asp-action="CreateProject">Create project</a>
+        <a class="btn btn-outline-dark" asp-controller="User" asp-action="CreateUser">CreateAsync employee</a>
+        <a class="btn btn-outline-dark" asp-controller="Project" asp-action="CreateProject">CreateAsync project</a>
     </span>
 }
 

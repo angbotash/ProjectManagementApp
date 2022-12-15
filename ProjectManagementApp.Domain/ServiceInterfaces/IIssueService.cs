@@ -4,12 +4,12 @@ namespace ProjectManagementApp.Domain.ServiceInterfaces
 {
     public interface IIssueService
     {
-        Task Create(Issue newIssue);
+        Task CreateAsync(Issue newIssue);
 
-        Task Edit(Issue updatedIssue);
+        Task EditAsync(Issue updatedIssue);
 
-        Task Delete(int id);
+        Task DeleteAsync(int id);
 
-        Task<Issue?> GetById(int id);
+        Task<Issue?> GetByIdAsync(int id);
     }
 }

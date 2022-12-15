@@ -50,13 +50,13 @@
     @if (User.IsInRole(Role.Supervisor.ToString()))
     {
         <div>
-            <a asp-controller="User" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-dark">Edit</a>
+            <a asp-controller="User" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-dark">EditAsyncAsyncAsync</a>
         </div>
         <br/>
         <div>
             @using (Html.BeginForm("Delete", "User", new {id = Model.Id}, FormMethod.Post))
             {
-                <input type="submit" value="Delete"/>
+                <input type="submit" value="DeleteAsyncAsyncAsyncAsyncAsyncAsync"/>
             }
         </div>
     }

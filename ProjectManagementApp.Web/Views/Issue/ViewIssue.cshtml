@@ -15,7 +15,7 @@
     </div>
 
     <div>
-        <a asp-controller="Issue" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-dark">Edit</a>
+        <a asp-controller="Issue" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-dark">EditAsyncAsyncAsync</a>
     </div>
     <br />
     @if (User.IsInRole(Role.Supervisor.ToString()) || User.IsInRole(Role.Manager.ToString()))
@@ -23,7 +23,7 @@
         <div>
             @using (Html.BeginForm("Delete", "Issue", new { id = Model.Id }, FormMethod.Post))
             {
-                <input type="submit" value="Delete" />
+                <input type="submit" value="DeleteAsyncAsyncAsyncAsyncAsyncAsync" />
             }
         </div>
     }

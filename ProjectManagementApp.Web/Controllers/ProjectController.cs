@@ -27,7 +27,7 @@ namespace ProjectManagementApp.Web.Controllers
         [Authorize(Roles = "Supervisor")]
         public async Task<ActionResult> CreateProject()
         {
-            var allManagers = await _userService.GetManagers();
+            var allManagers = await _userService.GetManagersAsync();
             var selectListManagers = allManagers.Select(u => new SelectListItem(u.Email, u.Id.ToString())).ToList();
             var model = new CreateProjectViewModel() { Managers = selectListManagers};
 
@@ -41,7 +41,7 @@ namespace ProjectManagementApp.Web.Controllers
             if (ModelState.IsValid)
             {
                 var project = _mapper.Map<CreateProjectViewModel, Project>(model);
-                await _projectService.Create(project);
+                await _projectService.CreateAsync(project);
 
                 return RedirectToAction("GetAllProjects");
             }
@@ -49,7 +49,7 @@ namespace ProjectManagementApp.Web.Controllers
             return View(model);
         }
 
-        [HttpGet("Edit")]
+        [HttpGet("EditAsync")]
         [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -58,7 +58,7 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            var project = await _projectService.GetById((int)id);
+            var project = await _projectService.GetByIdAsync((int)id);
 
             if (project is null)
             {
@@ -66,14 +66,14 @@ namespace ProjectManagementApp.Web.Controllers
             }
 
             var model = _mapper.Map<Project, EditProjectViewModel>(project);
-            var managers = await _userService.GetManagers();
+            var managers = await _userService.GetManagersAsync();
             var selectList = managers.Select(u => new SelectListItem(u.Email, u.Id.ToString())).ToList();
             model.Managers = selectList;
 
             return View(model);
         }
 
-        [HttpPost("Edit")]
+        [HttpPost("EditAsync")]
         [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> Edit(EditProjectViewModel model)
         {
@@ -81,13 +81,13 @@ namespace ProjectManagementApp.Web.Controllers
             {
                 var updatedProject = _mapper.Map<EditProjectViewModel, Project>(model);
 
-                await _projectService.Edit(updatedProject);
+                await _projectService.EditAsync(updatedProject);
             }
 
             return RedirectToAction("ViewProject", new { id = model.Id });
         }
 
-        [HttpPost("Delete")]
+        [HttpPost("DeleteAsync")]
         [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -96,14 +96,14 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            var project = await _projectService.GetById((int)id);
+            var project = await _projectService.GetByIdAsync((int)id);
 
             if (project is null)
             {
                 return NotFound();
             }
 
-            await _projectService.Delete((int)id);
+            await _projectService.DeleteAsync((int)id);
 
             return RedirectToAction("GetAllProjects");
         }
@@ -112,7 +112,7 @@ namespace ProjectManagementApp.Web.Controllers
         [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> GetAllProjects(string sortOrder)
         {
-            var projects = await _projectService.GetAll();
+            var projects = await _projectService.GetAllAsync();
             var result = new List<ProjectViewModel>();
 
             foreach (var proj in projects)
@@ -156,7 +156,7 @@ namespace ProjectManagementApp.Web.Controllers
             return View(sortedProjects.ToList());
         }
 
-        [HttpGet("GetManagerProjects")]
+        [HttpGet("GetManagerProjectsAsync")]
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> GetManagerProjects(int? managerId)
         {
@@ -165,7 +165,7 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            var projects = await _projectService.GetManagerProjects((int)managerId);
+            var projects = await _projectService.GetManagerProjectsAsync((int)managerId);
             var result = new List<ProjectViewModel>();
 
             foreach (var proj in projects)
@@ -187,7 +187,7 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            var user = await _userService.GetById((int)employeeId);
+            var user = await _userService.GetByIdAsync((int)employeeId);
 
             if (user is null)
             {
@@ -214,7 +214,7 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            var project = await _projectService.GetById((int)id);
+            var project = await _projectService.GetByIdAsync((int)id);
 
             if (project is null)
             {
@@ -242,14 +242,14 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            var project = await _projectService.GetById((int)id);
+            var project = await _projectService.GetByIdAsync((int)id);
 
             if (project is null)
             {
                 return NotFound();
             }
 
-            var allEmployees = await _userService.GetEmployees();
+            var allEmployees = await _userService.GetEmployeesAsync();
             var model = new EditProjectEmployeesViewModel()
             {
                 Project = _mapper.Map<Project, ProjectViewModel>(project)

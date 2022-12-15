@@ -22,7 +22,7 @@ namespace ProjectManagementApp.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var currentUser = await _userService.GetCurrentUser(User);
+            var currentUser = await _userService.GetCurrentUserAsync(User);
 
             if (currentUser is null)
             {

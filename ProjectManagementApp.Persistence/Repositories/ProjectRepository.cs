@@ -14,19 +14,19 @@ namespace ProjectManagementApp.Persistence.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task Create(Project newProject)
+        public async Task CreateAsync(Project newProject)
         {
             await _dbContext.Projects.AddAsync(newProject);
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task Update(Project updatedProject)
+        public async Task UpdateAsync(Project updatedProject)
         {
             this._dbContext.Projects.Update(updatedProject);
             await this._dbContext.SaveChangesAsync();
         }
 
-        public async Task Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             var project = await _dbContext.Projects.FirstOrDefaultAsync(p => p.Id == id);
 
@@ -39,7 +39,7 @@ namespace ProjectManagementApp.Persistence.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<Project?> GetById(int id)
+        public async Task<Project?> GetByIdAsync(int id)
         {
             return await _dbContext.Projects
                 .Include(p => p.Manager)
@@ -52,7 +52,7 @@ namespace ProjectManagementApp.Persistence.Repositories
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public async Task<IList<Project>> GetAll()
+        public async Task<IList<Project>> GetAllAsync()
         {
             var projects = _dbContext.Projects
                 .Include(p => p.Manager)
@@ -64,7 +64,7 @@ namespace ProjectManagementApp.Persistence.Repositories
             return await projects.ToListAsync();
         }
 
-        public async Task<IList<Project>> GetManagerProjects(int managerId)
+        public async Task<IList<Project>> GetManagerProjectsAsync(int managerId)
         {
             var managerProjects = _dbContext.Projects
                 .Include(p => p.Manager)

@@ -27,7 +27,7 @@ namespace ProjectManagementApp.Web.Controllers
         [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> CreateUser()
         {
-            var roles = await _userService.GetRoles();
+            var roles = await _userService.GetRolesAsync();
             var selectList = roles.Select(x => new SelectListItem(x.Name, x.Name.ToString())).ToList();
             var model = new CreateUserViewModel()
             {
@@ -44,7 +44,7 @@ namespace ProjectManagementApp.Web.Controllers
             if (ModelState.IsValid)
             {
                 var user = _mapper.Map<CreateUserViewModel, User>(model);
-                var result = await _userService.Create(user, model.Password, model.Role);
+                var result = await _userService.CreateAsync(user, model.Password, model.Role);
 
                 if (result.Success)
                 {
@@ -60,7 +60,7 @@ namespace ProjectManagementApp.Web.Controllers
             return View(model);
         }
 
-        [HttpGet("Edit")]
+        [HttpGet("EditAsync")]
         [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> EditAsync(int? id)
         {
@@ -69,7 +69,7 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            var user = await _userService.GetById((int)id);
+            var user = await _userService.GetByIdAsync((int)id);
 
             if (user is null)
             {
@@ -81,7 +81,7 @@ namespace ProjectManagementApp.Web.Controllers
             return View(result);
         }
 
-        [HttpPost("Edit")]
+        [HttpPost("EditAsync")]
         [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> Edit(EditUserViewModel model)
         {
@@ -89,13 +89,13 @@ namespace ProjectManagementApp.Web.Controllers
             {
                 var updatedUser = _mapper.Map<EditUserViewModel, User>(model);
 
-                await _userService.Edit(updatedUser);
+                await _userService.EditAsync(updatedUser);
             }
 
             return RedirectToAction("ViewUser", new { id = model.Id });
         }
 
-        [HttpPost("Delete")]
+        [HttpPost("DeleteAsync")]
         [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -104,14 +104,14 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            var user = await _userService.GetById((int)id);
+            var user = await _userService.GetByIdAsync((int)id);
 
             if (user is null)
             {
                 return NotFound();
             }
 
-            await _userService.Delete((int)id);
+            await _userService.DeleteAsync((int)id);
 
             return RedirectToAction("GetAllUsers");
         }
@@ -120,14 +120,14 @@ namespace ProjectManagementApp.Web.Controllers
         [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> GetAllUsers()
         {
-            var currentUser = await _userService.GetCurrentUser(User);
+            var currentUser = await _userService.GetCurrentUserAsync(User);
 
             if (currentUser is null)
             {
                 return BadRequest();
             }
 
-            var users = await _userService.GetAll();
+            var users = await _userService.GetAllAsync();
             var result = new List<UserViewModel>();
 
             foreach (var user in users)
@@ -145,7 +145,7 @@ namespace ProjectManagementApp.Web.Controllers
             return View(result);
         }
 
-        [HttpPost("AddToProject")]
+        [HttpPost("AddToProjectAsync")]
         [Authorize(Roles = "Supervisor, Manager")]
         public async Task<IActionResult> AddToProject(int? projectId, int? userId)
         {
@@ -154,22 +154,22 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            if (await _projectService.GetById((int)projectId) is null)
+            if (await _projectService.GetByIdAsync((int)projectId) is null)
             {
                 return NotFound();
             }
 
-            if (await _userService.GetById((int)userId) is null)
+            if (await _userService.GetByIdAsync((int)userId) is null)
             {
                 return NotFound();
             }
 
-            await _userService.AddToProject((int)projectId, (int)userId);
+            await _userService.AddToProjectAsync((int)projectId, (int)userId);
 
             return RedirectToAction("EditProjectEmployees", "Project", new { id = projectId });
         }
 
-        [HttpPost("RemoveFromProject")]
+        [HttpPost("RemoveFromProjectAsync")]
         [Authorize(Roles = "Supervisor, Manager")]
         public async Task<IActionResult> RemoveFromProject(int? projectId, int? userId)
         {
@@ -178,17 +178,17 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            if (await _projectService.GetById((int)projectId) is null)
+            if (await _projectService.GetByIdAsync((int)projectId) is null)
             {
                 return NotFound();
             }
 
-            if (await _userService.GetById((int)userId) is null)
+            if (await _userService.GetByIdAsync((int)userId) is null)
             {
                 return NotFound();
             }
 
-            await _userService.RemoveFromProject((int)projectId, (int)userId);
+            await _userService.RemoveFromProjectAsync((int)projectId, (int)userId);
 
             return RedirectToAction("EditProjectEmployees", "Project", new { id = projectId });
         }
@@ -201,7 +201,7 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            var user = await _userService.GetById((int)id);
+            var user = await _userService.GetByIdAsync((int)id);
 
             if (user is null)
             {

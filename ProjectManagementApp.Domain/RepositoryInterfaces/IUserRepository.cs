@@ -5,14 +5,14 @@ namespace ProjectManagementApp.Domain.RepositoryInterfaces
 {
     public interface IUserRepository
     {
-        Task Delete(int id);
+        Task DeleteAsync(int id);
 
-        Task<User?> GetById(int id);
+        Task<User?> GetByIdAsync(int id);
 
-        Task<IList<IdentityRole<int>>> GetRoles();
+        Task<IList<IdentityRole<int>>> GetRolesAsync();
 
-        Task AddToProject(int projectId, int userId);
+        Task AddToProjectAsync(int projectId, int userId);
 
-        Task RemoveFromProject(int projectId, int userId);
+        Task RemoveFromProjectAsync(int projectId, int userId);
     }
 }

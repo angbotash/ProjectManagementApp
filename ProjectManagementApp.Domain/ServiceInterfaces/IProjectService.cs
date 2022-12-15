@@ -4,16 +4,16 @@ namespace ProjectManagementApp.Domain.ServiceInterfaces
 {
     public interface IProjectService
     {
-        Task Create(Project newProject);
+        Task CreateAsync(Project newProject);
 
-        Task Edit(Project updatedProject);
+        Task EditAsync(Project updatedProject);
 
-        Task Delete(int id);
+        Task DeleteAsync(int id);
 
-        Task<Project?> GetById(int id);
+        Task<Project?> GetByIdAsync(int id);
 
-        Task<IEnumerable<Project>> GetAll();
+        Task<IEnumerable<Project>> GetAllAsync();
 
-        Task<IEnumerable<Project>> GetManagerProjects(int managerId);
+        Task<IEnumerable<Project>> GetManagerProjectsAsync(int managerId);
     }
 }

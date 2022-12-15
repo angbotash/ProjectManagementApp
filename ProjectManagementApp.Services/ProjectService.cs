@@ -13,41 +13,41 @@ namespace ProjectManagementApp.Services
             _projectRepository = projectRepository;
         }
 
-        public async Task Create(Project newProject)
+        public async Task CreateAsync(Project newProject)
         {
-            await _projectRepository.Create(newProject);
+            await _projectRepository.CreateAsync(newProject);
         }
 
-        public async Task Edit(Project updatedProject)
+        public async Task EditAsync(Project updatedProject)
         {
-            await _projectRepository.Update(updatedProject);
+            await _projectRepository.UpdateAsync(updatedProject);
         }
 
-        public async Task Delete(int id)
+        public async Task DeleteAsync(int id)
         {
-            var project = await _projectRepository.GetById(id);
+            var project = await _projectRepository.GetByIdAsync(id);
 
             if (project is null)
             {
                 throw new KeyNotFoundException($"There is no Project with Id {id}.");
             }
 
-            await _projectRepository.Delete(id);
+            await _projectRepository.DeleteAsync(id);
         }
 
-        public async Task<Project?> GetById(int id)
+        public async Task<Project?> GetByIdAsync(int id)
         {
-            return await _projectRepository.GetById(id);
+            return await _projectRepository.GetByIdAsync(id);
         }
 
-        public async Task<IEnumerable<Project>> GetAll()
+        public async Task<IEnumerable<Project>> GetAllAsync()
         {
-            return await _projectRepository.GetAll();
+            return await _projectRepository.GetAllAsync();
         }
 
-        public  async Task<IEnumerable<Project>> GetManagerProjects(int managerId)
+        public  async Task<IEnumerable<Project>> GetManagerProjectsAsync(int managerId)
         {
-            return await _projectRepository.GetManagerProjects(managerId);
+            return await _projectRepository.GetManagerProjectsAsync(managerId);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace ProjectManagementApp.Persistence.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             var user = _dbContext.Users.FirstOrDefault(u => u.Id == id);
 
@@ -27,7 +27,7 @@ namespace ProjectManagementApp.Persistence.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<User?> GetById(int id)
+        public async Task<User?> GetByIdAsync(int id)
         {
             var user = await _dbContext.Users
                 .Include(u => u.AssignedIssues)
@@ -45,12 +45,12 @@ namespace ProjectManagementApp.Persistence.Repositories
             return user;
         }
 
-        public async Task<IList<IdentityRole<int>>> GetRoles()
+        public async Task<IList<IdentityRole<int>>> GetRolesAsync()
         {
             return await _dbContext.Roles.ToListAsync();
         }
 
-        public async Task AddToProject(int projectId, int userId)
+        public async Task AddToProjectAsync(int projectId, int userId)
         {
             var project = await _dbContext.Projects.FirstOrDefaultAsync(p => p.Id == projectId);
 
@@ -75,7 +75,7 @@ namespace ProjectManagementApp.Persistence.Repositories
             }
         }
 
-        public async Task RemoveFromProject(int projectId, int userId)
+        public async Task RemoveFromProjectAsync(int projectId, int userId)
         {
             var project = await _dbContext.Projects.FirstOrDefaultAsync(p => p.Id == projectId);
 

@@ -23,7 +23,7 @@ namespace ProjectManagementApp.Services
             _signInManager = signInManager;
         }
 
-        public async Task<OperationResult> Create(User newUser, string password, string role)
+        public async Task<OperationResult> CreateAsync(User newUser, string password, string role)
         {
             var result = new OperationResult(false);
             var user = await _userManager.FindByEmailAsync(newUser.Email);
@@ -56,10 +56,10 @@ namespace ProjectManagementApp.Services
             return result;
         }
 
-        public async Task<OperationResult> Edit(User updatedUser)
+        public async Task<OperationResult> EditAsync(User updatedUser)
         {
             var result = new OperationResult(false);
-            var user = await _userRepository.GetById(updatedUser.Id);
+            var user = await _userRepository.GetByIdAsync(updatedUser.Id);
 
             if (user is null)
             {
@@ -86,19 +86,19 @@ namespace ProjectManagementApp.Services
             return result;
         }
 
-        public async Task Delete(int id)
+        public async Task DeleteAsync(int id)
         {
-            var user = _userRepository.GetById(id);
+            var user = _userRepository.GetByIdAsync(id);
 
             if (user is null)
             {
                 throw new KeyNotFoundException($"There is no User with Id {id}.");
             }
 
-            await _userRepository.Delete(id);
+            await _userRepository.DeleteAsync(id);
         }
 
-        public async Task<OperationResult> Authenticate(string email, string password)
+        public async Task<OperationResult> AuthenticateAsync(string email, string password)
         {
             var existingUser = await _userManager.FindByEmailAsync(email);
             var result = new OperationResult(false);
@@ -118,69 +118,69 @@ namespace ProjectManagementApp.Services
             return result;
         }
 
-        public async Task Logout()
+        public async Task LogoutAsync()
         {
             await _signInManager.SignOutAsync();
         }
 
-        public async Task<User?> GetById(int id)
+        public async Task<User?> GetByIdAsync(int id)
         {
-            return await _userRepository.GetById(id);
+            return await _userRepository.GetByIdAsync(id);
         }
 
-        public async Task<IEnumerable<User>> GetAll()
+        public async Task<IEnumerable<User>> GetAllAsync()
         {
             return await _userManager.Users.ToListAsync();
         }
 
-        public async Task<IEnumerable<IdentityRole<int>>> GetRoles()
+        public async Task<IEnumerable<IdentityRole<int>>> GetRolesAsync()
         {
-            return await _userRepository.GetRoles();
+            return await _userRepository.GetRolesAsync();
         }
 
-        public async Task<User?> GetCurrentUser(ClaimsPrincipal currentUser)
+        public async Task<User?> GetCurrentUserAsync(ClaimsPrincipal currentUser)
         {
             return await _userManager.GetUserAsync(currentUser);
         }
 
-        public async Task<IEnumerable<User>> GetManagers()
+        public async Task<IEnumerable<User>> GetManagersAsync()
         {
             return await _userManager.GetUsersInRoleAsync(Role.Manager.ToString());
         }
 
-        public async Task<IEnumerable<User>> GetEmployees()
+        public async Task<IEnumerable<User>> GetEmployeesAsync()
         {
             return await _userManager.GetUsersInRoleAsync(Role.Employee.ToString());
         }
 
-        public async Task AddToProject(int projectId, int userId)
+        public async Task AddToProjectAsync(int projectId, int userId)
         {
-            if (await _projectRepository.GetById(projectId) == null)
+            if (await _projectRepository.GetByIdAsync(projectId) == null)
             {
                 throw new KeyNotFoundException($"There is no Project with Id {projectId}.");
             }
 
-            if (await _userRepository.GetById(userId) == null)
+            if (await _userRepository.GetByIdAsync(userId) == null)
             {
                 throw new KeyNotFoundException($"There is no User with Id {userId}.");
             }
 
-            await _userRepository.AddToProject(projectId, userId);
+            await _userRepository.AddToProjectAsync(projectId, userId);
         }
 
-        public async Task RemoveFromProject(int projectId, int userId)
+        public async Task RemoveFromProjectAsync(int projectId, int userId)
         {
-            if (await _projectRepository.GetById(projectId) == null)
+            if (await _projectRepository.GetByIdAsync(projectId) == null)
             {
                 throw new KeyNotFoundException($"There is no Project with Id {projectId}.");
             }
 
-            if (await _userRepository.GetById(userId) == null)
+            if (await _userRepository.GetByIdAsync(userId) == null)
             {
                 throw new KeyNotFoundException($"There is no User with Id {userId}.");
             }
 
-            await _userRepository.RemoveFromProject(projectId, userId);
+            await _userRepository.RemoveFromProjectAsync(projectId, userId);
         }
     }
 }

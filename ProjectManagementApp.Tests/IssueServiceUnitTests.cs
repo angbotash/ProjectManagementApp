@@ -17,7 +17,7 @@ namespace ProjectManagementApp.Tests
         }
 
         [Fact]
-        public async Task Create_Creates_Issue()
+        public async Task CreateAsync_Creates_Issue()
         {
             // Arrange
             var newIssue = new Issue
@@ -31,121 +31,105 @@ namespace ProjectManagementApp.Tests
                 Priority = 1
             };
 
-            _issueRepositoryMock.Setup(m => m.Create(newIssue));
+            _issueRepositoryMock.Setup(m => m.CreateAsync(newIssue));
 
             // Act
-            await _issueService.Create(newIssue);
+            await _issueService.CreateAsync(newIssue);
 
             // Assert
-            _issueRepositoryMock.Verify(m => m.Create(It.IsAny<Issue>()), Times.Once);
+            _issueRepositoryMock.Verify(m => m.CreateAsync(It.IsAny<Issue>()), Times.Once);
         }
 
         [Fact]
-        public async Task Delete_Deletes_Issue()
+        public async Task EditAsync_Edits_Issue()
         {
             // Arrange
-            var id = 1;
+            var editedIssue = new Issue
+            {
+                Name = "Edited Issue Name",
+                AssigneeId = 3,
+                ReporterId = 2,
+                ProjectId = 3,
+                Comment = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+                Status = IssueStatus.InProgress,
+                Priority = 8
+            };
 
-            _issueRepositoryMock.Setup(m => m.GetById(id)).ReturnsAsync(Issues[0]);
-            _issueRepositoryMock.Setup(m => m.Delete(id));
+            _issueRepositoryMock.Setup(m => m.GetByIdAsync(It.IsAny<int>())).ReturnsAsync(new Issue());
+            _issueRepositoryMock.Setup(m => m.UpdateAsync(editedIssue));
 
             // Act
-            await _issueService.Delete(id);
+            await _issueService.EditAsync(editedIssue);
 
             // Assert
-            _issueRepositoryMock.Verify(m => m.GetById(It.IsAny<int>()), Times.Once);
-            _issueRepositoryMock.Verify(m => m.Delete(It.IsAny<int>()));
+            _issueRepositoryMock.Verify(m => m.GetByIdAsync(It.IsAny<int>()), Times.Once);
+            _issueRepositoryMock.Verify(m => m.UpdateAsync(It.IsAny<Issue>()), Times.Once);
         }
 
         [Fact]
-        public async Task GetById_Returns_Issue()
+        public async Task EditAsync_Throws_KeyNotFoundException_When_Issue_Does_Not_Exists()
         {
             // Arrange
-            var id = 2;
+            var editedIssue = new Issue
+            {
+                Name = "Edited Issue Name",
+                AssigneeId = 3,
+                ReporterId = 2,
+                ProjectId = 3,
+                Comment = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+                Status = IssueStatus.InProgress,
+                Priority = 8
+            };
 
-            _issueRepositoryMock.Setup(m => m.GetById(id)).ReturnsAsync(Issues[1]);
+            _issueRepositoryMock.Setup(m => m.GetByIdAsync(It.IsAny<int>())).ReturnsAsync((Issue?)null);
+
+            // Assert
+            await Assert.ThrowsAsync<KeyNotFoundException>(() => _issueService.EditAsync(It.IsAny<Issue>()));
+            _issueRepositoryMock.Verify(m => m.GetByIdAsync(It.IsAny<int>()), Times.Once);
+            _issueRepositoryMock.Verify(m => m.UpdateAsync(It.IsAny<Issue>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task DeleteAsync_Deletes_Issue()
+        {
+            // Arrange
+            _issueRepositoryMock.Setup(m => m.GetByIdAsync(It.IsAny<int>())).ReturnsAsync(new Issue());
+            _issueRepositoryMock.Setup(m => m.DeleteAsync(It.IsAny<int>()));
 
             // Act
-            var result = await _issueService.GetById(id);
+            await _issueService.DeleteAsync(It.IsAny<int>());
+
+            // Assert
+            _issueRepositoryMock.Verify(m => m.GetByIdAsync(It.IsAny<int>()), Times.Once);
+            _issueRepositoryMock.Verify(m => m.DeleteAsync(It.IsAny<int>()));
+        }
+
+        [Fact]
+        public async Task GetByIdAsync_Returns_Issue()
+        {
+            // Arrange
+            _issueRepositoryMock.Setup(m => m.GetByIdAsync(It.IsAny<int>())).ReturnsAsync(new Issue());
+
+            // Act
+            var result = await _issueService.GetByIdAsync(It.IsAny<int>());
 
             // Assert
             Assert.IsType<Issue?>(result);
-            Assert.Equal(Issues[1].Id, result.Id);
-            _issueRepositoryMock.Verify(m => m.GetById(It.IsAny<int>()), Times.Once());
+            _issueRepositoryMock.Verify(m => m.GetByIdAsync(It.IsAny<int>()), Times.Once());
         }
 
         [Fact]
-        public void GetById_Returns_Null_When_Issue_Does_Not_Exist()
+        public async Task GetByIdAsync_Returns_Null_When_Issue_Does_Not_Exist()
         {
             // Arrange
-            var id = 42;
-
-            _issueRepositoryMock.Setup(m => m.GetById(id)).ReturnsAsync(Issues.Find(i => i.Id == id));
+            _issueRepositoryMock.Setup(m => m.GetByIdAsync(It.IsAny<int>())).ReturnsAsync((Issue?)null);
 
             // Act
-            var result = _issueService.GetById(id);
+            var result = await _issueService.GetByIdAsync(It.IsAny<int>());
 
             // Assert
             Assert.Null(result);
-            _issueRepositoryMock.Verify(m => m.GetById(It.IsAny<int>()), Times.Once());
+            _issueRepositoryMock.Verify(m => m.GetByIdAsync(It.IsAny<int>()), Times.Once());
         }
-
-        private static User Assignee { get; } = new User()
-        {
-            Id = 2,
-            FirstName = "Kate",
-            LastName = "Osborn",
-            Email = "kateosborn@mail.com",
-        };
-
-        private static User Reporter { get; } = new User()
-        {
-            Id = 1,
-            FirstName = "Marry",
-            LastName = "Smith",
-            Email = "marrysmith@mail.com",
-        };
-
-        private static Project Project { get; } = new Project()
-        {
-
-        };
-
-        private List<Issue> Issues { get; } = new List<Issue>()
-        {
-            new Issue()
-            {
-                Id = 1,
-                Name = "IssueOneName",
-                AssigneeId = Assignee.Id,
-                ReporterId = Reporter.Id,
-                ProjectId = Project.Id,
-                Comment = string.Empty,
-                Status = IssueStatus.ToDo,
-                Priority = 7
-            },
-            new Issue()
-            {
-                Id = 2,
-                Name = "IssueTwoName",
-                AssigneeId = Assignee.Id,
-                ReporterId = Reporter.Id,
-                ProjectId = Project.Id,
-                Comment = string.Empty,
-                Status = IssueStatus.InProgress,
-                Priority = 7
-            },
-            new Issue()
-            {
-                Id = 3,
-                Name = "IssueThreeName",
-                AssigneeId = Assignee.Id,
-                ReporterId = Reporter.Id,
-                ProjectId = Project.Id,
-                Comment = string.Empty,
-                Status = IssueStatus.Done,
-                Priority = 7
-            }
-        };
     }
 }

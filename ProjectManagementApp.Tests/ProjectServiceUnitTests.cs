@@ -9,12 +9,13 @@ namespace ProjectManagementApp.Tests
     public class ProjectServiceUnitTests
     {
         private readonly ProjectService _projectService;
+        private readonly Mock<IProjectRepository> _projectRepositoryMock;
 
         public ProjectServiceUnitTests()
         {
-            var projectRepositoryMock = new Mock<IProjectRepository>();
+            _projectRepositoryMock = new Mock<IProjectRepository>();
 
-            _projectService = new ProjectService(projectRepositoryMock.Object);
+            _projectService = new ProjectService(_projectRepositoryMock.Object);
         }
     }
 }

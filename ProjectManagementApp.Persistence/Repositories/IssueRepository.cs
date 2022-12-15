@@ -13,13 +13,13 @@ namespace ProjectManagementApp.Persistence.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task Create(Issue newIssue)
+        public async Task CreateAsync(Issue newIssue)
         {
             await _dbContext.Issues.AddAsync(newIssue);
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task Update(Issue updatedIssue)
+        public async Task UpdateAsync(Issue updatedIssue)
         {
             var issue = await _dbContext.Issues.FirstOrDefaultAsync(i => i.Id == updatedIssue.Id);
 
@@ -37,7 +37,7 @@ namespace ProjectManagementApp.Persistence.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             var issue = await _dbContext.Issues.FirstOrDefaultAsync(i => i.Id == id);
 
@@ -50,7 +50,7 @@ namespace ProjectManagementApp.Persistence.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<Issue?> GetById(int id)
+        public async Task<Issue?> GetByIdAsync(int id)
         {
             return await _dbContext.Issues
                 .Include(i => i.Project)

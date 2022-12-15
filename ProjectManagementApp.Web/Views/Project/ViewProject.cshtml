@@ -71,20 +71,20 @@
         </div>
         <br/>
         <div>
-            <a asp-controller="Project" asp-action="EditProjectEmployees" asp-route-id="@Model.Id" class="btn btn-outline-dark">Edit employees</a>
+            <a asp-controller="Project" asp-action="EditProjectEmployees" asp-route-id="@Model.Id" class="btn btn-outline-dark">EditAsyncAsyncAsync employees</a>
         </div>
         <br/>
     }
     @if (User.IsInRole(Role.Supervisor.ToString()))
     {
         <div>
-            <a asp-controller="Project" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-dark">Edit</a>
+            <a asp-controller="Project" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-dark">EditAsyncAsyncAsync</a>
         </div>
         <br/>
         <div>
             @using (Html.BeginForm("Delete", "Project", new {id = Model.Id}, FormMethod.Post))
             {
-                <input type="submit" value="Delete"/>
+                <input type="submit" value="DeleteAsyncAsyncAsyncAsyncAsyncAsync"/>
             }
         </div>
     }

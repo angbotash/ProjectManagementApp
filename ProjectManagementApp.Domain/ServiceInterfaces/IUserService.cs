@@ -7,30 +7,30 @@ namespace ProjectManagementApp.Domain.ServiceInterfaces
 {
     public interface IUserService
     {
-        Task<OperationResult> Create(User newUser, string password, string role);
+        Task<OperationResult> CreateAsync(User newUser, string password, string role);
 
-        Task<OperationResult> Edit(User updatedUser);
+        Task<OperationResult> EditAsync(User updatedUser);
 
-        Task Delete(int id);
+        Task DeleteAsync(int id);
 
-        Task<OperationResult> Authenticate(string email, string password);
+        Task<OperationResult> AuthenticateAsync(string email, string password);
 
-        Task Logout();
+        Task LogoutAsync();
 
-        Task<User?> GetById(int id);
+        Task<User?> GetByIdAsync(int id);
 
-        Task<IEnumerable<User>> GetAll();
+        Task<IEnumerable<User>> GetAllAsync();
 
-        Task<IEnumerable<IdentityRole<int>>> GetRoles();
+        Task<IEnumerable<IdentityRole<int>>> GetRolesAsync();
 
-        Task<User?> GetCurrentUser(ClaimsPrincipal currentUser);
+        Task<User?> GetCurrentUserAsync(ClaimsPrincipal currentUser);
 
-        Task<IEnumerable<User>> GetManagers();
+        Task<IEnumerable<User>> GetManagersAsync();
 
-        Task<IEnumerable<User>> GetEmployees();
+        Task<IEnumerable<User>> GetEmployeesAsync();
 
-        Task AddToProject(int projectId, int userId);
+        Task AddToProjectAsync(int projectId, int userId);
 
-        Task RemoveFromProject(int projectId, int userId);
+        Task RemoveFromProjectAsync(int projectId, int userId);
     }
 }
