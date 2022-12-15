@@ -1,6 +1,7 @@
 ﻿using Moq;
 using ProjectManagementApp.Domain.Entities;
 using ProjectManagementApp.Domain.RepositoryInterfaces;
+using ProjectManagementApp.Domain.ServiceInterfaces;
 using ProjectManagementApp.Services;
 using Xunit;
 
@@ -72,6 +73,7 @@ namespace ProjectManagementApp.Tests
             // Arrange
             var editedIssue = new Issue
             {
+                Id = 42,
                 Name = "Edited Issue Name",
                 AssigneeId = 3,
                 ReporterId = 2,
@@ -81,10 +83,13 @@ namespace ProjectManagementApp.Tests
                 Priority = 8
             };
 
-            _issueRepositoryMock.Setup(m => m.GetByIdAsync(It.IsAny<int>())).ReturnsAsync((Issue?)null);
+            _issueRepositoryMock.Setup(m => m.GetByIdAsync(editedIssue.Id)).ReturnsAsync((Issue?)null);
+
+            // Act
+            await _issueService.EditAsync(editedIssue);
 
             // Assert
-            await Assert.ThrowsAsync<KeyNotFoundException>(() => _issueService.EditAsync(It.IsAny<Issue>()));
+            //await Assert.ThrowsAsync<KeyNotFoundException>(() => _issueService.EditAsync(editedIssue));
             _issueRepositoryMock.Verify(m => m.GetByIdAsync(It.IsAny<int>()), Times.Once);
             _issueRepositoryMock.Verify(m => m.UpdateAsync(It.IsAny<Issue>()), Times.Never);
         }
@@ -101,7 +106,20 @@ namespace ProjectManagementApp.Tests
 
             // Assert
             _issueRepositoryMock.Verify(m => m.GetByIdAsync(It.IsAny<int>()), Times.Once);
-            _issueRepositoryMock.Verify(m => m.DeleteAsync(It.IsAny<int>()));
+            _issueRepositoryMock.Verify(m => m.DeleteAsync(It.IsAny<int>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task DeleteAsync_Throws_KeyNotFoundException_When_Issue_Does_Not_Exists()
+        {
+            // Arrange
+            _issueRepositoryMock.Setup(m => m.GetByIdAsync(It.IsAny<int>())).ReturnsAsync((Issue?)null);
+            _issueRepositoryMock.Setup(m => m.DeleteAsync(It.IsAny<int>()));
+
+            // Assert
+            await Assert.ThrowsAsync<KeyNotFoundException>(() => _issueService.DeleteAsync(It.IsAny<int>()));
+            _issueRepositoryMock.Verify(m => m.GetByIdAsync(It.IsAny<int>()), Times.Once);
+            _issueRepositoryMock.Verify(m => m.DeleteAsync(It.IsAny<int>()), Times.Never);
         }
 
         [Fact]
