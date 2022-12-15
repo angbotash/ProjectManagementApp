@@ -28,17 +28,17 @@ namespace ProjectManagementApp.Web.ViewModels
 
         [Required(ErrorMessage = "Status is required.")]
         [Display(Name = "Project status")]
-        public IssueStatus.IssueStatus Status { get; set; }
+        public IssueStatus Status { get; set; }
 
         [Required(ErrorMessage = "Priority is required.")]
         [Range(1, 10)]
         [Display(Name = "Priority")]
         public int Priority { get; set; }
 
-        public IList<SelectListItem> Managers { get; set; } = null!;
+        public IList<SelectListItem> Managers { get; set; } = new List<SelectListItem>();
 
-        public IList<SelectListItem> Employees { get; set; } = null!;
+        public IList<SelectListItem> Employees { get; set; } = new List<SelectListItem>();
 
-        public IList<SelectListItem> Statuses { get; set; } = null!;
+        public IList<SelectListItem> Statuses { get; set; } = new List<SelectListItem>();
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ProjectManagementApp.Web.Models;
 using System.Diagnostics;
 using AutoMapper;
 using ProjectManagementApp.Domain.Entities;

@@ -25,6 +25,39 @@ namespace ProjectManagementApp.Persistence
             modelBuilder.ApplyConfiguration(new UserProjectMappingConfiguration());
             modelBuilder.ApplyConfiguration(new IssueMappingConfiguration());
 
+            SeedRoles(modelBuilder);
+            SeedSupervisor(modelBuilder);
+        }
+
+        private void SeedRoles(ModelBuilder modelBuilder)
+        {
+            // Seed roles
+            modelBuilder.Entity<IdentityRole<int>>().HasData(
+                new IdentityRole<int>
+                {
+                    Id = 1,
+                    Name = "Supervisor",
+                    NormalizedName = "SUPERVISOR",
+                    ConcurrencyStamp = "e10dcc3f-a309-441f-9752-a6814f6162cf"
+                },
+                new IdentityRole<int>
+                {
+                    Id = 2,
+                    Name = "Manager",
+                    NormalizedName = "MANAGER",
+                    ConcurrencyStamp = "fd21c7cd-8658-45cf-bd8c-d4ffac3c0ae5"
+                },
+                new IdentityRole<int>
+                {
+                    Id = 3,
+                    Name = "Employee",
+                    NormalizedName = "EMPLOYEE",
+                    ConcurrencyStamp = "fde66fdb-68cf-444e-9b69-f12141c880f8"
+                });
+        }
+
+        private void SeedSupervisor(ModelBuilder modelBuilder)
+        {
             // Add supervisor
             var supervisor = new User()
             {
@@ -55,31 +88,6 @@ namespace ProjectManagementApp.Persistence
                     UserId = 1
                 });
             });
-
-            // Seed roles
-            modelBuilder.Entity<IdentityRole<int>>()
-                .HasData(
-                    new IdentityRole<int>
-                    {
-                        Id = 1,
-                        Name = "Supervisor",
-                        NormalizedName = "SUPERVISOR",
-                        ConcurrencyStamp = "e10dcc3f-a309-441f-9752-a6814f6162cf"
-                    },
-                    new IdentityRole<int>
-                    {
-                        Id = 2,
-                        Name = "Manager",
-                        NormalizedName = "MANAGER",
-                        ConcurrencyStamp = "fd21c7cd-8658-45cf-bd8c-d4ffac3c0ae5"
-                    },
-                    new IdentityRole<int>
-                    {
-                        Id = 3,
-                        Name = "Employee",
-                        NormalizedName = "EMPLOYEE",
-                        ConcurrencyStamp = "fde66fdb-68cf-444e-9b69-f12141c880f8"
-                    });
         }
     }
 }

@@ -25,9 +25,9 @@ namespace ProjectManagementApp.Web.Controllers
 
         [HttpGet("CreateUser")]
         [Authorize(Roles = "Supervisor")]
-        public IActionResult CreateUser()
+        public async Task<IActionResult> CreateUser()
         {
-            var roles = _userService.GetRoles();
+            var roles = await _userService.GetRoles();
             var selectList = roles.Select(x => new SelectListItem(x.Name, x.Name.ToString())).ToList();
             var model = new CreateUserViewModel()
             {
@@ -62,14 +62,14 @@ namespace ProjectManagementApp.Web.Controllers
 
         [HttpGet("Edit")]
         [Authorize(Roles = "Supervisor")]
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> EditAsync(int? id)
         {
             if (id is null)
             {
                 return BadRequest();
             }
 
-            var user = _userService.Get((int)id);
+            var user = await _userService.GetById((int)id);
 
             if (user is null)
             {
@@ -104,7 +104,7 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            var user = _userService.Get((int)id);
+            var user = await _userService.GetById((int)id);
 
             if (user is null)
             {
@@ -127,12 +127,17 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            var users = _userService.GetAll().Where(u => u.Id != currentUser.Id);
+            var users = await _userService.GetAll();
             var result = new List<UserViewModel>();
 
             foreach (var user in users)
             {
                 var tempUser = _mapper.Map<User, UserViewModel>(user);
+
+                if (tempUser.Id == currentUser.Id)
+                {
+                    continue;
+                }
 
                 result.Add(tempUser);
             }
@@ -149,12 +154,12 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            if (_projectService.Get((int)projectId) is null)
+            if (await _projectService.GetById((int)projectId) is null)
             {
                 return NotFound();
             }
 
-            if (_userService.Get((int)userId) is null)
+            if (await _userService.GetById((int)userId) is null)
             {
                 return NotFound();
             }
@@ -173,12 +178,12 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            if (_projectService.Get((int)projectId) is null)
+            if (await _projectService.GetById((int)projectId) is null)
             {
                 return NotFound();
             }
 
-            if (_userService.Get((int)userId) is null)
+            if (await _userService.GetById((int)userId) is null)
             {
                 return NotFound();
             }
@@ -189,14 +194,14 @@ namespace ProjectManagementApp.Web.Controllers
         }
 
         [HttpGet("ViewUser")]
-        public IActionResult ViewUser(int? id)
+        public async Task<IActionResult> ViewUser(int? id)
         {
             if (id is null)
             {
                 return BadRequest();
             }
 
-            var user = _userService.Get((int)id);
+            var user = await _userService.GetById((int)id);
 
             if (user is null)
             {
@@ -204,11 +209,10 @@ namespace ProjectManagementApp.Web.Controllers
             }
 
             var result = _mapper.Map<User, UserViewModel>(user);
-            var projects = _userService.GetProjects((int)id);
 
-            foreach (var proj in projects)
+            foreach (var proj in user.UserProjects)
             {
-                var tempProject = _mapper.Map<Project, ProjectViewModel>(proj);
+                var tempProject = _mapper.Map<Project, ProjectViewModel>(proj.Project);
 
                 result.Projects.Add(tempProject);
             }

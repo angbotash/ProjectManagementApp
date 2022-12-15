@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using ProjectManagementApp.Domain.Entities;
 using ProjectManagementApp.Domain.Infrastructure;
 using ProjectManagementApp.Domain.RepositoryInterfaces;
@@ -58,7 +59,7 @@ namespace ProjectManagementApp.Services
         public async Task<OperationResult> Edit(User updatedUser)
         {
             var result = new OperationResult(false);
-            var user = _userRepository.Get(updatedUser.Id);
+            var user = await _userRepository.GetById(updatedUser.Id);
 
             if (user is null)
             {
@@ -87,7 +88,7 @@ namespace ProjectManagementApp.Services
 
         public async Task Delete(int id)
         {
-            var user = _userRepository.Get(id);
+            var user = _userRepository.GetById(id);
 
             if (user is null)
             {
@@ -122,24 +123,19 @@ namespace ProjectManagementApp.Services
             await _signInManager.SignOutAsync();
         }
 
-        public User? Get(int id)
+        public async Task<User?> GetById(int id)
         {
-            return _userRepository.Get(id);
+            return await _userRepository.GetById(id);
         }
 
-        public IEnumerable<User> GetAll()
+        public async Task<IEnumerable<User>> GetAll()
         {
-            return _userManager.Users;
+            return await _userManager.Users.ToListAsync();
         }
 
-        public IEnumerable<Project> GetProjects(int id)
+        public async Task<IEnumerable<IdentityRole<int>>> GetRoles()
         {
-            return _userRepository.GetProjects(id);
-        }
-
-        public IEnumerable<IdentityRole<int>> GetRoles()
-        {
-            return _userRepository.GetRoles();
+            return await _userRepository.GetRoles();
         }
 
         public async Task<User?> GetCurrentUser(ClaimsPrincipal currentUser)
@@ -159,12 +155,12 @@ namespace ProjectManagementApp.Services
 
         public async Task AddToProject(int projectId, int userId)
         {
-            if (_projectRepository.Get(projectId) == null)
+            if (await _projectRepository.GetById(projectId) == null)
             {
                 throw new KeyNotFoundException($"There is no Project with Id {projectId}.");
             }
 
-            if (_userRepository.Get(userId) == null)
+            if (await _userRepository.GetById(userId) == null)
             {
                 throw new KeyNotFoundException($"There is no User with Id {userId}.");
             }
@@ -174,12 +170,12 @@ namespace ProjectManagementApp.Services
 
         public async Task RemoveFromProject(int projectId, int userId)
         {
-            if (_projectRepository.Get(projectId) == null)
+            if (await _projectRepository.GetById(projectId) == null)
             {
                 throw new KeyNotFoundException($"There is no Project with Id {projectId}.");
             }
 
-            if (_userRepository.Get(userId) == null)
+            if (await _userRepository.GetById(userId) == null)
             {
                 throw new KeyNotFoundException($"There is no User with Id {userId}.");
             }

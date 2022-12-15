@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using ProjectManagementApp.Domain.Entities;
 using ProjectManagementApp.Domain.RepositoryInterfaces;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using System.ComponentModel;
 
 namespace ProjectManagementApp.Persistence.Repositories
 {
@@ -30,7 +32,7 @@ namespace ProjectManagementApp.Persistence.Repositories
 
         public async Task Delete(int id)
         {
-            var project = _dbContext.Projects.FirstOrDefault(p => p.Id == id);
+            var project = await _dbContext.Projects.FirstOrDefaultAsync(p => p.Id == id);
 
             if (project is null)
             {
@@ -41,20 +43,20 @@ namespace ProjectManagementApp.Persistence.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public Project? Get(int id)
+        public async Task<Project?> GetById(int id)
         {
-            var project = _dbContext.Projects
+            return await _dbContext.Projects
                 .Include(p => p.Manager)
                 .Include(p => p.Issues)
                     .ThenInclude(i => i.Assignee)
                 .Include(p => p.Issues)
                     .ThenInclude(i => i.Reporter)
-                .FirstOrDefault(p => p.Id == id);
-
-            return project;
+                .Include(p => p.UserProjects)
+                    .ThenInclude(up => up.User)
+                .FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public IEnumerable<Project> GetAll()
+        public async Task<IList<Project>> GetAll()
         {
             var projects = _dbContext.Projects
                 .Include(p => p.Manager)
@@ -63,38 +65,20 @@ namespace ProjectManagementApp.Persistence.Repositories
                 .Include(p => p.Issues)
                     .ThenInclude(i => i.Reporter);
 
-            return projects;
+            return await projects.ToListAsync();
         }
 
-        public IEnumerable<Project> GetManagerProjects(int managerId)
+        public async Task<IList<Project>> GetManagerProjects(int managerId)
         {
             var managerProjects = _dbContext.Projects
-                .Where(p => p.ManagerId == managerId)
                 .Include(p => p.Manager)
                 .Include(p => p.Issues)
                     .ThenInclude(i => i.Assignee)
                 .Include(p => p.Issues)
-                    .ThenInclude(i => i.Reporter);
+                    .ThenInclude(i => i.Reporter)
+                .Where(p => p.ManagerId == managerId);
 
-            return managerProjects;
-        }
-
-        public IEnumerable<User> GetUsers(int id)
-        {
-            var users = _dbContext.UserProject.Where(up => up.ProjectId == id).ToList();
-            var result = new List<User>();
-
-            foreach (var user in users)
-            {
-                var tempUser = _userManager.Users.FirstOrDefault(u => u.Id == user.UserId);
-
-                if (tempUser != null)
-                {
-                    result.Add(tempUser);
-                }
-            }
-
-            return result;
+            return await managerProjects.ToListAsync();
         }
     }
 }

@@ -17,13 +17,11 @@ namespace ProjectManagementApp.Domain.ServiceInterfaces
 
         Task Logout();
 
-        User? Get(int id);
+        Task<User?> GetById(int id);
 
-        IEnumerable<User> GetAll();
+        Task<IEnumerable<User>> GetAll();
 
-        IEnumerable<Project> GetProjects(int id);
-
-        IEnumerable<IdentityRole<int>> GetRoles();
+        Task<IEnumerable<IdentityRole<int>>> GetRoles();
 
         Task<User?> GetCurrentUser(ClaimsPrincipal currentUser);
 

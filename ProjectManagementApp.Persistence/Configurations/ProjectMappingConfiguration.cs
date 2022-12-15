@@ -11,7 +11,7 @@ namespace ProjectManagementApp.Persistence.Configurations
         {
             builder.HasKey(p => p.Id);
 
-            builder.HasMany(p => p.UserProject)
+            builder.HasMany(p => p.UserProjects)
                 .WithOne(up => up.Project)
                 .HasForeignKey(up => up.ProjectId);
 

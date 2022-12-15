@@ -15,19 +15,12 @@ namespace ProjectManagementApp.Services
 
         public async Task Create(Issue newIssue)
         {
-            var issue = _issueRepository.Get(newIssue.Id);
-
-            if (issue is null)
-            {
-                throw new KeyNotFoundException($"There is no Issue with Id {newIssue.Id}.");
-            }
-
             await _issueRepository.Create(newIssue);
         }
 
         public async Task Edit(Issue updatedIssue)
         {
-            var issue = _issueRepository.Get(updatedIssue.Id);
+            var issue = _issueRepository.GetById(updatedIssue.Id);
 
             if (issue is null)
             {
@@ -39,7 +32,7 @@ namespace ProjectManagementApp.Services
 
         public async Task Delete(int id)
         {
-            var issue = _issueRepository.Get(id);
+            var issue = _issueRepository.GetById(id);
 
             if (issue is null)
             {
@@ -49,9 +42,9 @@ namespace ProjectManagementApp.Services
             await _issueRepository.Delete(id);
         }
 
-        public Issue? Get(int id)
+        public async Task<Issue?> GetById(int id)
         {
-            return _issueRepository.Get(id);
+            return await _issueRepository.GetById(id);
         }
     }
 }

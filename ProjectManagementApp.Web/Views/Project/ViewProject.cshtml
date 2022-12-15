@@ -10,7 +10,7 @@
         <p><b>Executor: </b>@Model.ExecutorCompanyName</p>
         <p>
             <b>Manager: </b>
-            @if (Model.Manager != null)
+            @if (Model.Manager.Email != null)
             {
                 @if (User.IsInRole(Role.Supervisor.ToString()) || User.IsInRole(Role.Manager.ToString()))
                 {

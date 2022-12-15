@@ -4,12 +4,12 @@ namespace ProjectManagementApp.Domain.RepositoryInterfaces
 {
     public interface IIssueRepository
     {
-        Task Create(Issue newTask);
+        Task Create(Issue newIssue);
 
-        Task Update(Issue updatedTask);
+        Task Update(Issue updatedIssue);
 
         Task Delete(int id);
 
-        Issue? Get(int id);
+        Task<Issue?> GetById(int id);
     }
 }

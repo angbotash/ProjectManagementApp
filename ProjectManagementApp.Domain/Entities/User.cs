@@ -11,7 +11,7 @@ namespace ProjectManagementApp.Domain.Entities
 
         public string? Patronymic { get; set; }
 
-        public IList<UserProject> UserProject { get; set; } = null!;
+        public IList<UserProject> UserProjects { get; set; } = null!;
 
         public IList<Issue> AssignedIssues { get; set; } = null!;
 

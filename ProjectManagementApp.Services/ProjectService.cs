@@ -15,13 +15,6 @@ namespace ProjectManagementApp.Services
 
         public async Task Create(Project newProject)
         {
-            var project = _projectRepository.Get(newProject.Id);
-
-            if (project is null)
-            {
-                throw new KeyNotFoundException($"There is no Project with Id {newProject.Id}.");
-            }
-
             await _projectRepository.Create(newProject);
         }
 
@@ -32,7 +25,7 @@ namespace ProjectManagementApp.Services
 
         public async Task Delete(int id)
         {
-            var project = _projectRepository.Get(id);
+            var project = await _projectRepository.GetById(id);
 
             if (project is null)
             {
@@ -42,24 +35,19 @@ namespace ProjectManagementApp.Services
             await _projectRepository.Delete(id);
         }
 
-        public Project? Get(int id)
+        public async Task<Project?> GetById(int id)
         {
-            return _projectRepository.Get(id);
+            return await _projectRepository.GetById(id);
         }
 
-        public IEnumerable<Project> GetAll()
+        public async Task<IEnumerable<Project>> GetAll()
         {
-            return _projectRepository.GetAll();
+            return await _projectRepository.GetAll();
         }
 
-        public IEnumerable<Project> GetManagerProjects(int managerId)
+        public  async Task<IEnumerable<Project>> GetManagerProjects(int managerId)
         {
-            return _projectRepository.GetManagerProjects(managerId);
-        }
-
-        public IEnumerable<User> GetUsers(int projectId)
-        {
-            return _projectRepository.GetUsers(projectId);
+            return await _projectRepository.GetManagerProjects(managerId);
         }
     }
 }

@@ -10,6 +10,6 @@ namespace ProjectManagementApp.Domain.ServiceInterfaces
 
         Task Delete(int id);
 
-        Issue? Get(int id);
+        Task<Issue?> GetById(int id);
     }
 }

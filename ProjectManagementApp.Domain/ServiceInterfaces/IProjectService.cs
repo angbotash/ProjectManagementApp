@@ -10,12 +10,10 @@ namespace ProjectManagementApp.Domain.ServiceInterfaces
 
         Task Delete(int id);
 
-        Project? Get(int id);
+        Task<Project?> GetById(int id);
 
-        IEnumerable<Project> GetAll();
+        Task<IEnumerable<Project>> GetAll();
 
-        IEnumerable<Project> GetManagerProjects(int managerId);
-
-        IEnumerable<User> GetUsers(int projectId);
+        Task<IEnumerable<Project>> GetManagerProjects(int managerId);
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using ProjectManagementApp.Domain.Entities;
 using ProjectManagementApp.Domain.ServiceInterfaces;
 using ProjectManagementApp.Web.ViewModels;
+using IssueStatus = ProjectManagementApp.Web.ViewModels.IssueStatus;
 
 namespace ProjectManagementApp.Web.Controllers
 {
@@ -34,7 +35,7 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            if (_projectService.Get((int)projectId) == null)
+            if (_projectService.GetById((int)projectId) == null)
             {
                 return NotFound();
             }
@@ -42,7 +43,7 @@ namespace ProjectManagementApp.Web.Controllers
             var allEmployees = await _userService.GetEmployees();
             var allManagers = await _userService.GetManagers();
 
-            var selectListEmployees = allEmployees .Select(u => new SelectListItem(u.Email, u.Id.ToString())).ToList();
+            var selectListEmployees = allEmployees.Select(u => new SelectListItem(u.Email, u.Id.ToString())).ToList();
             var selectListManagers = allManagers.Select(u => new SelectListItem(u.Email, u.Id.ToString())).ToList();
             var model = new CreateIssueViewModel
             {
@@ -90,7 +91,7 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            var issue = _issueService.Get((int)id);
+            var issue = await _issueService.GetById((int)id);
 
             if (issue is null)
             {
@@ -141,7 +142,7 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            var issue = _issueService.Get((int)id);
+            var issue = await _issueService.GetById((int)id);
 
             if (issue is null)
             {
@@ -156,14 +157,14 @@ namespace ProjectManagementApp.Web.Controllers
         }
 
         [HttpGet("ViewIssue")]
-        public IActionResult ViewIssue(int? id)
+        public async Task<IActionResult> ViewIssueAsync(int? id)
         {
             if (id is null)
             {
                 return BadRequest();
             }
 
-            var issue = _issueService.Get((int)id);
+            var issue = await _issueService.GetById((int)id);
 
             if (issue is null)
             {
@@ -183,7 +184,7 @@ namespace ProjectManagementApp.Web.Controllers
         //        return BadRequest();
         //    }
 
-        //    var employee = this._userService.Get((int) userId);
+        //    var employee = this._userService.GetById((int) userId);
 
         //    if (employee is null)
         //    {
@@ -226,14 +227,14 @@ namespace ProjectManagementApp.Web.Controllers
         //}
 
         [HttpGet("ViewAssignedIssues")]
-        public IActionResult ViewAssignedIssues(int? userId)
+        public async Task<IActionResult> ViewAssignedIssuesAsync(int? userId)
         {
             if (userId is null)
             {
                 return BadRequest();
             }
 
-            var user = _userService.Get((int)userId);
+            var user = await _userService.GetById((int)userId);
 
             if (user is null)
             {
@@ -247,14 +248,14 @@ namespace ProjectManagementApp.Web.Controllers
         }
 
         [HttpGet("ViewReportedIssues")]
-        public IActionResult ViewReportedIssues(int? userId)
+        public async Task<IActionResult> ViewReportedIssues(int? userId)
         {
             if (userId is null)
             {
                 return BadRequest();
             }
 
-            var user = _userService.Get((int)userId);
+            var user = await _userService.GetById((int)userId);
 
             if (user is null)
             {
@@ -268,14 +269,14 @@ namespace ProjectManagementApp.Web.Controllers
         }
 
         [HttpGet("ViewProjectIssues")]
-        public IActionResult ViewProjectIssues(int? projectId)
+        public async Task<IActionResult> ViewProjectIssues(int? projectId)
         {
             if (projectId is null)
             {
                 return BadRequest();
             }
 
-            var project = _projectService.Get((int)projectId);
+            var project = await _projectService.GetById((int)projectId);
 
             if (project is null)
             {

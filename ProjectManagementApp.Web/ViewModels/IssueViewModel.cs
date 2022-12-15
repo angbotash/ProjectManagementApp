@@ -22,7 +22,7 @@ namespace ProjectManagementApp.Web.ViewModels
 
         public string? Comment { get; set; }
 
-        public IssueStatus.IssueStatus Status { get; set; }
+        public IssueStatus Status { get; set; }
 
         public int Priority { get; set; }
     }

@@ -5,15 +5,11 @@ namespace ProjectManagementApp.Domain.RepositoryInterfaces
 {
     public interface IUserRepository
     {
-        Task Create(User newUser);
-
         Task Delete(int id);
 
-        User? Get(int id);
+        Task<User?> GetById(int id);
 
-        IEnumerable<Project> GetProjects(int id);
-
-        IEnumerable<IdentityRole<int>> GetRoles();
+        Task<IList<IdentityRole<int>>> GetRoles();
 
         Task AddToProject(int projectId, int userId);
 

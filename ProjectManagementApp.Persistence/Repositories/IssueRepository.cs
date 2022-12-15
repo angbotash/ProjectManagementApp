@@ -13,33 +13,33 @@ namespace ProjectManagementApp.Persistence.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task Create(Issue newTask)
+        public async Task Create(Issue newIssue)
         {
-            await _dbContext.Issues.AddAsync(newTask);
+            await _dbContext.Issues.AddAsync(newIssue);
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task Update(Issue updatedTask)
+        public async Task Update(Issue updatedIssue)
         {
-            var issue = _dbContext.Issues.FirstOrDefault(i => i.Id == updatedTask.Id);
+            var issue = await _dbContext.Issues.FirstOrDefaultAsync(i => i.Id == updatedIssue.Id);
 
             if (issue is null)
             {
-                throw new KeyNotFoundException($"There is no Issue with Id {updatedTask.Id}.");
+                throw new KeyNotFoundException($"There is no Issue with Id {updatedIssue.Id}.");
             }
 
-            issue.Name = updatedTask.Name;
-            issue.AssigneeId = updatedTask.AssigneeId;
-            issue.Comment = updatedTask.Comment;
-            issue.Status = updatedTask.Status;
-            issue.Priority = updatedTask.Priority;
+            issue.Name = updatedIssue.Name;
+            issue.AssigneeId = updatedIssue.AssigneeId;
+            issue.Comment = updatedIssue.Comment;
+            issue.Status = updatedIssue.Status;
+            issue.Priority = updatedIssue.Priority;
 
             await _dbContext.SaveChangesAsync();
         }
 
         public async Task Delete(int id)
         {
-            var issue = _dbContext.Issues.FirstOrDefault(i => i.Id == id);
+            var issue = await _dbContext.Issues.FirstOrDefaultAsync(i => i.Id == id);
 
             if (issue is null)
             {
@@ -50,15 +50,13 @@ namespace ProjectManagementApp.Persistence.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public Issue? Get(int id)
+        public async Task<Issue?> GetById(int id)
         {
-            var issue = _dbContext.Issues
+            return await _dbContext.Issues
                 .Include(i => i.Project)
                 .Include(i => i.Assignee)
                 .Include(i => i.Reporter)
-                .FirstOrDefault(i => i.Id == id);
-
-            return issue;
+                .FirstOrDefaultAsync(i => i.Id == id);
         }
     }
 }
