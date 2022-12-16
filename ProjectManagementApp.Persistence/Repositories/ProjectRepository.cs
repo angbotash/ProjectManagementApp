@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Linq.Dynamic.Core;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagementApp.Domain.Entities;
+using ProjectManagementApp.Domain.QueryOrder;
 using ProjectManagementApp.Domain.RepositoryInterfaces;
 
 namespace ProjectManagementApp.Persistence.Repositories
@@ -8,29 +9,27 @@ namespace ProjectManagementApp.Persistence.Repositories
     public class ProjectRepository : IProjectRepository
     {
         private readonly ApplicationContext _dbContext;
-        private readonly UserManager<User> _userManager;
 
-        public ProjectRepository(ApplicationContext dbContext, UserManager<User> userManager)
+        public ProjectRepository(ApplicationContext dbContext)
         {
             _dbContext = dbContext;
-            _userManager = userManager;
         }
 
-        public async Task Create(Project newProject)
+        public async Task CreateAsync(Project newProject)
         {
             await _dbContext.Projects.AddAsync(newProject);
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task Update(Project updatedProject)
+        public async Task UpdateAsync(Project updatedProject)
         {
             this._dbContext.Projects.Update(updatedProject);
             await this._dbContext.SaveChangesAsync();
         }
 
-        public async Task Delete(int id)
+        public async Task DeleteAsync(int id)
         {
-            var project = _dbContext.Projects.FirstOrDefault(p => p.Id == id);
+            var project = await _dbContext.Projects.FirstOrDefaultAsync(p => p.Id == id);
 
             if (project is null)
             {
@@ -41,60 +40,56 @@ namespace ProjectManagementApp.Persistence.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public Project? Get(int id)
+        public async Task<Project?> GetByIdAsync(int id)
         {
-            var project = _dbContext.Projects
+            return await _dbContext.Projects
                 .Include(p => p.Manager)
                 .Include(p => p.Issues)
                     .ThenInclude(i => i.Assignee)
                 .Include(p => p.Issues)
                     .ThenInclude(i => i.Reporter)
-                .FirstOrDefault(p => p.Id == id);
-
-            return project;
+                .Include(p => p.UserProjects)
+                    .ThenInclude(up => up.User)
+                .FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public IEnumerable<Project> GetAll()
+        public async Task<IList<Project>> GetOrderedListAsync(SortDirection direction = SortDirection.Ascending, string? order = null)
         {
-            var projects = _dbContext.Projects
+            return await GetOrderedListQuery(direction, order).ToListAsync();
+        }
+
+        public async Task<IList<Project>> GetManagerProjectsAsync(int managerId,
+        SortDirection direction = SortDirection.Ascending, string? order = null)
+        {
+            return await GetOrderedListQuery(direction, order)
+                .Where(x => x.ManagerId == managerId)
+                .ToListAsync();
+        }
+
+        public async Task<IList<Project>> GetEmployeeProjectsAsync(int employeeId,
+            SortDirection direction = SortDirection.Ascending, string? order = null)
+        {
+            return await GetOrderedListQuery(direction, order)
+                .Where(x => x.UserProjects.Any(up => up.UserId == employeeId))
+                .ToListAsync();
+        }
+
+        private IQueryable<Project> GetOrderedListQuery(SortDirection direction = SortDirection.Ascending, string? order = null)
+        {
+            var query = _dbContext.Projects
                 .Include(p => p.Manager)
                 .Include(p => p.Issues)
                     .ThenInclude(i => i.Assignee)
                 .Include(p => p.Issues)
-                    .ThenInclude(i => i.Reporter);
+                    .ThenInclude(i => i.Reporter)
+                .AsQueryable();
 
-            return projects;
-        }
-
-        public IEnumerable<Project> GetManagerProjects(int managerId)
-        {
-            var managerProjects = _dbContext.Projects
-                .Where(p => p.ManagerId == managerId)
-                .Include(p => p.Manager)
-                .Include(p => p.Issues)
-                    .ThenInclude(i => i.Assignee)
-                .Include(p => p.Issues)
-                    .ThenInclude(i => i.Reporter);
-
-            return managerProjects;
-        }
-
-        public IEnumerable<User> GetUsers(int id)
-        {
-            var users = _dbContext.UserProject.Where(up => up.ProjectId == id).ToList();
-            var result = new List<User>();
-
-            foreach (var user in users)
+            if (order != null)
             {
-                var tempUser = _userManager.Users.FirstOrDefault(u => u.Id == user.UserId);
-
-                if (tempUser != null)
-                {
-                    result.Add(tempUser);
-                }
+                query = query.OrderBy($"{order} {direction}");
             }
 
-            return result;
+            return query;
         }
     }
 }

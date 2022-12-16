@@ -1,4 +1,4 @@
-namespace ProjectManagementApp.Web.Models
+namespace ProjectManagementApp.Web.ViewModels
 {
     public class ErrorViewModel
     {

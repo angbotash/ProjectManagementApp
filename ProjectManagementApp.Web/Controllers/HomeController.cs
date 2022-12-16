@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ProjectManagementApp.Web.Models;
 using System.Diagnostics;
 using AutoMapper;
 using ProjectManagementApp.Domain.Entities;
@@ -23,7 +22,7 @@ namespace ProjectManagementApp.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var currentUser = await _userService.GetCurrentUser(User);
+            var currentUser = await _userService.GetCurrentUserAsync(User);
 
             if (currentUser is null)
             {

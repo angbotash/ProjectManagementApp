@@ -1,21 +1,24 @@
 ﻿using ProjectManagementApp.Domain.Entities;
+using ProjectManagementApp.Domain.QueryOrder;
 
 namespace ProjectManagementApp.Domain.ServiceInterfaces
 {
     public interface IProjectService
     {
-        Task Create(Project newProject);
+        Task CreateAsync(Project newProject);
 
-        Task Edit(Project updatedProject);
+        Task EditAsync(Project updatedProject);
 
-        Task Delete(int id);
+        Task DeleteAsync(int id);
 
-        Project? Get(int id);
+        Task<Project?> GetByIdAsync(int id);
 
-        IEnumerable<Project> GetAll();
+        Task<IList<Project>> GetOrderedListAsync(SortDirection direction = SortDirection.Ascending, string? order = null);
+        
+        Task<IList<Project>> GetManagerProjectsAsync(int managerId,
+            SortDirection direction = SortDirection.Ascending, string? order = null);
 
-        IEnumerable<Project> GetManagerProjects(int managerId);
-
-        IEnumerable<User> GetUsers(int projectId);
+        Task<IList<Project>> GetEmployeeProjectsAsync(int employeeId,
+            SortDirection direction = SortDirection.Ascending, string? order = null);
     }
 }

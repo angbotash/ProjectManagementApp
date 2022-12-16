@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq.Dynamic.Core;
+using Microsoft.EntityFrameworkCore;
 using ProjectManagementApp.Domain.Entities;
+using ProjectManagementApp.Domain.QueryOrder;
 using ProjectManagementApp.Domain.RepositoryInterfaces;
 
 namespace ProjectManagementApp.Persistence.Repositories
@@ -13,33 +15,33 @@ namespace ProjectManagementApp.Persistence.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task Create(Issue newTask)
+        public async Task CreateAsync(Issue newIssue)
         {
-            await _dbContext.Issues.AddAsync(newTask);
+            await _dbContext.Issues.AddAsync(newIssue);
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task Update(Issue updatedTask)
+        public async Task UpdateAsync(Issue updatedIssue)
         {
-            var issue = _dbContext.Issues.FirstOrDefault(i => i.Id == updatedTask.Id);
+            var issue = await _dbContext.Issues.FirstOrDefaultAsync(i => i.Id == updatedIssue.Id);
 
             if (issue is null)
             {
-                throw new KeyNotFoundException($"There is no Issue with Id {updatedTask.Id}.");
+                throw new KeyNotFoundException($"There is no Issue with Id {updatedIssue.Id}.");
             }
 
-            issue.Name = updatedTask.Name;
-            issue.AssigneeId = updatedTask.AssigneeId;
-            issue.Comment = updatedTask.Comment;
-            issue.Status = updatedTask.Status;
-            issue.Priority = updatedTask.Priority;
+            issue.Name = updatedIssue.Name;
+            issue.AssigneeId = updatedIssue.AssigneeId;
+            issue.Comment = updatedIssue.Comment;
+            issue.Status = updatedIssue.Status;
+            issue.Priority = updatedIssue.Priority;
 
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task Delete(int id)
+        public async Task DeleteAsync(int id)
         {
-            var issue = _dbContext.Issues.FirstOrDefault(i => i.Id == id);
+            var issue = await _dbContext.Issues.FirstOrDefaultAsync(i => i.Id == id);
 
             if (issue is null)
             {
@@ -50,15 +52,67 @@ namespace ProjectManagementApp.Persistence.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public Issue? Get(int id)
+        public async Task<Issue?> GetByIdAsync(int id)
         {
-            var issue = _dbContext.Issues
+            return await _dbContext.Issues
                 .Include(i => i.Project)
                 .Include(i => i.Assignee)
                 .Include(i => i.Reporter)
-                .FirstOrDefault(i => i.Id == id);
+                .FirstOrDefaultAsync(i => i.Id == id);
+        }
 
-            return issue;
+        public async Task<IList<Issue>> GetReportedIssuesAsync(int userId,
+            SortDirection direction = SortDirection.Ascending, string? order = null)
+        {
+            var query = _dbContext.Issues
+                .Include(i => i.Project)
+                .Include(i => i.Assignee)
+                .Include(i => i.Reporter)
+                .Where(i => i.ReporterId == userId)
+                .AsQueryable();
+
+            if (order != null)
+            {
+                query = query.OrderBy($"{order} {direction}");
+            }
+
+            return await query.ToListAsync();
+        }
+
+        public async Task<IList<Issue>> GetAssignedIssuesAsync(int userId, 
+            SortDirection direction = SortDirection.Ascending, string? order = null)
+        {
+            var query = _dbContext.Issues
+                .Include(i => i.Project)
+                .Include(i => i.Assignee)
+                .Include(i => i.Reporter)
+                .Where(i => i.AssigneeId == userId)
+                .AsQueryable();
+
+            if (order != null)
+            {
+                query = query.OrderBy($"{order} {direction}");
+            }
+
+            return await query.ToListAsync();
+        }
+
+        public async Task<IList<Issue>> GetProjectIssuesAsync(int projectId,
+            SortDirection direction = SortDirection.Ascending, string? order = null)
+        {
+            var query = _dbContext.Issues
+                .Include(i => i.Project)
+                .Include(i => i.Assignee)
+                .Include(i => i.Reporter)
+                .Where(i => i.Project.Id == projectId)
+                .AsQueryable();
+
+            if (order != null)
+            {
+                query = query.OrderBy($"{order} {direction}");
+            }
+
+            return await query.ToListAsync();
         }
     }
 }

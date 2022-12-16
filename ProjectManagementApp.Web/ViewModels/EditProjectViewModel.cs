@@ -43,6 +43,6 @@ namespace ProjectManagementApp.Web.ViewModels
         [Display(Name = "Priority 1-10")]
         public int Priority { get; set; }
 
-        public IList<SelectListItem> Managers { get; set; } = null!;
+        public IList<SelectListItem> Managers { get; set; } = new List<SelectListItem>();
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ProjectManagementApp.Domain.Entities;
+using ProjectManagementApp.Domain.QueryOrder;
 using ProjectManagementApp.Domain.ServiceInterfaces;
 using ProjectManagementApp.Web.ViewModels;
 
@@ -27,7 +28,7 @@ namespace ProjectManagementApp.Web.Controllers
         [Authorize(Roles = "Supervisor")]
         public async Task<ActionResult> CreateProject()
         {
-            var allManagers = await _userService.GetManagers();
+            var allManagers = await _userService.GetManagersAsync();
             var selectListManagers = allManagers.Select(u => new SelectListItem(u.Email, u.Id.ToString())).ToList();
             var model = new CreateProjectViewModel() { Managers = selectListManagers};
 
@@ -41,7 +42,7 @@ namespace ProjectManagementApp.Web.Controllers
             if (ModelState.IsValid)
             {
                 var project = _mapper.Map<CreateProjectViewModel, Project>(model);
-                await _projectService.Create(project);
+                await _projectService.CreateAsync(project);
 
                 return RedirectToAction("GetAllProjects");
             }
@@ -58,7 +59,7 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            var project = _projectService.Get((int)id);
+            var project = await _projectService.GetByIdAsync(id.Value);
 
             if (project is null)
             {
@@ -66,7 +67,7 @@ namespace ProjectManagementApp.Web.Controllers
             }
 
             var model = _mapper.Map<Project, EditProjectViewModel>(project);
-            var managers = await _userService.GetManagers();
+            var managers = await _userService.GetManagersAsync();
             var selectList = managers.Select(u => new SelectListItem(u.Email, u.Id.ToString())).ToList();
             model.Managers = selectList;
 
@@ -81,7 +82,7 @@ namespace ProjectManagementApp.Web.Controllers
             {
                 var updatedProject = _mapper.Map<EditProjectViewModel, Project>(model);
 
-                await _projectService.Edit(updatedProject);
+                await _projectService.EditAsync(updatedProject);
             }
 
             return RedirectToAction("ViewProject", new { id = model.Id });
@@ -96,137 +97,104 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            var project = _projectService.Get((int)id);
+            var project = await _projectService.GetByIdAsync(id.Value);
 
             if (project is null)
             {
                 return NotFound();
             }
 
-            await _projectService.Delete((int)id);
+            await _projectService.DeleteAsync(id.Value);
 
             return RedirectToAction("GetAllProjects");
         }
 
         [HttpGet("GetAllProjects")]
         [Authorize(Roles = "Supervisor")]
-        public IActionResult GetAllProjects(string sortOrder)
+        public async Task<IActionResult> GetAllProjects(
+            SortDirection direction = SortDirection.Ascending,
+            string? order = null)
         {
-            var projects = _projectService.GetAll();
-            var result = new List<ProjectViewModel>();
-
-            foreach (var proj in projects)
+            var projects = await _projectService.GetOrderedListAsync(direction, order);
+            var model = new ProjectsViewModel
             {
-                var tempProject = _mapper.Map<Project, ProjectViewModel>(proj);
+                Projects = _mapper.Map<IList<ProjectViewModel>>(projects),
+                Direction = direction,
+                Order = order
+            };
 
-                result.Add(tempProject);
-            }
-
-            ViewData["NameSortParam"] = string.IsNullOrEmpty(sortOrder) ? "name_desc" : String.Empty;
-            ViewData["StartDateSortParam"] = sortOrder == "Date" ? "start_date_desc" : "Date";
-            ViewData["EndDateSortParam"] = sortOrder == "Date" ? "end_date_desc" : "Date";
-            ViewData["PrioritySortParam"] = sortOrder == "Priority" ? "priority_desc" : "Priority";
-
-            IEnumerable<ProjectViewModel> sortedProjects = result;
-
-            switch (sortOrder)
-            {
-                case "name_desc":
-                    sortedProjects = sortedProjects.OrderByDescending(s => s.Name);
-                    break;
-                case "Date":
-                    sortedProjects = sortedProjects.OrderBy(s => s.StartDate);
-                    break;
-                case "start_date_desc":
-                    sortedProjects = sortedProjects.OrderByDescending(s => s.StartDate);
-                    break;
-                case "end_date_desc":
-                    sortedProjects = sortedProjects.OrderByDescending(s => s.StartDate);
-                    break;
-                case "Priority":
-                    sortedProjects = sortedProjects.OrderBy(s => s.Priority);
-                    break;
-                case "priority_desc":
-                    sortedProjects = sortedProjects.OrderByDescending(s => s.Priority);
-                    break;
-                default:
-                    sortedProjects = sortedProjects.OrderBy(s => s.Name);
-                    break;
-            }
-
-            return View(sortedProjects.ToList());
+            return View(model);
         }
 
         [HttpGet("GetManagerProjects")]
         [Authorize(Roles = "Manager")]
-        public IActionResult GetManagerProjects(int? managerId)
+        public async Task<IActionResult> GetManagerProjects(
+            int? managerId,
+            SortDirection direction = SortDirection.Ascending,
+            string? order = null,
+            string? filter = null)
         {
             if (managerId is null)
             {
                 return BadRequest();
             }
 
-            var projects = _projectService.GetManagerProjects((int)managerId);
-            var result = new List<ProjectViewModel>();
-
-            foreach (var proj in projects)
+            var projects = await _projectService.GetManagerProjectsAsync(managerId.Value, direction, order);
+            var model = new ProjectsViewModel()
             {
-                var tempProject = _mapper.Map<Project, ProjectViewModel>(proj);
+                Projects = _mapper.Map<IList<ProjectViewModel>>(projects),
+                ManagerId = managerId,
+                Direction = direction,
+                Order = order
+            };
 
-                result.Add(tempProject);
-            }
-
-            return View(result);
+            return View(model);
         }
 
         [HttpGet("GetEmployeeProjects")]
         [Authorize(Roles = "Employee")]
-        public IActionResult GetEmployeeProjects(int? employeeId)
+        public async Task<IActionResult> GetEmployeeProjects(
+            int? employeeId,
+            SortDirection direction = SortDirection.Ascending,
+            string? order = null)
         {
             if (employeeId is null)
             {
                 return BadRequest();
             }
 
-            var projects = _userService.GetProjects((int)employeeId);
-            var result = new List<ProjectViewModel>();
-
-            foreach (var proj in projects)
+            var projects = await _projectService.GetEmployeeProjectsAsync(employeeId.Value, direction, order);
+            var model = new ProjectsViewModel()
             {
-                var tempProject = _mapper.Map<Project, ProjectViewModel>(proj);
+                Projects = _mapper.Map<IList<ProjectViewModel>>(projects),
+                EmployeeId = employeeId,
+                Direction = direction,
+                Order = order
+            };
 
-                result.Add(tempProject);
-            }
-
-            return View(result);
+            return View(model);
         }
 
         [HttpGet("ViewProject")]
-        public IActionResult ViewProject(int? id)
+        public async Task<IActionResult> ViewProject(int? id)
         {
             if (id is null)
             {
                 return BadRequest();
             }
 
-            var project = _projectService.Get((int)id);
+            var project = await _projectService.GetByIdAsync(id.Value);
 
             if (project is null)
             {
                 return NotFound();
             }
 
-            var result = _mapper.Map<Project, ProjectViewModel>(project);
-            var users = _projectService.GetUsers((int)id);
+            var model = _mapper.Map<Project, ProjectViewModel>(project);
+            var users = project.UserProjects.Select(x => x.User).ToList();
+            model.Users = _mapper.Map<IList<UserViewModel>>(users);
 
-            foreach (var empl in users)
-            {
-                var tempUser = _mapper.Map<User, UserViewModel>(empl);
-
-                result.Users.Add(tempUser);
-            }
-
-            return View(result);
+            return View(model);
         }
 
         [HttpGet("EditProjectEmployees")]
@@ -238,30 +206,29 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            var project = _projectService.Get((int)id);
+            var project = await _projectService.GetByIdAsync(id.Value);
 
             if (project is null)
             {
                 return NotFound();
             }
 
-            var allEmployees = await _userService.GetEmployees();
-            var projectEmployees = _projectService.GetUsers((int) id);
+            var allEmployees = await _userService.GetEmployeesAsync();
+            var projectEmployees = project.UserProjects.Select(x => x.User).ToList();
             var model = new EditProjectEmployeesViewModel()
             {
-                Project = _mapper.Map<Project, ProjectViewModel>(project)
+                Project = _mapper.Map<Project, ProjectViewModel>(project),
+                ProjectEmployees = _mapper.Map<IList<UserViewModel>>(projectEmployees),
             };
 
             foreach (var user in allEmployees)
             {
-                var tempUser = _mapper.Map<User, UserViewModel>(user);
-                model.AllEmployees.Add(tempUser);
-            }
+                if (!projectEmployees.Contains(user))
+                {
+                    var tempUser = _mapper.Map<User, UserViewModel>(user);
 
-            foreach (var user in projectEmployees)
-            {
-                var tempUser = _mapper.Map<User, UserViewModel>(user);
-                model.ProjectEmployees.Add(tempUser);
+                    model.AllEmployees.Add(tempUser);
+                }
             }
 
             return View(model);

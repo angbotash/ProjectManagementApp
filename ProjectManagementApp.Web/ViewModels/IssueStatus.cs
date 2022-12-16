@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace ProjectManagementApp.Web.ViewModels.IssueStatus
+namespace ProjectManagementApp.Web.ViewModels
 {
     public enum IssueStatus
     {

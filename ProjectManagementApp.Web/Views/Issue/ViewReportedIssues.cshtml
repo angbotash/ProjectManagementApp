@@ -1,5 +1,7 @@
 ﻿@using ProjectManagementApp.Domain.Entities
-@model IList<ProjectManagementApp.Web.ViewModels.IssueViewModel>
+@using ProjectManagementApp.Domain.QueryOrder
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model IssuesViewModel
 
 <h4>Issues</h4>
 
@@ -7,29 +9,29 @@
     <thead>
         <tr>
             <th>
-                Name
+                <a asp-action="ViewReportedIssues" asp-route-userId="@Model.ReporterId" asp-route-order="Name" asp-route-direction="@Model.GetNextSortDirection("Name", SortDirection.Ascending)">Issue name</a>
             </th>
             <th>
-                Reporter
+                <a asp-action="ViewReportedIssues" asp-route-userId="@Model.ReporterId" asp-route-order="Reporter" asp-route-direction="@Model.GetNextSortDirection("Reporter", SortDirection.Ascending)">Reporter</a>
             </th>
             <th>
-                Assignee
+                <a asp-action="ViewReportedIssues" asp-route-userId="@Model.ReporterId" asp-route-order="Assignee" asp-route-direction="@Model.GetNextSortDirection("Assignee", SortDirection.Ascending)">Assignee</a>
             </th>
             <th>
-                Project
+                <a asp-action="ViewReportedIssues" asp-route-userId="@Model.ReporterId" asp-route-order="Project" asp-route-direction="@Model.GetNextSortDirection("Project", SortDirection.Ascending)">Project</a>
             </th>
             <th>
                 Comment
             </th>
             <th>
-                Status
+                <a asp-action="ViewReportedIssues" asp-route-userId="@Model.ReporterId" asp-route-order="Status" asp-route-direction="@Model.GetNextSortDirection("Status", SortDirection.Ascending)">Status</a>
             </th>
             <th>
-                Priority
+                <a asp-action="ViewReportedIssues" asp-route-userId="@Model.ReporterId" asp-route-order="Priority" asp-route-direction="@Model.GetNextSortDirection("Priority", SortDirection.Ascending)">Priority</a>
             </th>
         </tr>
     </thead>
-    @foreach (var issue in Model)
+    @foreach (var issue in Model.Issues)
     {
         <tr>
             <td>

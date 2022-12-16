@@ -1,28 +1,30 @@
-﻿@model List<ProjectManagementApp.Web.ViewModels.UserViewModel>
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using ProjectManagementApp.Domain.QueryOrder
+@model UsersViewModel
 
 <h2>Users<a class="btn btn-outline-dark" asp-controller="User" asp-action="CreateUser" style="float: right">Create a new employee</a></h2>
 
-@if (Model.Any())
+@if (Model.Users.Any())
 {
     <div>
         <table class="table">
             <thead>
             <tr>
                 <th>
-                    First name
+                    <a asp-action="GetAllUsers" asp-route-order="FirstName" asp-route-direction="@Model.GetNextSortDirection("FirstName", SortDirection.Ascending)">First name</a>
                 </th>
                 <th>
-                    Last name
+                    <a asp-action="GetAllUsers" asp-route-order="LastName" asp-route-direction="@Model.GetNextSortDirection("LastName", SortDirection.Ascending)">Last name</a>
                 </th>
                 <th>
-                    Patronymic
+                    <a asp-action="GetAllUsers" asp-route-order="Patronymic" asp-route-direction="@Model.GetNextSortDirection("Patronymic", SortDirection.Ascending)">Patronymic</a>
                 </th>
                 <th>
-                    Email
+                    <a asp-action="GetAllUsers" asp-route-order="Email" asp-route-direction="@Model.GetNextSortDirection("Email", SortDirection.Ascending)">Patronymic</a>
                 </th>
             </tr>
             </thead>
-            @foreach (var user in Model)
+            @foreach (var user in Model.Users)
             {
                 <tr>
                     <td>

@@ -47,15 +47,19 @@
             @Html.ValidationMessageFor(m => m.ConfirmPassword)
         </div>
         <hr>
-
-        @using (Html.BeginForm("Register", "Account", FormMethod.Post))
-        {
-            <input type="submit" value="Register" />
-        }
+        
+        <div>
+            @using (Html.BeginForm("Register", "Account", FormMethod.Post))
+            {
+                <input type="submit" value="Register" />
+            }
+        </div>
         <br/>
         <div>
-            @Html.ActionLink("Log in", "Login", "Account")
-
+            @using (Html.BeginForm("Login", "Account", FormMethod.Post))
+            {
+                <input type="submit" value="Log in" />
+            }
         </div>
     </div>
 }

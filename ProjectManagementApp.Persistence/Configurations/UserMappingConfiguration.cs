@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProjectManagementApp.Domain.Entities;
-using System.ComponentModel.DataAnnotations;
 
 namespace ProjectManagementApp.Persistence.Configurations
 {
@@ -9,7 +8,7 @@ namespace ProjectManagementApp.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.HasMany(u => u.UserProject)
+            builder.HasMany(u => u.UserProjects)
                 .WithOne(up => up.User)
                 .HasForeignKey(up => up.UserId);
 

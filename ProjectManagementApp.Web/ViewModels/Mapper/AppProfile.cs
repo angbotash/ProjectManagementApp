@@ -9,19 +9,13 @@ namespace ProjectManagementApp.Web.ViewModels.Mapper
         {
             CreateMap<CreateUserViewModel, User>();
             CreateMap<CreateProjectViewModel, Project>();
-            CreateMap<UserViewModel, User>();
-            CreateMap<User, UserViewModel>();
-            CreateMap<ProjectViewModel, Project>();
-            CreateMap<Project, ProjectViewModel>();
-            CreateMap<EditUserViewModel, User>();
-            CreateMap<User, EditUserViewModel>();
-            CreateMap<EditProjectViewModel, Project>();
-            CreateMap<Project, EditProjectViewModel>();
+            CreateMap<UserViewModel, User>().ReverseMap();
+            CreateMap<ProjectViewModel, Project>().ReverseMap();
+            CreateMap<EditUserViewModel, User>().ReverseMap();
+            CreateMap<EditProjectViewModel, Project>().ReverseMap();
             CreateMap<CreateIssueViewModel, Issue>();
-            CreateMap<IssueViewModel, Issue>();
-            CreateMap<Issue, IssueViewModel>();
-            CreateMap<Issue, EditIssueViewModel>();
-            CreateMap<EditIssueViewModel, Issue>();
+            CreateMap<IssueViewModel, Issue>().ReverseMap();
+            CreateMap<Issue, EditIssueViewModel>().ReverseMap();
             CreateMap<RegisterViewModel, User>();
         }
     }

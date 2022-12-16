@@ -1,15 +1,22 @@
 ﻿using ProjectManagementApp.Domain.Entities;
+using ProjectManagementApp.Domain.QueryOrder;
 
 namespace ProjectManagementApp.Domain.ServiceInterfaces
 {
     public interface IIssueService
     {
-        Task Create(Issue newIssue);
+        Task CreateAsync(Issue newIssue);
 
-        Task Edit(Issue updatedIssue);
+        Task EditAsync(Issue updatedIssue);
 
-        Task Delete(int id);
+        Task DeleteAsync(int id);
 
-        Issue? Get(int id);
+        Task<Issue?> GetByIdAsync(int id);
+
+        Task<IList<Issue>> GetReportedIssuesAsync(int userId, SortDirection direction = SortDirection.Ascending, string? order = null);
+
+        Task<IList<Issue>> GetAssignedIssuesAsync(int userId, SortDirection direction = SortDirection.Ascending, string? order = null);
+
+        Task<IList<Issue>> GetProjectIssuesAsync(int projectId, SortDirection direction = SortDirection.Ascending, string? order = null);
     }
 }

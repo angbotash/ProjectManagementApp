@@ -1,36 +1,38 @@
-﻿@model List<ProjectManagementApp.Web.ViewModels.ProjectViewModel>
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using ProjectManagementApp.Domain.QueryOrder
+@model ProjectsViewModel
 
 <h2>Projects</h2>
 
-@if (Model.Any())
+@if (Model.Projects.Any())
 {
     <table class="table">
         <thead>
-            <tr>
-                <th>
-                    Name
-                </th>
-                <th>
-                    Customer
-                </th>
-                <th>
-                    Executor
-                </th>
-                <th>
-                    Manager
-                </th>
-                <th>
-                    Start date
-                </th>
-                <th>
-                    End date
-                </th>
-                <th>
-                    Priority
-                </th>
-            </tr>
+        <tr>
+            <th>
+                <a asp-action="GetManagerProjects" asp-route-managerId="@Model.ManagerId" asp-route-order="Name" asp-route-direction="@Model.GetNextSortDirection("Name", SortDirection.Ascending)">Project name</a>
+            </th>
+            <th>
+                <a asp-action="GetManagerProjects" asp-route-managerId="@Model.ManagerId" asp-route-order="ClientCompanyName" asp-route-direction="@Model.GetNextSortDirection("ClientCompanyName", SortDirection.Ascending)">Client company</a>
+            </th>
+            <th>
+                <a asp-action="GetManagerProjects" asp-route-managerId="@Model.ManagerId" asp-route-order="ExecutorCompanyName" asp-route-direction="@Model.GetNextSortDirection("ExecutorCompanyName", SortDirection.Ascending)">Executor company</a>
+            </th>
+            <th>
+                <a asp-action="GetManagerProjects" asp-route-managerId="@Model.ManagerId" asp-route-order="Manager" asp-route-direction="@Model.GetNextSortDirection("Manager", SortDirection.Ascending)">Manager</a>
+            </th>
+            <th>
+                <a asp-action="GetManagerProjects" asp-route-managerId="@Model.ManagerId" asp-route-order="StartDate" asp-route-direction="@Model.GetNextSortDirection("StartDate", SortDirection.Ascending)">Start date</a>
+            </th>
+            <th>
+                <a asp-action="GetManagerProjects" asp-route-managerId="@Model.ManagerId" asp-route-order="EndDate" asp-route-direction="@Model.GetNextSortDirection("EndDate", SortDirection.Ascending)">End date</a>
+            </th>
+            <th>
+                <a asp-action="GetManagerProjects" asp-route-managerId="@Model.ManagerId" asp-route-order="Priority" asp-route-direction="@Model.GetNextSortDirection("Priority", SortDirection.Ascending)">Priority</a>
+            </th>
+        </tr>
         </thead>
-        @foreach (var project in Model)
+        @foreach (var project in Model.Projects)
         {
             <tr>
                 <td>
@@ -48,7 +50,7 @@
                     @project.ExecutorCompanyName
                 </td>
                 <td>
-                    @if (project.Manager != null)
+                    @if (project.Manager?.Email != null)
                     {
                         @project.Manager.Email
                     }

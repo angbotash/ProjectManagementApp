@@ -1,6 +1,4 @@
-﻿using ProjectManagementApp.Domain.Entities;
-
-namespace ProjectManagementApp.Web.ViewModels
+﻿namespace ProjectManagementApp.Web.ViewModels
 {
     public class IssueViewModel
     {
@@ -22,7 +20,7 @@ namespace ProjectManagementApp.Web.ViewModels
 
         public string? Comment { get; set; }
 
-        public IssueStatus.IssueStatus Status { get; set; }
+        public IssueStatus Status { get; set; }
 
         public int Priority { get; set; }
     }

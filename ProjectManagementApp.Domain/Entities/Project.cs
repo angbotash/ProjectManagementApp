@@ -12,7 +12,7 @@ namespace ProjectManagementApp.Domain.Entities
 
         public string ExecutorCompanyName { get; set; } = null!;
 
-        public IList<UserProject> UserProject { get; set; } = null!;
+        public IList<UserProject> UserProjects { get; set; } = null!;
 
         public User? Manager { get; set; }
 

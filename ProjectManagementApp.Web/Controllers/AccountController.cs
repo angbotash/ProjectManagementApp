@@ -33,7 +33,7 @@ namespace ProjectManagementApp.Web.Controllers
                 model.Role = "Employee";
                 var newUser = _mapper.Map<RegisterViewModel, User>(model);
 
-                var result = await _userService.Create(newUser, model.Password, model.Role);
+                var result = await _userService.CreateAsync(newUser, model.Password, model.Role);
 
                 if (result.Success)
                 {
@@ -60,7 +60,7 @@ namespace ProjectManagementApp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                OperationResult result = await _userService.Authenticate(model.Email, model.Password);
+                OperationResult result = await _userService.AuthenticateAsync(model.Email, model.Password);
 
                 if (result.Success)
                 {
@@ -79,7 +79,7 @@ namespace ProjectManagementApp.Web.Controllers
         [HttpPost("Logout")]
         public IActionResult Logout()
         {
-            _userService.Logout();
+            _userService.LogoutAsync();
 
             return RedirectToAction("Login", "Account");
         }

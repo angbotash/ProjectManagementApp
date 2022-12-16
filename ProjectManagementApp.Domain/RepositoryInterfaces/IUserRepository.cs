@@ -1,22 +1,21 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using ProjectManagementApp.Domain.Entities;
+using ProjectManagementApp.Domain.QueryOrder;
 
 namespace ProjectManagementApp.Domain.RepositoryInterfaces
 {
     public interface IUserRepository
     {
-        Task Create(User newUser);
+        Task DeleteAsync(int id);
 
-        Task Delete(int id);
+        Task<User?> GetByIdAsync(int id);
 
-        User? Get(int id);
+        Task<IList<User>> GetOrderedListAsync(SortDirection direction = SortDirection.Ascending, string? order = null);
 
-        IEnumerable<Project> GetProjects(int id);
+        Task<IList<IdentityRole<int>>> GetRolesAsync();
 
-        IEnumerable<IdentityRole<int>> GetRoles();
+        Task AddToProjectAsync(int projectId, int userId);
 
-        Task AddToProject(int projectId, int userId);
-
-        Task RemoveFromProject(int projectId, int userId);
+        Task RemoveFromProjectAsync(int projectId, int userId);
     }
 }

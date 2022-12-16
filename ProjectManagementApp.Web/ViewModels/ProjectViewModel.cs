@@ -10,7 +10,7 @@
 
         public string ExecutorCompanyName { get; set; } = null!;
 
-        public UserViewModel? Manager { get; set; }
+        public UserViewModel? Manager { get; set; } = null;
 
         public DateTime StartDate { get; set; }
 

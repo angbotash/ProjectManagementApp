@@ -30,7 +30,7 @@ namespace ProjectManagementApp.Web.ViewModels
 
         [Required(ErrorMessage = "Status is required.")]
         [Display(Name = "Status")]
-        public IssueStatus.IssueStatus Status { get; set; }
+        public IssueStatus Status { get; set; }
 
         [Required(ErrorMessage = "Priority 1-10 is required.")]
         [Range(1, 10)]

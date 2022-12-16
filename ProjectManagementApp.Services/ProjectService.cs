@@ -1,4 +1,5 @@
 ﻿using ProjectManagementApp.Domain.Entities;
+using ProjectManagementApp.Domain.QueryOrder;
 using ProjectManagementApp.Domain.RepositoryInterfaces;
 using ProjectManagementApp.Domain.ServiceInterfaces;
 
@@ -13,53 +14,48 @@ namespace ProjectManagementApp.Services
             _projectRepository = projectRepository;
         }
 
-        public async Task Create(Project newProject)
+        public async Task CreateAsync(Project newProject)
         {
-            var project = _projectRepository.Get(newProject.Id);
-
-            if (project is null)
-            {
-                throw new KeyNotFoundException($"There is no Project with Id {newProject.Id}.");
-            }
-
-            await _projectRepository.Create(newProject);
+            await _projectRepository.CreateAsync(newProject);
         }
 
-        public async Task Edit(Project updatedProject)
+        public async Task EditAsync(Project updatedProject)
         {
-            await _projectRepository.Update(updatedProject);
+            await _projectRepository.UpdateAsync(updatedProject);
         }
 
-        public async Task Delete(int id)
+        public async Task DeleteAsync(int id)
         {
-            var project = _projectRepository.Get(id);
+            var project = await _projectRepository.GetByIdAsync(id);
 
             if (project is null)
             {
                 throw new KeyNotFoundException($"There is no Project with Id {id}.");
             }
 
-            await _projectRepository.Delete(id);
+            await _projectRepository.DeleteAsync(id);
         }
 
-        public Project? Get(int id)
+        public async Task<Project?> GetByIdAsync(int id)
         {
-            return _projectRepository.Get(id);
+            return await _projectRepository.GetByIdAsync(id);
         }
 
-        public IEnumerable<Project> GetAll()
+        public async Task<IList<Project>> GetOrderedListAsync(SortDirection direction = SortDirection.Ascending, string? order = null)
         {
-            return _projectRepository.GetAll();
+            return await _projectRepository.GetOrderedListAsync(direction, order);
         }
 
-        public IEnumerable<Project> GetManagerProjects(int managerId)
+        public async Task<IList<Project>> GetManagerProjectsAsync(int managerId,
+            SortDirection direction = SortDirection.Ascending, string? order = null)
         {
-            return _projectRepository.GetManagerProjects(managerId);
+            return await _projectRepository.GetManagerProjectsAsync(managerId, direction, order);
         }
 
-        public IEnumerable<User> GetUsers(int projectId)
+        public async Task<IList<Project>> GetEmployeeProjectsAsync(int employeeId,
+            SortDirection direction = SortDirection.Ascending, string? order = null)
         {
-            return _projectRepository.GetUsers(projectId);
+            return await _projectRepository.GetEmployeeProjectsAsync(employeeId, direction, order);
         }
     }
 }
