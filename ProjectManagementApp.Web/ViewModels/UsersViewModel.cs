@@ -2,21 +2,15 @@
 
 namespace ProjectManagementApp.Web.ViewModels
 {
-    public class IssuesViewModel
+    public class UsersViewModel
     {
-        public IList<IssueViewModel> Issues { get; set; } = new List<IssueViewModel>();
-
-        public int? ProjectId;
-
-        public int? ReporterId;
-
-        public int? AsigneeId;
+        public IList<UserViewModel> Users { get; set; } = new List<UserViewModel>();
 
         public string? Order { get; set; }
 
         public SortDirection Direction { get; set; }
 
-        public SortDirection GetNextSortDirection(string? name, SortDirection defaultOrder)
+        public SortDirection GetNextSortDirection(string name, SortDirection defaultOrder)
         {
             if (Order?.ToLower() != name?.ToLower())
             {

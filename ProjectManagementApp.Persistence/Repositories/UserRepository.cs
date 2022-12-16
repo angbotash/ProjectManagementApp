@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Linq.Dynamic.Core;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagementApp.Domain.Entities;
+using ProjectManagementApp.Domain.QueryOrder;
 using ProjectManagementApp.Domain.RepositoryInterfaces;
 
 namespace ProjectManagementApp.Persistence.Repositories
@@ -43,6 +45,11 @@ namespace ProjectManagementApp.Persistence.Repositories
                 .FirstOrDefaultAsync(u => u.Id == id);
 
             return user;
+        }
+
+        public async Task<IList<User>> GetOrderedListAsync(SortDirection direction = SortDirection.Ascending, string? order = null)
+        {
+            return await GetOrderedListQuery(direction, order).ToListAsync();
         }
 
         public async Task<IList<IdentityRole<int>>> GetRolesAsync()
@@ -92,6 +99,30 @@ namespace ProjectManagementApp.Persistence.Repositories
                 _dbContext.UserProject.Remove(userProject);
                 await _dbContext.SaveChangesAsync();
             }
+        }
+
+        private IQueryable<User> GetOrderedListQuery(SortDirection direction = SortDirection.Ascending,
+            string? order = null)
+        {
+            var query = _dbContext.Users
+                .Include(u => u.AssignedIssues)
+                    .ThenInclude(i => i.Reporter)
+                .Include(u => u.AssignedIssues)
+                    .ThenInclude(i => i.Project)
+                .Include(u => u.ReportedIssues)
+                    .ThenInclude(i => i.Assignee)
+                .Include(u => u.ReportedIssues)
+                    .ThenInclude(i => i.Project)
+                .Include(u => u.UserProjects)
+                    .ThenInclude(up => up.Project)
+                .AsQueryable();
+
+            if (order != null)
+            {
+                query = query.OrderBy($"{order} {direction}");
+            }
+
+            return query;
         }
     }
 }

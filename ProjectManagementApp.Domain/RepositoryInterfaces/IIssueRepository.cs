@@ -13,13 +13,10 @@ namespace ProjectManagementApp.Domain.RepositoryInterfaces
 
         Task<Issue?> GetByIdAsync(int id);
 
-        Task<IList<Issue>> GetReportedIssuesAsync(int userId, SortDirection direction = SortDirection.Ascending,
-            string? order = null, string? filter = null);
+        Task<IList<Issue>> GetReportedIssuesAsync(int userId, SortDirection direction = SortDirection.Ascending, string? order = null);
 
-        Task<IList<Issue>> GetAssignedIssuesAsync(int userId, SortDirection direction = SortDirection.Ascending,
-            string? order = null, string? filter = null);
+        Task<IList<Issue>> GetAssignedIssuesAsync(int userId, SortDirection direction = SortDirection.Ascending, string? order = null);
 
-        Task<IList<Issue>> GetProjectIssuesAsync(int projectId, SortDirection direction = SortDirection.Ascending,
-            string? order = null, string? filter = null);
+        Task<IList<Issue>> GetProjectIssuesAsync(int projectId, SortDirection direction = SortDirection.Ascending, string? order = null);
     }
 }

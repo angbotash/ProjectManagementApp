@@ -48,22 +48,22 @@ namespace ProjectManagementApp.Services
             return await _issueRepository.GetByIdAsync(id);
         }
 
-        public async Task<IEnumerable<Issue>> GetReportedIssuesAsync(int userId, SortDirection direction = SortDirection.Ascending, string? order = null,
-            string? filter = null)
+        public async Task<IList<Issue>> GetReportedIssuesAsync(int userId,
+            SortDirection direction = SortDirection.Ascending, string? order = null)
         {
-            return await _issueRepository.GetReportedIssuesAsync(userId, direction, order, filter);
+            return await _issueRepository.GetReportedIssuesAsync(userId, direction, order);
         }
 
-        public async Task<IEnumerable<Issue>> GetAssignedIssuesAsync(int userId, SortDirection direction = SortDirection.Ascending, string? order = null,
-            string? filter = null)
+        public async Task<IList<Issue>> GetAssignedIssuesAsync(int userId,
+            SortDirection direction = SortDirection.Ascending, string? order = null)
         {
-            return await _issueRepository.GetAssignedIssuesAsync(userId, direction, order, filter);
+            return await _issueRepository.GetAssignedIssuesAsync(userId, direction, order);
         }
 
-        public async Task<IEnumerable<Issue>> GetProjectIssuesAsync(int projectId, SortDirection direction = SortDirection.Ascending, string? order = null,
-            string? filter = null)
+        public async Task<IList<Issue>> GetProjectIssuesAsync(int projectId,
+            SortDirection direction = SortDirection.Ascending, string? order = null)
         {
-            return await _issueRepository.GetProjectIssuesAsync(projectId, direction, order, filter);
+            return await _issueRepository.GetProjectIssuesAsync(projectId, direction, order);
         }
     }
 }

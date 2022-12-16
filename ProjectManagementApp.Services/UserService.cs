@@ -1,8 +1,8 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using ProjectManagementApp.Domain.Entities;
 using ProjectManagementApp.Domain.Infrastructure;
+using ProjectManagementApp.Domain.QueryOrder;
 using ProjectManagementApp.Domain.RepositoryInterfaces;
 using ProjectManagementApp.Domain.ServiceInterfaces;
 
@@ -132,12 +132,12 @@ namespace ProjectManagementApp.Services
             return await _userRepository.GetByIdAsync(id);
         }
 
-        public async Task<IEnumerable<User>> GetAllAsync()
+        public async Task<IList<User>> GetOrderedListAsync(SortDirection direction = SortDirection.Ascending, string? order = null)
         {
-            return await _userManager.Users.ToListAsync();
+            return await _userRepository.GetOrderedListAsync(direction, order);
         }
 
-        public async Task<IEnumerable<IdentityRole<int>>> GetRolesAsync()
+        public async Task<IList<IdentityRole<int>>> GetRolesAsync()
         {
             return await _userRepository.GetRolesAsync();
         }
@@ -147,12 +147,12 @@ namespace ProjectManagementApp.Services
             return await _userManager.GetUserAsync(currentUser);
         }
 
-        public async Task<IEnumerable<User>> GetManagersAsync()
+        public async Task<IList<User>> GetManagersAsync()
         {
             return await _userManager.GetUsersInRoleAsync(Role.Manager.ToString());
         }
 
-        public async Task<IEnumerable<User>> GetEmployeesAsync()
+        public async Task<IList<User>> GetEmployeesAsync()
         {
             return await _userManager.GetUsersInRoleAsync(Role.Employee.ToString());
         }

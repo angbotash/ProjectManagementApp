@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using ProjectManagementApp.Domain.Entities;
+using ProjectManagementApp.Domain.QueryOrder;
 
 namespace ProjectManagementApp.Domain.RepositoryInterfaces
 {
@@ -8,6 +9,8 @@ namespace ProjectManagementApp.Domain.RepositoryInterfaces
         Task DeleteAsync(int id);
 
         Task<User?> GetByIdAsync(int id);
+
+        Task<IList<User>> GetOrderedListAsync(SortDirection direction = SortDirection.Ascending, string? order = null);
 
         Task<IList<IdentityRole<int>>> GetRolesAsync();
 

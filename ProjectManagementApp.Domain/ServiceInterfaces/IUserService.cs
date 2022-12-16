@@ -2,6 +2,7 @@
 using ProjectManagementApp.Domain.Entities;
 using ProjectManagementApp.Domain.Infrastructure;
 using System.Security.Claims;
+using ProjectManagementApp.Domain.QueryOrder;
 
 namespace ProjectManagementApp.Domain.ServiceInterfaces
 {
@@ -19,15 +20,15 @@ namespace ProjectManagementApp.Domain.ServiceInterfaces
 
         Task<User?> GetByIdAsync(int id);
 
-        Task<IEnumerable<User>> GetAllAsync();
+        Task<IList<User>> GetOrderedListAsync(SortDirection direction = SortDirection.Ascending, string? order = null);
 
-        Task<IEnumerable<IdentityRole<int>>> GetRolesAsync();
+        Task<IList<IdentityRole<int>>> GetRolesAsync();
 
         Task<User?> GetCurrentUserAsync(ClaimsPrincipal currentUser);
 
-        Task<IEnumerable<User>> GetManagersAsync();
+        Task<IList<User>> GetManagersAsync();
 
-        Task<IEnumerable<User>> GetEmployeesAsync();
+        Task<IList<User>> GetEmployeesAsync();
 
         Task AddToProjectAsync(int projectId, int userId);
 

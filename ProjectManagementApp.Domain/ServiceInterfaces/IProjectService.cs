@@ -13,9 +13,12 @@ namespace ProjectManagementApp.Domain.ServiceInterfaces
 
         Task<Project?> GetByIdAsync(int id);
 
-        Task<IEnumerable<Project>> GetOrderedListAsync(SortDirection direction = SortDirection.Ascending,
-            string? order = null, string? filter = null);
+        Task<IList<Project>> GetOrderedListAsync(SortDirection direction = SortDirection.Ascending, string? order = null);
+        
+        Task<IList<Project>> GetManagerProjectsAsync(int managerId,
+            SortDirection direction = SortDirection.Ascending, string? order = null);
 
-        Task<IEnumerable<Project>> GetManagerProjectsAsync(int managerId);
+        Task<IList<Project>> GetEmployeeProjectsAsync(int employeeId,
+            SortDirection direction = SortDirection.Ascending, string? order = null);
     }
 }

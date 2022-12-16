@@ -10,7 +10,7 @@
 }
 @if (User.IsInRole(Role.Employee.ToString()) && Model != null)
 {
-    <a asp-controller="User" asp-action="ViewUser" asp-route-id="@Model.Id">My profile</a>
+    <a class="btn btn-outline-dark" asp-controller="User" asp-action="ViewUser" asp-route-id="@Model.Id">My profile</a>
     <hr/>
     <span style="display: inline; float: left">
         <a class="btn btn-outline-dark" asp-controller="Project" asp-action="GetEmployeeProjects" asp-route-employeeId="@Model.Id">My projects</a>
@@ -20,7 +20,7 @@
 
 @if (User.IsInRole(Role.Manager.ToString()) && Model != null)
 {
-    <a asp-controller="User" asp-action="ViewUser" asp-route-id="@Model.Id">My profile</a>
+    <a class="btn btn-outline-dark" asp-controller="User" asp-action="ViewUser" asp-route-id="@Model.Id">My profile</a>
     <hr/>
     <span style="display: inline; float: left">
         <a class="btn btn-outline-dark" asp-controller="Project" asp-action="GetManagerProjects" asp-route-managerId="@Model.Id">My projects</a>

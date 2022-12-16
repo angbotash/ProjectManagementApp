@@ -1,6 +1,8 @@
 ﻿using Moq;
 using ProjectManagementApp.Domain.Entities;
+using ProjectManagementApp.Domain.QueryOrder;
 using ProjectManagementApp.Domain.RepositoryInterfaces;
+using ProjectManagementApp.Domain.ServiceInterfaces;
 using ProjectManagementApp.Services;
 using Xunit;
 
@@ -8,7 +10,7 @@ namespace ProjectManagementApp.Tests
 {
     public class IssueServiceUnitTests
     {
-        private readonly IssueService _issueService;
+        private readonly IIssueService _issueService;
         private readonly Mock<IIssueRepository> _issueRepositoryMock;
         public IssueServiceUnitTests()
         {
@@ -145,6 +147,78 @@ namespace ProjectManagementApp.Tests
             // Assert
             Assert.Null(result);
             _issueRepositoryMock.Verify(m => m.GetByIdAsync(It.IsAny<int>()), Times.Once());
+        }
+
+        [Fact]
+        public async Task GetReportedIssuesAsync_Returns_Collection_Of_Reported_Issues()
+        {
+            // Arrange
+            _issueRepositoryMock.Setup(m => m.GetReportedIssuesAsync(
+                    It.IsAny<int>(),
+                    SortDirection.Ascending,
+                    It.IsAny<string>()))
+                .ReturnsAsync(new List<Issue>());
+
+            // Act
+            var result = await _issueService.GetReportedIssuesAsync(
+                It.IsAny<int>(),
+                SortDirection.Ascending,
+                It.IsAny<string>());
+
+            // Assert
+            Assert.IsType<List<Issue>>(result);
+            _issueRepositoryMock.Verify(m => m.GetReportedIssuesAsync(
+                It.IsAny<int>(),
+                SortDirection.Ascending,
+                It.IsAny<string>()), Times.Once());
+        }
+
+        [Fact]
+        public async Task GetAssignedIssuesAsync_Returns_Collection_Of_Assigned_Issues()
+        {
+            // Arrange
+            _issueRepositoryMock.Setup(m => m.GetAssignedIssuesAsync(
+                    It.IsAny<int>(),
+                    SortDirection.Ascending,
+                    It.IsAny<string>()))
+                .ReturnsAsync(new List<Issue>());
+
+            // Act
+            var result = await _issueService.GetAssignedIssuesAsync(
+                It.IsAny<int>(),
+                SortDirection.Ascending,
+                It.IsAny<string>());
+
+            // Assert
+            Assert.IsType<List<Issue>>(result);
+            _issueRepositoryMock.Verify(m => m.GetAssignedIssuesAsync(
+                It.IsAny<int>(),
+                SortDirection.Ascending,
+                It.IsAny<string>()), Times.Once());
+        }
+
+        [Fact]
+        public async Task GetProjectIssuesAsync_Returns_Collection_Of_Project_Issues()
+        {
+            // Arrange
+            _issueRepositoryMock.Setup(m => m.GetProjectIssuesAsync(
+                    It.IsAny<int>(),
+                    SortDirection.Ascending,
+                    It.IsAny<string>()))
+                .ReturnsAsync(new List<Issue>());
+
+            // Act
+            var result = await _issueService.GetProjectIssuesAsync(
+                It.IsAny<int>(),
+                SortDirection.Ascending,
+                It.IsAny<string>());
+
+            // Assert
+            Assert.IsType<List<Issue>>(result);
+            _issueRepositoryMock.Verify(m => m.GetProjectIssuesAsync(
+                It.IsAny<int>(),
+                SortDirection.Ascending,
+                It.IsAny<string>()), Times.Once());
         }
     }
 }

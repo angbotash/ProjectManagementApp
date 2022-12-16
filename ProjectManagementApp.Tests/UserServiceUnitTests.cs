@@ -2,7 +2,9 @@
 using Moq;
 using ProjectManagementApp.Domain.Entities;
 using ProjectManagementApp.Domain.Infrastructure;
+using ProjectManagementApp.Domain.QueryOrder;
 using ProjectManagementApp.Domain.RepositoryInterfaces;
+using ProjectManagementApp.Domain.ServiceInterfaces;
 using ProjectManagementApp.Services;
 using ProjectManagementApp.Tests.IdentityMock;
 using Xunit;
@@ -11,7 +13,7 @@ namespace ProjectManagementApp.Tests
 {
     public class UserServiceUnitTests
     {
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
         private readonly Mock<IUserRepository> _userRepositoryMock;
         private readonly Mock<IProjectRepository> _projectRepositoryMock;
         private readonly Mock<UserManager<User>> _userManagerMock;
@@ -241,13 +243,24 @@ namespace ProjectManagementApp.Tests
         }
 
         [Fact]
-        public async Task GetAllAsync_Returns_Collection_Of_Users()
+        public async Task GetOrderedListAsync_Returns_Collection_Of_Users()
         {
+            // Arrange
+            _userRepositoryMock.Setup(m => m.GetOrderedListAsync(
+                    SortDirection.Ascending,
+                    It.IsAny<string>()))
+                .ReturnsAsync(new List<User>());
+
             // Act
-            var result = await _userService.GetAllAsync();
+            var result = await _userService.GetOrderedListAsync(
+                SortDirection.Ascending,
+                It.IsAny<string>());
 
             // Assert
             Assert.IsType<List<User>>(result);
+            _userRepositoryMock.Verify(m => m.GetOrderedListAsync(
+                SortDirection.Ascending,
+                It.IsAny<string>()), Times.Once());
         }
 
         [Fact]
@@ -257,7 +270,7 @@ namespace ProjectManagementApp.Tests
             _userRepositoryMock.Setup(m => m.GetRolesAsync()).ReturnsAsync(new List<IdentityRole<int>>());
 
             // Act
-            var result = await _userService.GetAllAsync();
+            var result = await _userService.GetRolesAsync();
 
             // Assert
             Assert.IsType<List<IdentityRole<int>>>(result);

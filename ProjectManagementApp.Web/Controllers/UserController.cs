@@ -5,6 +5,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using ProjectManagementApp.Domain.Entities;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using ProjectManagementApp.Domain.QueryOrder;
 
 namespace ProjectManagementApp.Web.Controllers
 {
@@ -69,7 +70,7 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            var user = await _userService.GetByIdAsync((int)id);
+            var user = await _userService.GetByIdAsync(id.Value);
 
             if (user is null)
             {
@@ -104,21 +105,23 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            var user = await _userService.GetByIdAsync((int)id);
+            var user = await _userService.GetByIdAsync(id.Value);
 
             if (user is null)
             {
                 return NotFound();
             }
 
-            await _userService.DeleteAsync((int)id);
+            await _userService.DeleteAsync(id.Value);
 
             return RedirectToAction("GetAllUsers");
         }
 
         [HttpGet("GetAllUsers")]
         [Authorize(Roles = "Supervisor")]
-        public async Task<IActionResult> GetAllUsers()
+        public async Task<IActionResult> GetAllUsers(
+            SortDirection direction = SortDirection.Ascending,
+            string? order = null)
         {
             var currentUser = await _userService.GetCurrentUserAsync(User);
 
@@ -127,9 +130,13 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            var users = await _userService.GetAllAsync();
-            var model = _mapper.Map<IList<UserViewModel>>(users);
-            model = model.Where(u => u.Id != currentUser.Id).ToList();
+            var users = await _userService.GetOrderedListAsync(direction, order);
+            var model = new UsersViewModel
+            {
+                Users = _mapper.Map<IList<UserViewModel>>(users),
+                Direction = direction,
+                Order = order
+            };
 
             return View(model);
         }
@@ -143,17 +150,17 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            if (await _projectService.GetByIdAsync((int)projectId) is null)
+            if (await _projectService.GetByIdAsync(projectId.Value) is null)
             {
                 return NotFound();
             }
 
-            if (await _userService.GetByIdAsync((int)userId) is null)
+            if (await _userService.GetByIdAsync(userId.Value) is null)
             {
                 return NotFound();
             }
 
-            await _userService.AddToProjectAsync((int)projectId, (int)userId);
+            await _userService.AddToProjectAsync(projectId.Value, userId.Value);
 
             return RedirectToAction("EditProjectEmployees", "Project", new { id = projectId });
         }
@@ -167,17 +174,17 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            if (await _projectService.GetByIdAsync((int)projectId) is null)
+            if (await _projectService.GetByIdAsync(projectId.Value) is null)
             {
                 return NotFound();
             }
 
-            if (await _userService.GetByIdAsync((int)userId) is null)
+            if (await _userService.GetByIdAsync(userId.Value) is null)
             {
                 return NotFound();
             }
 
-            await _userService.RemoveFromProjectAsync((int)projectId, (int)userId);
+            await _userService.RemoveFromProjectAsync(projectId.Value, userId.Value);
 
             return RedirectToAction("EditProjectEmployees", "Project", new { id = projectId });
         }
@@ -190,7 +197,7 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            var user = await _userService.GetByIdAsync((int)id);
+            var user = await _userService.GetByIdAsync(id.Value);
 
             if (user is null)
             {

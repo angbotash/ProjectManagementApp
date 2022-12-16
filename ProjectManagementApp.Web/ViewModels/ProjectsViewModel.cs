@@ -6,7 +6,9 @@ namespace ProjectManagementApp.Web.ViewModels
     {
         public IList<ProjectViewModel> Projects { get; set; } = new List<ProjectViewModel>();
 
-        public string? Filter { get; set; }
+        public int? ManagerId { get; set; }
+
+        public int? EmployeeId { get; set; }
 
         public string? Order { get; set; }
         

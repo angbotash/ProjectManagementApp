@@ -43,7 +43,7 @@ namespace ProjectManagementApp.Web.Controllers
             {
                 Employees = selectListEmployees,
                 Managers = selectListManagers,
-                ProjectId = (int)projectId,
+                ProjectId = projectId.Value,
                 Statuses = new List<SelectListItem>()
                 {
                     new SelectListItem(
@@ -85,7 +85,7 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            var issue = await _issueService.GetByIdAsync((int)id);
+            var issue = await _issueService.GetByIdAsync(id.Value);
 
             if (issue is null)
             {
@@ -136,7 +136,7 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            var issue = await _issueService.GetByIdAsync((int)id);
+            var issue = await _issueService.GetByIdAsync(id.Value);
 
             if (issue is null)
             {
@@ -145,7 +145,7 @@ namespace ProjectManagementApp.Web.Controllers
 
             var projectId = issue.ProjectId;
 
-            await _issueService.DeleteAsync((int)id);
+            await _issueService.DeleteAsync(id.Value);
 
             return RedirectToAction("ViewProject", "Project", new { id = projectId });
         }
@@ -158,7 +158,7 @@ namespace ProjectManagementApp.Web.Controllers
                 return BadRequest();
             }
 
-            var issue = await _issueService.GetByIdAsync((int)id);
+            var issue = await _issueService.GetByIdAsync(id.Value);
 
             if (issue is null)
             {
@@ -171,66 +171,69 @@ namespace ProjectManagementApp.Web.Controllers
         }
 
         [HttpGet("ViewReportedIssues")]
-        public async Task<IActionResult> ViewReportedIssues(int? userId, SortDirection direction = SortDirection.Ascending, string? order = null, string? filter = null)
+        public async Task<IActionResult> ViewReportedIssues(int? userId,
+            SortDirection direction = SortDirection.Ascending,
+            string? order = null)
         {
             if (userId is null)
             {
                 return BadRequest();
             }
 
-            var issues = await _issueService.GetReportedIssuesAsync((int)userId, direction, order, filter);
+            var issues = await _issueService.GetReportedIssuesAsync(userId.Value, direction, order);
 
             var model = new IssuesViewModel()
             {
                 Issues = _mapper.Map<IList<IssueViewModel>>(issues),
-                ReporterId = (int)userId,
+                ReporterId = userId.Value,
                 Direction = direction,
                 Order = order,
-                Filter = filter
             };
 
             return View(model);
         }
 
         [HttpGet("ViewAssignedIssues")]
-        public async Task<IActionResult> ViewAssignedIssuesAsync(int? userId, SortDirection direction = SortDirection.Ascending, string? order = null, string? filter = null)
+        public async Task<IActionResult> ViewAssignedIssuesAsync(int? userId,
+            SortDirection direction = SortDirection.Ascending,
+            string? order = null)
         {
             if (userId is null)
             {
                 return BadRequest();
             }
 
-            var issues = await _issueService.GetAssignedIssuesAsync((int)userId, direction, order, filter);
+            var issues = await _issueService.GetAssignedIssuesAsync(userId.Value, direction, order);
 
             var model = new IssuesViewModel()
             {
                 Issues = _mapper.Map<IList<IssueViewModel>>(issues),
-                AsigneeId = (int)userId,
+                AsigneeId = userId.Value,
                 Direction = direction,
                 Order = order,
-                Filter = filter
             };
 
             return View(model);
         }
 
         [HttpGet("ViewProjectIssues")]
-        public async Task<IActionResult> ViewProjectIssues(int? projectId, SortDirection direction = SortDirection.Ascending, string? order = null, string? filter = null)
+        public async Task<IActionResult> ViewProjectIssues(int? projectId,
+            SortDirection direction = SortDirection.Ascending,
+            string? order = null)
         {
             if (projectId is null)
             {
                 return BadRequest();
             }
 
-            var issues = await _issueService.GetProjectIssuesAsync((int)projectId, direction, order, filter);
+            var issues = await _issueService.GetProjectIssuesAsync(projectId.Value, direction, order);
 
             var model = new IssuesViewModel()
             {
                 Issues = _mapper.Map<IList<IssueViewModel>>(issues),
-                ProjectId = (int)projectId,
+                ProjectId = projectId.Value,
                 Direction = direction,
                 Order = order,
-                Filter = filter
             };
 
             return View(model);

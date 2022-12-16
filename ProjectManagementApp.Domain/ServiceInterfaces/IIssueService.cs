@@ -13,13 +13,10 @@ namespace ProjectManagementApp.Domain.ServiceInterfaces
 
         Task<Issue?> GetByIdAsync(int id);
 
-        Task<IEnumerable<Issue>> GetReportedIssuesAsync(int userId, SortDirection direction = SortDirection.Ascending,
-            string? order = null, string? filter = null);
+        Task<IList<Issue>> GetReportedIssuesAsync(int userId, SortDirection direction = SortDirection.Ascending, string? order = null);
 
-        Task<IEnumerable<Issue>> GetAssignedIssuesAsync(int userId, SortDirection direction = SortDirection.Ascending,
-            string? order = null, string? filter = null);
+        Task<IList<Issue>> GetAssignedIssuesAsync(int userId, SortDirection direction = SortDirection.Ascending, string? order = null);
 
-        Task<IEnumerable<Issue>> GetProjectIssuesAsync(int projectId, SortDirection direction = SortDirection.Ascending,
-            string? order = null, string? filter = null);
+        Task<IList<Issue>> GetProjectIssuesAsync(int projectId, SortDirection direction = SortDirection.Ascending, string? order = null);
     }
 }

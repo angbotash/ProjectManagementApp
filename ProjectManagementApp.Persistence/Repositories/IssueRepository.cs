@@ -61,8 +61,8 @@ namespace ProjectManagementApp.Persistence.Repositories
                 .FirstOrDefaultAsync(i => i.Id == id);
         }
 
-        public async Task<IList<Issue>> GetReportedIssuesAsync(int userId, SortDirection direction = SortDirection.Ascending, string? order = null,
-            string? filter = null)
+        public async Task<IList<Issue>> GetReportedIssuesAsync(int userId,
+            SortDirection direction = SortDirection.Ascending, string? order = null)
         {
             var query = _dbContext.Issues
                 .Include(i => i.Project)
@@ -71,11 +71,6 @@ namespace ProjectManagementApp.Persistence.Repositories
                 .Where(i => i.ReporterId == userId)
                 .AsQueryable();
 
-            if (filter != null)
-            {
-                query = query.Where(filter);
-            }
-
             if (order != null)
             {
                 query = query.OrderBy($"{order} {direction}");
@@ -84,8 +79,8 @@ namespace ProjectManagementApp.Persistence.Repositories
             return await query.ToListAsync();
         }
 
-        public async Task<IList<Issue>> GetAssignedIssuesAsync(int userId, SortDirection direction = SortDirection.Ascending, string? order = null,
-            string? filter = null)
+        public async Task<IList<Issue>> GetAssignedIssuesAsync(int userId, 
+            SortDirection direction = SortDirection.Ascending, string? order = null)
         {
             var query = _dbContext.Issues
                 .Include(i => i.Project)
@@ -94,11 +89,6 @@ namespace ProjectManagementApp.Persistence.Repositories
                 .Where(i => i.AssigneeId == userId)
                 .AsQueryable();
 
-            if (filter != null)
-            {
-                query = query.Where(filter);
-            }
-
             if (order != null)
             {
                 query = query.OrderBy($"{order} {direction}");
@@ -107,8 +97,8 @@ namespace ProjectManagementApp.Persistence.Repositories
             return await query.ToListAsync();
         }
 
-        public async Task<IList<Issue>> GetProjectIssuesAsync(int projectId, SortDirection direction = SortDirection.Ascending, string? order = null,
-            string? filter = null)
+        public async Task<IList<Issue>> GetProjectIssuesAsync(int projectId,
+            SortDirection direction = SortDirection.Ascending, string? order = null)
         {
             var query = _dbContext.Issues
                 .Include(i => i.Project)
@@ -116,11 +106,6 @@ namespace ProjectManagementApp.Persistence.Repositories
                 .Include(i => i.Reporter)
                 .Where(i => i.Project.Id == projectId)
                 .AsQueryable();
-
-            if (filter != null)
-            {
-                query = query.Where(filter);
-            }
 
             if (order != null)
             {

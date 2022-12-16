@@ -41,14 +41,21 @@ namespace ProjectManagementApp.Services
             return await _projectRepository.GetByIdAsync(id);
         }
 
-        public async Task<IEnumerable<Project>> GetOrderedListAsync(SortDirection direction = SortDirection.Ascending, string? order = null, string? filter = null)
+        public async Task<IList<Project>> GetOrderedListAsync(SortDirection direction = SortDirection.Ascending, string? order = null)
         {
-            return await _projectRepository.GetOrderedListAsync(direction, order, filter);
+            return await _projectRepository.GetOrderedListAsync(direction, order);
         }
 
-        public  async Task<IEnumerable<Project>> GetManagerProjectsAsync(int managerId)
+        public async Task<IList<Project>> GetManagerProjectsAsync(int managerId,
+            SortDirection direction = SortDirection.Ascending, string? order = null)
         {
-            return await _projectRepository.GetManagerProjectsAsync(managerId);
+            return await _projectRepository.GetManagerProjectsAsync(managerId, direction, order);
+        }
+
+        public async Task<IList<Project>> GetEmployeeProjectsAsync(int employeeId,
+            SortDirection direction = SortDirection.Ascending, string? order = null)
+        {
+            return await _projectRepository.GetEmployeeProjectsAsync(employeeId, direction, order);
         }
     }
 }
